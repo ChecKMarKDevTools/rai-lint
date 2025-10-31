@@ -27,7 +27,7 @@
     "ai-attribution"
   ],
   "author": "",
-  "license": "MIT",
+  "license": "SEE LICENSE IN ../../LICENSE",
   "peerDependencies": {
     "@commitlint/types": "^19.0.0"
   },

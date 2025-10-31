@@ -7,9 +7,9 @@ Thank you for your interest in contributing to CheckMarK RAI Lint!
 All commits to this repository must include an AI attribution footer using standard Git trailer format:
 
 1. **`Authored-by: [Human] <email>`** - Human only, no AI involvement
-2. **`Commit-generated-by: [AI Tool] <email>`** - Trivial AI (docs, commit msg, advice, reviews)
+2. **`Commit-generated-by: [AI Tool] <email>`** - Trivial AI (docs, commit msg, reviews, advice, etc)
 3. **`Assisted-by: [AI Tool] <email>`** - AI helped, but primarily human code
-4. **`Co-authored-by: [AI Tool] <email>`** - Roughly 50/50 AI and human (40-60 leeway)
+4. **`Co-authored-by: [AI Tool] <email>`** - Roughly half is AI generated and half human-authored content
 5. **`Generated-by: [AI Tool] <email>`** - Majority of code was AI generated
 
 Examples:

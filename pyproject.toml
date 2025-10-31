@@ -8,11 +8,10 @@ version = "0.1.0"
 description = "Dual-language commit-message validation framework for AI-responsible development"
 requires-python = ">=3.9,<3.13"
 keywords = ["gitlint", "commitlint", "rai", "ai-attribution", "commit-validation", "git-hooks"]
-license = {text = "MIT"}
+license = {text = "Polyform Shield 1.0.0"}
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",

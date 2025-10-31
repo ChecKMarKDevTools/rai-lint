@@ -137,4 +137,4 @@ isort packages/python-gitlint
 
 ## License
 
-MIT
+Polyform Shield 1.0.0
