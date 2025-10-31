@@ -1,0 +1,119 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - run: npm ci
+      
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: packages/node-commitlint
+
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - run: npm ci
+      
+      - name: Check formatting
+        run: npm run format:check
+
+  black:
+    name: Black
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install Black
+        run: pip install black
+      
+      - name: Check formatting
+        run: black --check packages/python-gitlint
+
+  isort:
+    name: isort
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install isort
+        run: pip install isort
+      
+      - name: Check imports
+        run: isort --check-only packages/python-gitlint
+
+  typecheck:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - run: npm ci
+      
+      - name: Type check
+        run: npx tsc --noEmit
+        working-directory: packages/node-commitlint
+
+  coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - run: npm ci
+      
+      - name: Run tests with coverage
+        run: npm test -- --coverage
+        working-directory: packages/node-commitlint
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: packages/node-commitlint/coverage/coverage-final.json
+          flags: node
