@@ -1,0 +1,40 @@
+{
+  "name": "@checkmark/commitlint-plugin-rai",
+  "version": "0.1.0",
+  "description": "Commitlint plugin for RAI footer validation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src/",
+    "build": "tsc"
+  },
+  "keywords": [
+    "commitlint",
+    "plugin",
+    "rai",
+    "ai-attribution"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@commitlint/types": "^19.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/types": "^19.0.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  }
+}
