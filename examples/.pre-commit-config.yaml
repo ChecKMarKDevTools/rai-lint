@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: gitlint
+        name: gitlint
+        entry: gitlint
+        args: [--msg-filename]
+        language: python
+        stages: [commit-msg]
