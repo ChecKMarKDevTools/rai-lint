@@ -38,6 +38,15 @@ describe('rai-footer-exists', () => {
     expect(isValid).toBe(true);
   });
 
+  it('should pass with Authored-by footer', () => {
+    const parsed = {
+      raw: 'feat: implement feature\n\nAuthored-by: Jane Doe <jane@example.com>',
+    } as any;
+
+    const [isValid] = raiFooterExists(parsed);
+    expect(isValid).toBe(true);
+  });
+
   it('should fail without AI attribution footer', () => {
     const parsed = {
       raw: 'feat: add new feature\n\nSome other footer',
@@ -69,6 +78,15 @@ describe('rai-footer-exists', () => {
   it('should pass with multiple AI tools', () => {
     const parsed = {
       raw: 'feat: complex feature\n\nGenerated-by: ChatGPT <chatgpt@openai.com>',
+    } as any;
+
+    const [isValid] = raiFooterExists(parsed);
+    expect(isValid).toBe(true);
+  });
+
+  it('should accept guidance percentages', () => {
+    const parsed = {
+      raw: 'feat: add feature\n\nAssisted-by: GitHub Copilot <copilot@github.com>',
     } as any;
 
     const [isValid] = raiFooterExists(parsed);

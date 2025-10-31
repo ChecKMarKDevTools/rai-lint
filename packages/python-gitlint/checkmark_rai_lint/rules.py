@@ -12,6 +12,7 @@ class RaiFooterExists(CommitRule):
         re.compile(r"^Assisted-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
         re.compile(r"^Generated-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
         re.compile(r"^Commit-generated-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
+        re.compile(r"^Authored-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
     ]
 
     def validate(self, commit):
@@ -26,14 +27,18 @@ class RaiFooterExists(CommitRule):
                 RuleViolation(
                     self.id,
                     'Commit message must include AI attribution footer:\n'
-                    '  - "Co-authored-by: [AI Tool] <email>" (34-66% AI contribution)\n'
-                    '  - "Assisted-by: [AI Tool] <email>" (up to 33% AI contribution)\n'
-                    '  - "Generated-by: [AI Tool] <email>" (67-100% AI contribution)\n'
+                    '  - "Co-authored-by: [AI Tool] <email>" (~34-66% AI contribution)\n'
+                    '  - "Assisted-by: [AI Tool] <email>" (~minimal AI contribution)\n'
+                    '  - "Generated-by: [AI Tool] <email>" (~67-100% AI contribution)\n'
                     '  - "Commit-generated-by: [AI Tool] <email>" (AI-generated commit message only)\n'
+                    '  - "Authored-by: [Human] <email>" (human author attribution)\n'
+                    '\n'
+                    'Note: Percentages are guidance, not strict requirements.\n'
                     '\n'
                     'Examples:\n'
                     '  - "Generated-by: GitHub Copilot <copilot@github.com>"\n'
-                    '  - "Assisted-by: Verdent AI <verdent@verdent.ai>"',
+                    '  - "Assisted-by: Verdent AI <verdent@verdent.ai>"\n'
+                    '  - "Authored-by: Jane Doe <jane@example.com>"',
                 )
             ]
 

@@ -13,6 +13,7 @@ export default {
             /^Assisted-by:\s+.+\s+<.+@.+>$/im,
             /^Generated-by:\s+.+\s+<.+@.+>$/im,
             /^Commit-generated-by:\s+.+\s+<.+@.+>$/im,
+            /^Authored-by:\s+.+\s+<.+@.+>$/im,
           ];
           
           const hasValidFooter = aiAttributionPatterns.some((pattern) => pattern.test(raw));
@@ -20,10 +21,12 @@ export default {
           return [
             hasValidFooter,
             'Commit must include AI attribution footer:\n' +
-            '  - "Co-authored-by: [AI Tool] <email>" (34-66% AI)\n' +
-            '  - "Assisted-by: [AI Tool] <email>" (up to 33% AI)\n' +
-            '  - "Generated-by: [AI Tool] <email>" (67-100% AI)\n' +
-            '  - "Commit-generated-by: [AI Tool] <email>" (message only)',
+            '  - "Co-authored-by: [AI Tool] <email>" (~34-66% AI)\n' +
+            '  - "Assisted-by: [AI Tool] <email>" (~minimal AI)\n' +
+            '  - "Generated-by: [AI Tool] <email>" (~67-100% AI)\n' +
+            '  - "Commit-generated-by: [AI Tool] <email>" (message only)\n' +
+            '  - "Authored-by: [Human] <email>" (human author)\n' +
+            '\nNote: Percentages are guidance, not strict requirements.',
           ];
         },
       },

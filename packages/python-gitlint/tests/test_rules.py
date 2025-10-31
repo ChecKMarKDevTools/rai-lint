@@ -34,6 +34,14 @@ class TestRaiFooterExists(BaseTestCase):
         violations = rule.validate(commit)
         assert len(violations) == 0
 
+    def test_authored_by_footer(self):
+        rule = RaiFooterExists()
+        commit = self.gitcommit(
+            "feat: implement feature\n\nAuthored-by: Jane Doe <jane@example.com>"
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
     def test_missing_ai_attribution(self):
         rule = RaiFooterExists()
         commit = self.gitcommit("feat: add new feature\n\nSome other footer")
@@ -59,6 +67,14 @@ class TestRaiFooterExists(BaseTestCase):
         rule = RaiFooterExists()
         commit = self.gitcommit(
             "feat: complex feature\n\nGenerated-by: ChatGPT <chatgpt@openai.com>"
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
+    def test_guidance_percentages(self):
+        rule = RaiFooterExists()
+        commit = self.gitcommit(
+            "feat: add feature\n\nAssisted-by: GitHub Copilot <copilot@github.com>"
         )
         violations = rule.validate(commit)
         assert len(violations) == 0

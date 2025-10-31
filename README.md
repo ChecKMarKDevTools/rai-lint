@@ -18,22 +18,29 @@ All commits must include one of the following Git trailer footers:
 ```
 Co-authored-by: GitHub Copilot <copilot@github.com>
 ```
-**Use when**: AI contributes 34-66% of the code
+**Use when**: Roughly 34-66% AI contribution (guidance, not strict)
 
 ```
 Assisted-by: Verdent AI <verdent@verdent.ai>
 ```
-**Use when**: AI contributes up to 33% of the code
+**Use when**: Minimal AI contribution (guidance, not strict)
 
 ```
 Generated-by: GitHub Copilot <copilot@github.com>
 ```
-**Use when**: AI generates 67-100% of the code
+**Use when**: Roughly 67-100% AI contribution (guidance, not strict)
 
 ```
 Commit-generated-by: Claude AI <claude@anthropic.com>
 ```
 **Use when**: AI only generated the commit message
+
+```
+Authored-by: Jane Doe <jane@example.com>
+```
+**Use when**: Attributing the human author
+
+**Note**: Percentages are guidance to help you choose the appropriate trailer, not strict requirements. Use your judgment based on the level of AI involvement.
 
 All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers).
 

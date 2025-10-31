@@ -6,16 +6,20 @@ Thank you for your interest in contributing to CheckMarK RAI Lint!
 
 All commits to this repository must include an AI attribution footer using standard Git trailer format:
 
-- Use `Co-authored-by: [AI Tool] <email>` when AI contributes 34-66% of the code
-- Use `Assisted-by: [AI Tool] <email>` when AI contributes up to 33% of the code
-- Use `Generated-by: [AI Tool] <email>` when AI generates 67-100% of the code
-- Use `Commit-generated-by: [AI Tool] <email>` when AI only generated the commit message
+- `Co-authored-by: [AI Tool] <email>` - Roughly 34-66% AI contribution
+- `Assisted-by: [AI Tool] <email>` - Minimal AI contribution
+- `Generated-by: [AI Tool] <email>` - Roughly 67-100% AI contribution
+- `Commit-generated-by: [AI Tool] <email>` - AI-generated commit message only
+- `Authored-by: [Human] <email>` - Human author attribution
+
+**Note**: Percentages are guidance to help you choose, not strict requirements. Use your judgment.
 
 Examples:
 ```
 Generated-by: GitHub Copilot <copilot@github.com>
 Assisted-by: Verdent AI <verdent@verdent.ai>
 Co-authored-by: Claude AI <claude@anthropic.com>
+Authored-by: Jane Doe <jane@example.com>
 ```
 
 ## Development Setup
