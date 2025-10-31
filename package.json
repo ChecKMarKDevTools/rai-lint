@@ -1,0 +1,38 @@
+{
+  "name": "checkmark-rai-lint-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Dual-language commit-message validation framework for AI-responsible development",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md}\""
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.2.5",
+    "vitest": "^1.2.0"
+  },
+  "keywords": [
+    "commitlint",
+    "gitlint",
+    "rai",
+    "ai-attribution",
+    "commit-validation",
+    "git-hooks"
+  ],
+  "author": "",
+  "license": "MIT"
+}
