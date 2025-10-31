@@ -11,23 +11,31 @@ The project is implemented as a monorepo containing two native packages:
 - **Node/ESM plugin** for @commitlint (JavaScript and multi-language projects)
 - **Python plugin** for Gitlint (Python ecosystems)
 
-## Supported RAI Footer Formats
+## Supported AI Attribution Formats
 
-All commits must include one of the following footers:
-
-```
-🛡️ RAI: AI-Generated
-```
+All commits must include one of the following Git trailer footers:
 
 ```
-🛡️ RAI: AI-Assisted
+Co-authored-by: GitHub Copilot <copilot@github.com>
 ```
+**Use when**: AI contributes 34-66% of the code
 
 ```
-Generated-by: Verdent AI <verdent@verdent.ai>
+Assisted-by: Verdent AI <verdent@verdent.ai>
 ```
+**Use when**: AI contributes up to 33% of the code
 
-All patterns are case-insensitive.
+```
+Generated-by: GitHub Copilot <copilot@github.com>
+```
+**Use when**: AI generates 67-100% of the code
+
+```
+Commit-generated-by: Claude AI <claude@anthropic.com>
+```
+**Use when**: AI only generated the commit message
+
+All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers).
 
 ## Installation
 

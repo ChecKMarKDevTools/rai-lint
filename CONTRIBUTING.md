@@ -2,13 +2,21 @@
 
 Thank you for your interest in contributing to CheckMarK RAI Lint!
 
-## RAI Attribution Policy
+## AI Attribution Policy
 
-All commits to this repository must include an RAI footer indicating AI involvement:
+All commits to this repository must include an AI attribution footer using standard Git trailer format:
 
-- Use `🛡️ RAI: AI-Generated` when AI generated the entire commit
-- Use `🛡️ RAI: AI-Assisted` when AI helped but you made the final decisions
-- Use `Generated-by: Verdent AI <verdent@verdent.ai>` for Verdent AI contributions
+- Use `Co-authored-by: [AI Tool] <email>` when AI contributes 34-66% of the code
+- Use `Assisted-by: [AI Tool] <email>` when AI contributes up to 33% of the code
+- Use `Generated-by: [AI Tool] <email>` when AI generates 67-100% of the code
+- Use `Commit-generated-by: [AI Tool] <email>` when AI only generated the commit message
+
+Examples:
+```
+Generated-by: GitHub Copilot <copilot@github.com>
+Assisted-by: Verdent AI <verdent@verdent.ai>
+Co-authored-by: Claude AI <claude@anthropic.com>
+```
 
 ## Development Setup
 
