@@ -25,7 +25,6 @@ dist/
 build/
 
 .idea/
-.vscode/
 *.swp
 *.swo
 *~
