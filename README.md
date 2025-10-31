@@ -15,32 +15,37 @@ The project is implemented as a monorepo containing two native packages:
 
 All commits must include one of the following Git trailer footers:
 
-```
-Co-authored-by: GitHub Copilot <copilot@github.com>
-```
-**Use when**: Roughly 34-66% AI contribution (guidance, not strict)
-
-```
-Assisted-by: Verdent AI <verdent@verdent.ai>
-```
-**Use when**: Minimal AI contribution (guidance, not strict)
-
-```
-Generated-by: GitHub Copilot <copilot@github.com>
-```
-**Use when**: Roughly 67-100% AI contribution (guidance, not strict)
-
-```
-Commit-generated-by: Claude AI <claude@anthropic.com>
-```
-**Use when**: AI only generated the commit message
-
+### 1. Authored-by (Human Only)
 ```
 Authored-by: Jane Doe <jane@example.com>
 ```
-**Use when**: Attributing the human author
+**Use when**: Human only, no AI involvement
 
-**Note**: Percentages are guidance to help you choose the appropriate trailer, not strict requirements. Use your judgment based on the level of AI involvement.
+### 2. Commit-generated-by (Trivial AI)
+```
+Commit-generated-by: ChatGPT <chatgpt@openai.com>
+```
+**Use when**: Trivial AI contribution - typically not code (docs, commit messages, advice, reviews, etc.)
+
+### 3. Assisted-by (AI Helped)
+```
+Assisted-by: GitHub Copilot <copilot@github.com>
+```
+**Use when**: AI helped, but code is primarily human-written
+
+### 4. Co-authored-by (50/50 Split)
+```
+Co-authored-by: Verdent AI <verdent@verdent.ai>
+```
+**Use when**: Roughly 50/50 AI and human contributions (40-60 range with leeway)
+
+### 5. Generated-by (AI Majority)
+```
+Generated-by: GitHub Copilot <copilot@github.com>
+```
+**Use when**: Majority of code was AI-generated
+
+---
 
 All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers).
 

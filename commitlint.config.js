@@ -9,11 +9,11 @@ export default {
       rules: {
         'ai-attribution-exists': ({ raw }) => {
           const aiAttributionPatterns = [
-            /^Co-authored-by:\s+.+\s+<.+@.+>$/im,
-            /^Assisted-by:\s+.+\s+<.+@.+>$/im,
-            /^Generated-by:\s+.+\s+<.+@.+>$/im,
-            /^Commit-generated-by:\s+.+\s+<.+@.+>$/im,
             /^Authored-by:\s+.+\s+<.+@.+>$/im,
+            /^Commit-generated-by:\s+.+\s+<.+@.+>$/im,
+            /^Assisted-by:\s+.+\s+<.+@.+>$/im,
+            /^Co-authored-by:\s+.+\s+<.+@.+>$/im,
+            /^Generated-by:\s+.+\s+<.+@.+>$/im,
           ];
           
           const hasValidFooter = aiAttributionPatterns.some((pattern) => pattern.test(raw));
@@ -21,12 +21,11 @@ export default {
           return [
             hasValidFooter,
             'Commit must include AI attribution footer:\n' +
-            '  - "Co-authored-by: [AI Tool] <email>" (~34-66% AI)\n' +
-            '  - "Assisted-by: [AI Tool] <email>" (~minimal AI)\n' +
-            '  - "Generated-by: [AI Tool] <email>" (~67-100% AI)\n' +
-            '  - "Commit-generated-by: [AI Tool] <email>" (message only)\n' +
-            '  - "Authored-by: [Human] <email>" (human author)\n' +
-            '\nNote: Percentages are guidance, not strict requirements.',
+            '  1. "Authored-by: [Human] <email>" - Human only, no AI\n' +
+            '  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)\n' +
+            '  3. "Assisted-by: [AI Tool] <email>" - AI helped, primarily human\n' +
+            '  4. "Co-authored-by: [AI Tool] <email>" - 50/50 AI/human (40-60 leeway)\n' +
+            '  5. "Generated-by: [AI Tool] <email>" - Majority AI generated',
           ];
         },
       },
