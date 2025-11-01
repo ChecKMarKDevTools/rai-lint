@@ -18,13 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive documentation with architecture diagrams
 - Package README files
 - Contributing guidelines
-- MIT License
-
-## [0.1.0] - 2025-10-31
-
-### Added
-- Initial release (implementation phase only, not published)
-- RAI footer validation framework
+- Polyform Shield 1.0.0 License — Custom
 - Dual-language support (Node.js and Python)
 - Cross-version compatibility testing
 - Documentation and examples
