@@ -8,8 +8,12 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "plugins": ["eslint-comments"],
   "rules": {
     "import/extensions": ["error", "ignorePackages"],
-    "no-console": "off"
+    "no-console": "off",
+    "max-len": ["error", { "code": 120, "ignoreUrls": true, "ignoreStrings": true }],
+    "no-inline-comments": "error",
+    "eslint-comments/no-use": "error"
   }
 }
