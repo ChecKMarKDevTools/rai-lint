@@ -13,7 +13,6 @@
     "import/extensions": ["error", "ignorePackages"],
     "no-console": "off",
     "max-len": ["error", { "code": 120, "ignoreUrls": true, "ignoreStrings": true }],
-    "no-inline-comments": "error",
-    "eslint-comments/no-use": "error"
+    "eslint-comments/no-use": ["error", { "allow": [] }]
   }
 }
