@@ -15,21 +15,23 @@ describe('Integration Tests', () => {
       });
       return { exitCode: 0, output };
     } catch (error: any) {
-      return { exitCode: error.status, output: error.stderr };
+      return { exitCode: error.status, output: error.stderr || error.stdout || '' };
     } finally {
       try {
         unlinkSync(testCommitFile);
-      } catch {}
+      } catch {
+        // Ignore cleanup errors
+      }
     }
   };
 
-  it('should accept valid AI-Generated footer', () => {
-    const result = testCommit('feat: add new feature\n\n🛡️ RAI: AI-Generated');
+  it('should accept valid Generated-by footer', () => {
+    const result = testCommit('feat: add new feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>');
     expect(result.exitCode).toBe(0);
   });
 
-  it('should accept valid AI-Assisted footer', () => {
-    const result = testCommit('fix: resolve bug\n\n🛡️ RAI: AI-Assisted');
+  it('should accept valid Assisted-by footer', () => {
+    const result = testCommit('fix: resolve bug\n\nAssisted-by: Verdent AI <verdent@verdent.ai>');
     expect(result.exitCode).toBe(0);
   });
 
@@ -40,25 +42,25 @@ describe('Integration Tests', () => {
     expect(result.exitCode).toBe(0);
   });
 
-  it('should reject commit without RAI footer', () => {
+  it('should reject commit without AI attribution footer', () => {
     const result = testCommit('feat: add feature\n\nNo footer here');
     expect(result.exitCode).not.toBe(0);
-    expect(result.output).toContain('RAI footer');
+    expect(result.output).toContain('AI attribution');
   });
 
   it('should reject commit with malformed footer', () => {
-    const result = testCommit('feat: add feature\n\n🛡️ RAI: AI-Something');
+    const result = testCommit('feat: add feature\n\nGenerated-by: Invalid Format');
     expect(result.exitCode).not.toBe(0);
   });
 
   it('should accept case-insensitive footer', () => {
-    const result = testCommit('feat: add feature\n\n🛡️ rai: ai-generated');
+    const result = testCommit('feat: add feature\n\ngenerated-by: GitHub Copilot <copilot@github.com>');
     expect(result.exitCode).toBe(0);
   });
 
   it('should accept footer with additional text before it', () => {
     const result = testCommit(
-      'feat: add feature\n\nSome description\n\nCloses #123\n\n🛡️ RAI: AI-Assisted'
+      'feat: add feature\n\nSome description\n\nCloses #123\n\nGenerated-by: GitHub Copilot <copilot@github.com>'
     );
     expect(result.exitCode).toBe(0);
   });

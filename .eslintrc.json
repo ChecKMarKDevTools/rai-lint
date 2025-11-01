@@ -4,15 +4,24 @@
     "es2024": true
   },
   "extends": ["airbnb-base", "prettier"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["eslint-comments"],
+  "plugins": ["eslint-comments", "@typescript-eslint"],
   "rules": {
-    "import/extensions": ["error", "ignorePackages"],
+    "import/extensions": ["error", "ignorePackages", { "ts": "never" }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.ts", "**/*.spec.ts", "**/vitest.config.ts"] }],
     "no-console": "off",
     "max-len": ["error", { "code": 120, "ignoreUrls": true, "ignoreStrings": true }],
     "eslint-comments/no-use": ["error", { "allow": [] }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    }
   }
 }
