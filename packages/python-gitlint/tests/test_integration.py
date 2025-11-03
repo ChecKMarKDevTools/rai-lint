@@ -6,7 +6,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "packages" / "python-gitlint"))
 
 
-def test_commit(message: str) -> tuple[int, str]:
+def run_gitlint_test(message):
     try:
         result = subprocess.run(
             ["gitlint"],
@@ -21,41 +21,41 @@ def test_commit(message: str) -> tuple[int, str]:
 
 
 def test_valid_ai_generated():
-    exit_code, output = test_commit("feat: add feature\n\n🛡️ RAI: AI-Generated")
+    exit_code, output = run_gitlint_test("feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>")
     assert exit_code == 0, f"Expected success but got: {output}"
 
 
 def test_valid_ai_assisted():
-    exit_code, output = test_commit("fix: resolve bug\n\n🛡️ RAI: AI-Assisted")
+    exit_code, output = run_gitlint_test("fix: resolve bug\n\nAssisted-by: GitHub Copilot <copilot@github.com>")
     assert exit_code == 0, f"Expected success but got: {output}"
 
 
 def test_valid_verdent_ai():
-    exit_code, output = test_commit(
+    exit_code, output = run_gitlint_test(
         "chore: update\n\nGenerated-by: Verdent AI <verdent@verdent.ai>"
     )
     assert exit_code == 0, f"Expected success but got: {output}"
 
 
 def test_invalid_no_footer():
-    exit_code, output = test_commit("feat: add feature\n\nNo footer")
+    exit_code, output = run_gitlint_test("feat: add feature with a longer body message\n\nNo footer here at all")
     assert exit_code != 0, "Expected failure but got success"
-    assert "RAI footer" in output
+    assert "AI attribution" in output
 
 
 def test_invalid_malformed():
-    exit_code, output = test_commit("feat: add feature\n\n🛡️ RAI: AI-Something")
+    exit_code, output = run_gitlint_test("feat: add feature with a longer body message\n\nGenerated-by: Invalid Format")
     assert exit_code != 0, "Expected failure but got success"
 
 
 def test_case_insensitive():
-    exit_code, output = test_commit("feat: add feature\n\n🛡️ rai: ai-generated")
+    exit_code, output = run_gitlint_test("feat: add feature\n\ngenerated-by: GitHub Copilot <copilot@github.com>")
     assert exit_code == 0, f"Expected success but got: {output}"
 
 
 def test_with_additional_footers():
-    exit_code, output = test_commit(
-        "feat: add feature\n\nDescription\n\nCloses #123\n\n🛡️ RAI: AI-Assisted"
+    exit_code, output = run_gitlint_test(
+        "feat: add feature\n\nDescription\n\nCloses #123\n\nAssisted-by: GitHub Copilot <copilot@github.com>"
     )
     assert exit_code == 0, f"Expected success but got: {output}"
 

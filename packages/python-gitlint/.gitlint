@@ -1,2 +1,3 @@
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+extra-path = .
+contrib = UC1
