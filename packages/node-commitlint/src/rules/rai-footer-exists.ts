@@ -11,6 +11,10 @@ const AI_ATTRIBUTION_PATTERNS = [
 const raiFooterExists: Rule = (parsed) => {
   const { raw } = parsed;
 
+  if (!raw) {
+    return [false, 'Commit message is empty'];
+  }
+
   const hasValidFooter = AI_ATTRIBUTION_PATTERNS.some((pattern) => pattern.test(raw));
 
   if (!hasValidFooter) {

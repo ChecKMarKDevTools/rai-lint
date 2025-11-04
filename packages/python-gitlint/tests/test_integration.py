@@ -1,71 +1,61 @@
-import subprocess
-import sys
-from pathlib import Path
+from unittest.mock import Mock
 
-project_root = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(project_root / "packages" / "python-gitlint"))
+from checkmark_rai_lint.rules import RaiFooterExists
 
 
-def run_gitlint_test(message):
-    try:
-        result = subprocess.run(
-            ["gitlint"],
-            input=message,
-            capture_output=True,
-            text=True,
-            cwd=str(project_root),
-        )
-        return result.returncode, result.stderr
-    except Exception as e:
-        return 1, str(e)
+def create_commit(message: str):
+    commit = Mock()
+    commit.message.full = message
+    return commit
 
 
-def test_valid_ai_generated():
-    exit_code, output = run_gitlint_test("feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>")
-    assert exit_code == 0, f"Expected success but got: {output}"
+def test_valid_generated_by():
+    rule = RaiFooterExists()
+    commit = create_commit("feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>")
+    violations = rule.validate(commit)
+    assert len(violations) == 0, f"Expected no violations but got: {violations}"
 
 
-def test_valid_ai_assisted():
-    exit_code, output = run_gitlint_test("fix: resolve bug\n\nAssisted-by: GitHub Copilot <copilot@github.com>")
-    assert exit_code == 0, f"Expected success but got: {output}"
+def test_valid_assisted_by():
+    rule = RaiFooterExists()
+    commit = create_commit("fix: resolve bug\n\nAssisted-by: Verdent AI <verdent@verdent.ai>")
+    violations = rule.validate(commit)
+    assert len(violations) == 0
 
 
 def test_valid_verdent_ai():
-    exit_code, output = run_gitlint_test(
-        "chore: update\n\nGenerated-by: Verdent AI <verdent@verdent.ai>"
-    )
-    assert exit_code == 0, f"Expected success but got: {output}"
+    rule = RaiFooterExists()
+    commit = create_commit("chore: update\n\nGenerated-by: Verdent AI <verdent@verdent.ai>")
+    violations = rule.validate(commit)
+    assert len(violations) == 0
 
 
 def test_invalid_no_footer():
-    exit_code, output = run_gitlint_test("feat: add feature with a longer body message\n\nNo footer here at all")
-    assert exit_code != 0, "Expected failure but got success"
-    assert "AI attribution" in output
+    rule = RaiFooterExists()
+    commit = create_commit("feat: add feature\n\nNo footer")
+    violations = rule.validate(commit)
+    assert len(violations) == 1
+    assert "AI attribution" in violations[0].message
 
 
 def test_invalid_malformed():
-    exit_code, output = run_gitlint_test("feat: add feature with a longer body message\n\nGenerated-by: Invalid Format")
-    assert exit_code != 0, "Expected failure but got success"
+    rule = RaiFooterExists()
+    commit = create_commit("feat: add feature\n\nGenerated-by: Invalid Format")
+    violations = rule.validate(commit)
+    assert len(violations) == 1
 
 
 def test_case_insensitive():
-    exit_code, output = run_gitlint_test("feat: add feature\n\ngenerated-by: GitHub Copilot <copilot@github.com>")
-    assert exit_code == 0, f"Expected success but got: {output}"
+    rule = RaiFooterExists()
+    commit = create_commit("feat: add feature\n\ngenerated-by: GitHub Copilot <copilot@github.com>")
+    violations = rule.validate(commit)
+    assert len(violations) == 0
 
 
 def test_with_additional_footers():
-    exit_code, output = run_gitlint_test(
+    rule = RaiFooterExists()
+    commit = create_commit(
         "feat: add feature\n\nDescription\n\nCloses #123\n\nAssisted-by: GitHub Copilot <copilot@github.com>"
     )
-    assert exit_code == 0, f"Expected success but got: {output}"
-
-
-if __name__ == "__main__":
-    test_valid_ai_generated()
-    test_valid_ai_assisted()
-    test_valid_verdent_ai()
-    test_invalid_no_footer()
-    test_invalid_malformed()
-    test_case_insensitive()
-    test_with_additional_footers()
-    print("All integration tests passed!")
+    violations = rule.validate(commit)
+    assert len(violations) == 0

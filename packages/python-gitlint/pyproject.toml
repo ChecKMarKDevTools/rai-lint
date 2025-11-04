@@ -1,15 +1,15 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=80.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "checkmark-rai-lint"
 version = "0.1.0"
 description = "Gitlint plugin for RAI footer validation"
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.9"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
 license = {text = "Polyform Shield 1.0.0"}
-dependencies = ["gitlint>=0.19.0"]
+dependencies = ["gitlint>=0.19.1"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -22,12 +22,14 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.4.0",
-    "black>=23.0.0",
-    "isort>=5.12.0",
-    "gitlint[trusted-deps]>=0.19.0",
+    "pytest>=8.0.0",
+    "black>=24.0.0",
+    "isort>=5.13.0",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["checkmark_rai_lint*"]
+
+[project.entry-points."gitlint.plugins"]
+rai-footer-exists = "checkmark_rai_lint.rules:RaiFooterExists"
