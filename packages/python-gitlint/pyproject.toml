@@ -22,9 +22,9 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
-    "black>=24.0.0",
-    "isort>=5.13.0",
+    "pytest>=8.4.0",
+    "black>=25.9.0",
+    "isort>=7.0.0",
 ]
 
 [tool.setuptools.packages.find]

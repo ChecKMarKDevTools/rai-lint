@@ -17,18 +17,17 @@
     "format:check": "prettier --check \"**/*.{js,json,md}\""
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.0.0",
+    "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^8.57.0",
-    "eslint-config-airbnb-base": "^15.0.0",
+    "@eslint/js": "^9.39.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "@typescript-eslint/parser": "^8.46.0",
+    "eslint": "^9.39.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-import": "^2.31.0",
     "globals": "^16.5.0",
-    "prettier": "^3.6.0",
-    "vitest": "^4.0.0"
+    "prettier": "^3.6.2",
+    "vitest": "^4.0.7"
   },
   "keywords": [
     "commitlint",
