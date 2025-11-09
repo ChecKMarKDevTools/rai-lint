@@ -122,7 +122,7 @@ git commit -m "test: manual verification
 
 Testing the RAI lint implementation.
 
-🛡️ RAI: AI-Assisted"
+Assisted-by: GitHub Copilot <copilot@github.com>"
 ```
 
 ## VS Code Setup

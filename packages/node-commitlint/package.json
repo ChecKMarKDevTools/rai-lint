@@ -27,7 +27,7 @@
     "ai-attribution"
   ],
   "author": "",
-  "license": "SEE LICENSE IN ../../LICENSE",
+  "license": "Polyform Shield 1.0.0",
   "peerDependencies": {
     "@commitlint/types": "^20.0.0"
   },

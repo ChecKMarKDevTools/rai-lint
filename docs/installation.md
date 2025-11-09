@@ -31,7 +31,7 @@ export default {
   extends: ['@commitlint/config-conventional'],
   plugins: ['@checkmark/commitlint-plugin-rai'],
   rules: {
-    'rai-footer-exists': [2, 'always'],
+    'ai-attribution-exists': [2, 'always'],
   },
 };
 ```
@@ -140,7 +140,7 @@ Test your setup with a valid commit:
 ```bash
 git commit -m "test: verify RAI lint setup
 
-🛡️ RAI: AI-Assisted"
+Assisted-by: GitHub Copilot <copilot@github.com>"
 ```
 
 This should succeed. Try an invalid commit:
@@ -208,7 +208,7 @@ repos:
         entry: npx commitlint --edit
         language: system
         stages: [commit-msg]
-      
+
       - id: gitlint
         name: gitlint
         entry: gitlint

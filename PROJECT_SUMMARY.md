@@ -115,10 +115,12 @@ rai-lint/
 - Identical validation logic across both implementations
 
 ✅ **RAI Footer Validation**
-- Three supported footer formats:
-  - `🛡️ RAI: AI-Generated`
-  - `🛡️ RAI: AI-Assisted`
-  - `Generated-by: Verdent AI <verdent@verdent.ai>`
+- Five supported footer formats:
+  - `Authored-by: [Human] <email>` - Human only, no AI
+  - `Commit-generated-by: [AI Tool] <email>` - Trivial AI (docs, msg, advice)
+  - `Assisted-by: [AI Tool] <email>` - AI helped, primarily human
+  - `Co-authored-by: [AI Tool] <email>` - 50/50 AI/human (40-60 leeway)
+  - `Generated-by: [AI Tool] <email>` - Majority AI generated
 - Case-insensitive matching
 - Regex-based pattern validation
 
@@ -198,11 +200,11 @@ pytest packages/python-gitlint/tests
 
 ### @checkmark/commitlint-plugin-rai (Node.js)
 
-**Version**: 0.1.0  
-**Type**: ESM  
-**Target**: Node.js >= 16.0.0  
-**Language**: TypeScript  
-**Testing**: Vitest  
+**Version**: 0.1.0
+**Type**: ESM
+**Target**: Node.js >= 16.0.0
+**Language**: TypeScript
+**Testing**: Vitest
 **Status**: Implementation complete (not published)
 
 **Dependencies**:
@@ -212,10 +214,10 @@ pytest packages/python-gitlint/tests
 
 ### checkmark-rai-lint (Python)
 
-**Version**: 0.1.0  
-**Type**: Gitlint contrib rule  
-**Target**: Python >= 3.9, < 3.13  
-**Testing**: Pytest  
+**Version**: 0.1.0
+**Type**: Gitlint contrib rule
+**Target**: Python >= 3.9, < 3.13
+**Testing**: Pytest
 **Status**: Implementation complete (not published)
 
 **Dependencies**:
@@ -276,34 +278,34 @@ All 16 commits include the required RAI footer:
 
 ### Technical Requirements
 
-✅ Node.js 16+ baseline, backwards compatible  
-✅ Python 3.9-3.12 support  
-✅ ESM-first architecture  
-✅ TypeScript with strict mode  
-✅ Airbnb ESLint config  
-✅ Black + isort for Python  
-✅ Vitest for Node testing  
-✅ Pytest for Python testing  
-✅ CI matrix testing  
+✅ Node.js 16+ baseline, backwards compatible
+✅ Python 3.9-3.12 support
+✅ ESM-first architecture
+✅ TypeScript with strict mode
+✅ Airbnb ESLint config
+✅ Black + isort for Python
+✅ Vitest for Node testing
+✅ Pytest for Python testing
+✅ CI matrix testing
 ✅ Shared fixtures between languages
 
 ### Documentation Requirements
 
-✅ Architecture documentation with diagrams  
-✅ Installation guides for both languages  
-✅ Usage guide with examples  
-✅ API reference  
-✅ Troubleshooting guide  
-✅ Development setup guide  
-✅ Contributing guidelines  
+✅ Architecture documentation with diagrams
+✅ Installation guides for both languages
+✅ Usage guide with examples
+✅ API reference
+✅ Troubleshooting guide
+✅ Development setup guide
+✅ Contributing guidelines
 ✅ README with quick start
 
 ### Integration Requirements
 
-✅ Lefthook support  
-✅ Husky support  
-✅ pre-commit support  
-✅ Example configurations  
+✅ Lefthook support
+✅ Husky support
+✅ pre-commit support
+✅ Example configurations
 ✅ Multi-language project support
 
 ---
@@ -365,9 +367,3 @@ MIT License - See LICENSE file
 Built with Verdent AI following responsible AI development practices.
 
 All implementation work completed with AI assistance and properly attributed through RAI footers.
-
----
-
-**Implementation Date**: October 31, 2025  
-**Status**: ✅ Complete and ready for testing  
-**Next Milestone**: Beta testing and user feedback

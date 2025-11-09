@@ -20,9 +20,6 @@
 
 <!-- List the key changes in bullet points -->
 
-- 
-- 
-- 
 
 ## Testing
 
@@ -34,9 +31,8 @@
 - [ ] Tested in CI environment
 
 **Test Environment**:
-- Node.js version (if applicable): 
-- Python version (if applicable): 
-- OS: 
+- Node.js version (if applicable):
+- Python version (if applicable):
 
 ## Documentation
 
@@ -68,6 +64,8 @@
 **RAI Attribution**:
 
 All commits in this PR include the required RAI footer:
-- [ ] 🛡️ RAI: AI-Generated
-- [ ] 🛡️ RAI: AI-Assisted
-- [ ] Generated-by: Verdent AI <verdent@verdent.ai>
+- [ ] Authored-by: [Human] <email> - Human only, no AI
+- [ ] Commit-generated-by: [AI Tool] <email> - Trivial AI work
+- [ ] Assisted-by: [AI Tool] <email> - AI helped, primarily human
+- [ ] Co-authored-by: [AI Tool] <email> - Roughly 50/50 AI/human
+- [ ] Generated-by: [AI Tool] <email> - Majority AI-generated

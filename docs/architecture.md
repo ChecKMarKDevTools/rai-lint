@@ -65,14 +65,17 @@ packages/python-gitlint/
 
 Both implementations use identical validation patterns:
 
-1. **AI-Generated Pattern**: `^🛡️\s+RAI:\s+AI-Generated$`
-2. **AI-Assisted Pattern**: `^🛡️\s+RAI:\s+AI-Assisted$`
-3. **Verdent AI Pattern**: `^Generated-by:\s+Verdent AI\s+<verdent@verdent\.ai>$`
+1. **Authored-by Pattern**: `^Authored-by:\s+.+\s+<.+@.+>$`
+2. **Commit-generated-by Pattern**: `^Commit-generated-by:\s+.+\s+<.+@.+>$`
+3. **Assisted-by Pattern**: `^Assisted-by:\s+.+\s+<.+@.+>$`
+4. **Co-authored-by Pattern**: `^Co-authored-by:\s+.+\s+<.+@.+>$`
+5. **Generated-by Pattern**: `^Generated-by:\s+.+\s+<.+@.+>$`
 
 All patterns are:
 - Case-insensitive (`re.IGNORECASE` / `i` flag)
 - Multiline-aware (`re.MULTILINE` / `m` flag)
 - Anchored to line boundaries (`^` and `$`)
+- Follow Git trailer format with name and email
 
 ## Testing Strategy
 
@@ -133,7 +136,7 @@ sequenceDiagram
     participant Git as Git
     participant Hook as Hook Manager
     participant Lint as RAI Lint
-    
+
     Dev->>Git: git commit -m "message"
     Git->>Hook: Trigger commit-msg hook
     Hook->>Lint: Validate message

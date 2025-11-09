@@ -16,33 +16,43 @@ The project is implemented as a monorepo containing two native packages:
 All commits must include one of the following Git trailer footers:
 
 ### 1. Authored-by (Human Only)
-```
+
+```plaintext
 Authored-by: Jane Doe <jane@example.com>
 ```
+
 **Use when**: Human only, no AI involvement
 
 ### 2. Commit-generated-by (Trivial AI)
-```
+
+```plaintext
 Commit-generated-by: ChatGPT <chatgpt@openai.com>
 ```
+
 **Use when**: Trivial AI contribution - typically not code (docs, commit messages, advice, reviews, etc.)
 
 ### 3. Assisted-by (AI Helped)
-```
+
+```plaintext
 Assisted-by: GitHub Copilot <copilot@github.com>
 ```
+
 **Use when**: AI helped, but code is primarily human-written
 
 ### 4. Co-authored-by (50/50 Split)
-```
+
+```plaintext
 Co-authored-by: Verdent AI <verdent@verdent.ai>
 ```
+
 **Use when**: Roughly 50/50 AI and human contributions (40-60 range with leeway)
 
 ### 5. Generated-by (AI Majority)
-```
+
+```plaintext
 Generated-by: GitHub Copilot <copilot@github.com>
 ```
+
 **Use when**: Majority of code was AI-generated
 
 ---
@@ -64,7 +74,7 @@ export default {
   extends: ['@commitlint/config-conventional'],
   plugins: ['@checkmark/commitlint-plugin-rai'],
   rules: {
-    'rai-footer-exists': [2, 'always'],
+    'ai-attribution-exists': [2, 'always'],
   },
 };
 ```

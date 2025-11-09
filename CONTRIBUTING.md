@@ -17,7 +17,7 @@ Examples:
 Authored-by: Jane Doe <jane@example.com>
 Commit-generated-by: ChatGPT <chatgpt@openai.com>
 Assisted-by: GitHub Copilot <copilot@github.com>
-Co-authored-by: Verdent AI <verdent@verdent.ai>
+Co-authored-by: GitHub Copilot <copilot@github.com>
 Generated-by: GitHub Copilot <copilot@github.com>
 ```
 

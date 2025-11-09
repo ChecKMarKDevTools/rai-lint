@@ -9,16 +9,16 @@ import type { Plugin } from '@commitlint/types';
 
 const plugin: Plugin = {
   rules: {
-    'rai-footer-exists': raiFooterExists,
+    'ai-attribution-exists': aiAttributionExists,
   },
 };
 ```
 
-### Rule: rai-footer-exists
+### Rule: ai-attribution-exists
 
 **Type**: `Rule`
 
-**Description**: Validates that a commit message contains a valid RAI footer.
+**Description**: Validates that a commit message contains a valid AI attribution footer.
 
 **Return Type**: `[boolean, string]`
 
@@ -34,13 +34,13 @@ const plugin: Plugin = {
 **Example**:
 
 ```typescript
-import raiFooterExists from '@checkmark/commitlint-plugin-rai/rules/rai-footer-exists';
+import aiAttributionExists from '@checkmark/commitlint-plugin-rai/rules/ai-attribution-exists';
 
 const parsed = {
-  raw: 'feat: add feature\n\n🛡️ RAI: AI-Generated'
+  raw: 'feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>'
 };
 
-const [isValid, message] = raiFooterExists(parsed);
+const [isValid, message] = aiAttributionExists(parsed);
 // isValid: true
 // message: ''
 ```
@@ -48,10 +48,12 @@ const [isValid, message] = raiFooterExists(parsed);
 ### Supported Patterns
 
 ```typescript
-const RAI_FOOTER_PATTERNS = [
-  /^🛡️\s+RAI:\s+AI-Generated$/im,
-  /^🛡️\s+RAI:\s+AI-Assisted$/im,
-  /^Generated-by:\s+Verdent AI\s+<verdent@verdent\.ai>$/im,
+const AI_ATTRIBUTION_PATTERNS = [
+  /^Authored-by:\s+.+\s+<.+@.+>$/im,
+  /^Commit-generated-by:\s+.+\s+<.+@.+>$/im,
+  /^Assisted-by:\s+.+\s+<.+@.+>$/im,
+  /^Co-authored-by:\s+.+\s+<.+@.+>$/im,
+  /^Generated-by:\s+.+\s+<.+@.+>$/im,
 ];
 ```
 
@@ -95,7 +97,7 @@ from gitlint.tests.base import BaseTestCase
 class TestCase(BaseTestCase):
     def test_valid_footer(self):
         rule = RaiFooterExists()
-        commit = self.gitcommit("feat: add feature\n\n🛡️ RAI: AI-Generated")
+        commit = self.gitcommit("feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>")
         violations = rule.validate(commit)
         assert len(violations) == 0  # Valid
 ```
@@ -103,19 +105,19 @@ class TestCase(BaseTestCase):
 ### Supported Patterns
 
 ```python
-RAI_FOOTER_PATTERNS = [
-    re.compile(r"^🛡️\s+RAI:\s+AI-Generated$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^🛡️\s+RAI:\s+AI-Assisted$", re.IGNORECASE | re.MULTILINE),
-    re.compile(
-        r"^Generated-by:\s+Verdent AI\s+<verdent@verdent\.ai>$",
-        re.IGNORECASE | re.MULTILINE,
-    ),
+AI_ATTRIBUTION_PATTERNS = [
+    re.compile(r"^Authored-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"^Commit-generated-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"^Assisted-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"^Co-authored-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"^Generated-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
 ]
 ```
 
 **Flags**:
 - `re.IGNORECASE`: Case-insensitive matching
 - `re.MULTILINE`: ^ and $ match line boundaries
+- Follow Git trailer format with tool name and email
 
 ---
 
@@ -130,7 +132,7 @@ export default {
   extends: ['@commitlint/config-conventional'],
   plugins: ['@checkmark/commitlint-plugin-rai'],
   rules: {
-    'rai-footer-exists': [2, 'always'],
+    'ai-attribution-exists': [2, 'always'],
   },
 };
 ```
@@ -173,7 +175,7 @@ function validateCommitMessage(message) {
   }
 }
 
-const result = validateCommitMessage('feat: test\n\n🛡️ RAI: AI-Generated');
+const result = validateCommitMessage('feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>');
 console.log(result); // { valid: true }
 ```
 
@@ -188,7 +190,7 @@ def validate_commit_message(message):
     result = runner.invoke(cli, ['--msg-filename', '-'], input=message)
     return result.exit_code == 0
 
-valid = validate_commit_message("feat: test\n\n🛡️ RAI: AI-Generated")
+valid = validate_commit_message("feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>")
 print(valid)  # True
 ```
 
@@ -200,18 +202,22 @@ print(valid)  # True
 
 **Node.js**:
 ```
-Commit message must include a valid RAI footer:
-  - "🛡️ RAI: AI-Generated"
-  - "🛡️ RAI: AI-Assisted"
-  - "Generated-by: Verdent AI <verdent@verdent.ai>"
+Commit must include AI attribution footer:
+  1. "Authored-by: [Human] <email>" - Human only, no AI
+  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)
+  3. "Assisted-by: [AI Tool] <email>" - AI helped, primarily human
+  4. "Co-authored-by: [AI Tool] <email>" - 50/50 AI/human (40-60 leeway)
+  5. "Generated-by: [AI Tool] <email>" - Majority AI generated
 ```
 
 **Python**:
 ```
-UC1 Commit message must include a valid RAI footer:
-  - "🛡️ RAI: AI-Generated"
-  - "🛡️ RAI: AI-Assisted"
-  - "Generated-by: Verdent AI <verdent@verdent.ai>"
+UC1 Commit message must include a valid AI attribution footer:
+  1. "Authored-by: [Human] <email>" - Human only, no AI
+  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)
+  3. "Assisted-by: [AI Tool] <email>" - AI helped, primarily human
+  4. "Co-authored-by: [AI Tool] <email>" - 50/50 AI/human (40-60 leeway)
+  5. "Generated-by: [AI Tool] <email>" - Majority AI generated
 ```
 
 ---

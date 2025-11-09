@@ -137,47 +137,47 @@ ls -la .git/hooks/commit-msg
 
 1. **Extra whitespace**
    ```bash
-   # ❌ Extra space before emoji
-   " 🛡️ RAI: AI-Generated"
-   
+   # ❌ Extra space before footer
+   " Generated-by: GitHub Copilot <copilot@github.com>"
+
    # ✅ No leading space
-   "🛡️ RAI: AI-Generated"
+   "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
-2. **Wrong emoji**
+2. **Wrong keyword**
    ```bash
-   # ❌ Wrong emoji
-   "🔒 RAI: AI-Generated"
-   
-   # ✅ Shield emoji
-   "🛡️ RAI: AI-Generated"
+   # ❌ Invalid keyword
+   "Created-by: GitHub Copilot <copilot@github.com>"
+
+   # ✅ Valid keyword
+   "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
 3. **Typo in text**
    ```bash
    # ❌ Typo
-   "🛡️ RAI: AI-Generatd"
-   
+   "Generatedby: GitHub Copilot <copilot@github.com>"
+
    # ✅ Correct
-   "🛡️ RAI: AI-Generated"
+   "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
 4. **Email format**
    ```bash
    # ❌ Missing angle brackets
-   "Generated-by: Verdent AI verdent@verdent.ai"
-   
+   "Generated-by: GitHub Copilot copilot@github.com"
+
    # ✅ With angle brackets
-   "Generated-by: Verdent AI <verdent@verdent.ai>"
+   "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
 **Debug**:
 ```bash
 # Check exact bytes
-echo "🛡️ RAI: AI-Generated" | xxd
+echo "Generated-by: GitHub Copilot <copilot@github.com>" | xxd
 
 # Test pattern
-echo "feat: test\n\n🛡️ RAI: AI-Generated" | npx commitlint
+echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
 ```
 
 ---
@@ -190,12 +190,12 @@ echo "feat: test\n\n🛡️ RAI: AI-Generated" | npx commitlint
 ```bash
 # ❌ No blank line
 feat: add feature
-🛡️ RAI: AI-Generated
+Generated-by: GitHub Copilot <copilot@github.com>
 
 # ✅ Blank line before footer
 feat: add feature
 
-🛡️ RAI: AI-Generated
+Generated-by: GitHub Copilot <copilot@github.com>
 ```
 
 ---
@@ -289,7 +289,7 @@ If slower, check for:
 
 ```bash
 # Test commit message
-echo "feat: test\n\n🛡️ RAI: AI-Generated" | npx commitlint
+echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
 
 # Verbose output
 npx commitlint --verbose --edit .git/COMMIT_EDITMSG
@@ -305,7 +305,7 @@ npx commitlint --print-config
 
 ```bash
 # Test commit message
-echo "feat: test\n\n🛡️ RAI: AI-Generated" | gitlint
+echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | gitlint
 
 # Verbose output
 gitlint --verbose
@@ -330,7 +330,7 @@ If you're still experiencing issues:
    # Node
    node --version
    npm list @checkmark/commitlint-plugin-rai
-   
+
    # Python
    python --version
    pip show checkmark-rai-lint
