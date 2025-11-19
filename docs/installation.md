@@ -4,14 +4,14 @@
 
 ### For Node.js Projects
 
-- Node.js >= 16.0.0
+- Node.js >= 18.0.0
 - npm or yarn
 - Git repository
 
 ### For Python Projects
 
-- Python >= 3.9, < 3.13
-- pip
+- Python >= 3.10, < 3.13
+- uv
 - Git repository
 
 ## Node.js Installation
@@ -41,11 +41,13 @@ export default {
 #### Option A: Lefthook (Recommended)
 
 Install Lefthook:
+
 ```bash
 npm install --save-dev lefthook
 ```
 
 Create `lefthook.yml`:
+
 ```yaml
 commit-msg:
   commands:
@@ -54,6 +56,7 @@ commit-msg:
 ```
 
 Install hooks:
+
 ```bash
 npx lefthook install
 ```
@@ -61,12 +64,14 @@ npx lefthook install
 #### Option B: Husky
 
 Install Husky:
+
 ```bash
 npm install --save-dev husky
 npx husky install
 ```
 
 Add commit-msg hook:
+
 ```bash
 npx husky add .husky/commit-msg 'npx commitlint --edit $1'
 ```
@@ -76,12 +81,13 @@ npx husky add .husky/commit-msg 'npx commitlint --edit $1'
 ### 1. Install the Plugin
 
 ```bash
-pip install checkmark-rai-lint
+uv add checkmark-rai-lint
 ```
 
 For development:
+
 ```bash
-pip install checkmark-rai-lint[dev]
+uv add checkmark-rai-lint --dev
 ```
 
 ### 2. Configure Gitlint
@@ -98,11 +104,13 @@ contrib = checkmark_rai_lint.rules.RaiFooterExists
 #### Option A: pre-commit (Recommended)
 
 Install pre-commit:
+
 ```bash
-pip install pre-commit
+uv add pre-commit
 ```
 
 Create `.pre-commit-config.yaml`:
+
 ```yaml
 repos:
   - repo: local
@@ -116,6 +124,7 @@ repos:
 ```
 
 Install hooks:
+
 ```bash
 pre-commit install --hook-type commit-msg
 ```
@@ -123,12 +132,14 @@ pre-commit install --hook-type commit-msg
 #### Option B: Manual Git Hook
 
 Create `.git/hooks/commit-msg`:
+
 ```bash
 #!/bin/sh
 gitlint --msg-filename="$1"
 ```
 
 Make it executable:
+
 ```bash
 chmod +x .git/hooks/commit-msg
 ```
@@ -162,6 +173,7 @@ This should be rejected with an error message.
 **Problem**: Commitlint not running on commit
 
 **Solution**: Verify hooks are installed:
+
 ```bash
 ls -la .git/hooks/commit-msg
 ```
@@ -171,13 +183,15 @@ ls -la .git/hooks/commit-msg
 **Problem**: `ImportError: No module named 'checkmark_rai_lint'`
 
 **Solution**: Reinstall the package:
+
 ```bash
-pip install --force-reinstall checkmark-rai-lint
+uv add --reinstall checkmark-rai-lint
 ```
 
 **Problem**: Gitlint not finding the rule
 
 **Solution**: Check `.gitlint` configuration and ensure the contrib path is correct:
+
 ```bash
 gitlint --debug
 ```

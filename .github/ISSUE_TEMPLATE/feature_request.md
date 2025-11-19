@@ -30,7 +30,7 @@ Which package(s) should this feature be added to?
 - [ ] Python (checkmark-rai-lint)
 - [ ] Both packages
 - [ ] Documentation
-- [ ] Other: 
+- [ ] Other:
 
 ## Breaking Changes
 
@@ -43,9 +43,3 @@ Would this feature require breaking changes?
 ## Additional Context
 
 Add any other context, screenshots, or examples about the feature request.
-
-## RAI Footer
-
-This issue was created with:
-- [ ] AI assistance
-- [ ] No AI assistance

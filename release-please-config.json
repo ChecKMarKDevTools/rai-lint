@@ -1,0 +1,33 @@
+{
+  "packages": {
+    "packages/node-commitlint": {
+      "release-type": "node",
+      "package-name": "@checkmark/commitlint-plugin-rai",
+      "changelog-path": "packages/python-gitlint/CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true,
+      "draft": false,
+      "prerelease": false,
+      "draft-pull-request": false,
+      "extra-files": ["package.json"]
+    },
+    "packages/python-gitlint": {
+      "release-type": "python",
+      "package-name": "checkmark-rai-lint",
+      "changelog-path": "packages/python-gitlint/CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true,
+      "draft": false,
+      "prerelease": false,
+      "draft-pull-request": false,
+      "extra-files": ["pyproject.toml"]
+    }
+  },
+  "separate-pull-requests": true,
+  "fork": false,
+  "include-component-in-tag": true,
+  "tag-separator": "-",
+  "include-v-in-tag": true,
+  "always-link-releases": true,
+  "create-release": true
+}

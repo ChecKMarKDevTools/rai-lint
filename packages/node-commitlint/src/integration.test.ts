@@ -36,9 +36,7 @@ describe('Integration Tests', () => {
   });
 
   it('should accept valid Verdent AI footer', () => {
-    const result = testCommit(
-      'chore: update deps\n\nGenerated-by: Verdent AI <verdent@verdent.ai>'
-    );
+    const result = testCommit('chore: update deps\n\nGenerated-by: Verdent AI <verdent@verdent.ai>');
     expect(result.exitCode).toBe(0);
   });
 

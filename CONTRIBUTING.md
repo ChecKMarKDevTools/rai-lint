@@ -1,6 +1,6 @@
 # Contributing to CheckMarK RAI Lint
 
-Thank you for your interest in contributing to CheckMarK RAI Lint!
+Thank you for your interest in CheckMarK RAI Lint!
 
 ## AI Attribution Policy
 
@@ -13,6 +13,7 @@ All commits to this repository must include an AI attribution footer using stand
 5. **`Generated-by: [AI Tool] <email>`** - Majority of code was AI generated
 
 Examples:
+
 ```
 Authored-by: Jane Doe <jane@example.com>
 Commit-generated-by: ChatGPT <chatgpt@openai.com>
@@ -26,8 +27,8 @@ Generated-by: GitHub Copilot <copilot@github.com>
 ### Node.js Development
 
 ```bash
-npm install
 cd packages/node-commitlint
+npm install
 npm test
 npm run lint
 ```
@@ -35,8 +36,8 @@ npm run lint
 ### Python Development
 
 ```bash
-pip install -e "packages/python-gitlint[dev]"
 cd packages/python-gitlint
+uv sync --locked --group dev
 pytest tests/
 black checkmark_rai_lint/
 isort checkmark_rai_lint/

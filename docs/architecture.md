@@ -37,6 +37,7 @@ packages/node-commitlint/
 ```
 
 **Key Design Decisions:**
+
 - ESM-first with TypeScript for modern Node.js
 - Commitlint Rule API compliance
 - Regex-based pattern matching for flexibility
@@ -56,9 +57,10 @@ packages/python-gitlint/
 ```
 
 **Key Design Decisions:**
+
 - Gitlint contrib rule pattern
 - Identical regex patterns to Node version
-- Python 3.9+ baseline for broad compatibility
+- Python 3.10+ baseline for compatibility
 - Minimal dependencies (gitlint only)
 
 ## RAI Footer Validation Logic
@@ -72,6 +74,7 @@ Both implementations use identical validation patterns:
 5. **Generated-by Pattern**: `^Generated-by:\s+.+\s+<.+@.+>$`
 
 All patterns are:
+
 - Case-insensitive (`re.IGNORECASE` / `i` flag)
 - Multiline-aware (`re.MULTILINE` / `m` flag)
 - Anchored to line boundaries (`^` and `$`)
@@ -90,7 +93,8 @@ fixtures/
 ```
 
 Test cases cover:
-- ✅ Valid footers (all three patterns)
+
+- ✅ Valid footers (all five patterns)
 - ✅ Case insensitivity
 - ❌ Missing footers
 - ❌ Malformed footers
@@ -99,10 +103,12 @@ Test cases cover:
 ### CI Matrix
 
 Automated testing across:
-- **Node**: 16, 18, 20, 24
-- **Python**: 3.9, 3.10, 3.11, 3.12
+
+- **Node**: 18, 20
+- **Python**: 3.11, 3.12
 
 Each matrix job runs:
+
 - Linting (ESLint/Black/isort)
 - Unit tests (Vitest/Pytest)
 - Build verification (TypeScript compilation)

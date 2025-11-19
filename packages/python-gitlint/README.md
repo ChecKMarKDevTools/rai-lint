@@ -5,40 +5,54 @@ Gitlint plugin for enforcing AI attribution in commit messages using standard Gi
 ## Installation
 
 ```bash
-pip install checkmark-rai-lint
+uv add checkmark-rai-lint
 ```
 
 ## Usage
 
-Add to your `.gitlint`:
+Install the plugin via uv:
+
+```bash
+uv add checkmark-rai-lint
+```
+
+The plugin will be auto-discovered by gitlint (>=0.19.1) via entry points. No additional configuration is required in your `.gitlint` file. To verify the rule is loaded, run:
+
+```bash
+gitlint --list-rules | grep rai-footer-exists
+```
+
+If auto-discovery is not working in your environment, configure gitlint to explicitly load the plugin:
 
 ```ini
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+extra-paths = /path/to/site-packages
 ```
+
+Then list and validate rules as above.
 
 ## Valid Footer Formats
 
-1. **`Authored-by: [Human] <email>`** - Human only, no AI
-2. **`Commit-generated-by: [AI Tool] <email>`** - Trivial AI (docs, commit msg, advice, reviews)
+1. **`Authored-by: [Human] <email>`** - Human only, no AI involvement
+2. **`Commit-generated-by: [AI Tool] <email>`** - Trivial AI (docs, commit msg, reviews, advice, etc)
 3. **`Assisted-by: [AI Tool] <email>`** - AI helped, but primarily human code
-4. **`Co-authored-by: [AI Tool] <email>`** - Roughly 50/50 AI and human (40-60 leeway)
+4. **`Co-authored-by: [AI Tool] <email>`** - Roughly half is AI generated and half human-authored content
 5. **`Generated-by: [AI Tool] <email>`** - Majority of code was AI generated
 
 All patterns are case-insensitive.
 
 ## Requirements
 
-- Python >= 3.9, < 3.13
-- gitlint >= 0.19.0
+- Python >= 3.10, < 3.13
+- gitlint >= 0.19.1
 
 ## Development
 
 ```bash
-pip install -e ".[dev]"
-pytest tests/
-black checkmark_rai_lint/
-isort checkmark_rai_lint/
+uv sync --locked --group dev
+make test
+make lint
+make test-coverage
 ```
 
 ## License

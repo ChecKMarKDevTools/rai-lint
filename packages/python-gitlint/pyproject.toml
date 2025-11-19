@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "checkmark-rai-lint"
 version = "0.1.0"
 description = "Gitlint plugin for RAI footer validation"
-requires-python = ">=3.9"
+requires-python = ">=3.10,<3.13"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
 license = {text = "Polyform Shield 1.0.0"}
 dependencies = ["gitlint>=0.19.1"]
@@ -14,17 +14,21 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
 
 [project.optional-dependencies]
+
+[dependency-groups]
 dev = [
     "pytest>=8.4.0",
+    "pytest-cov>=4.0.0",
     "black>=25.9.0",
     "isort>=7.0.0",
+    "coverage>=7.0.0",
+    "build>=0.10.0",
 ]
 
 [tool.setuptools.packages.find]
@@ -33,3 +37,31 @@ include = ["checkmark_rai_lint*"]
 
 [project.entry-points."gitlint.plugins"]
 rai-footer-exists = "checkmark_rai_lint.rules:RaiFooterExists"
+
+[tool.coverage.run]
+source = ["checkmark_rai_lint"]
+omit = [
+    "tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    ".venv/*",
+    "venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == '__main__':",
+]
+show_missing = true
+precision = 2
+fail_under = 80
+
+[tool.coverage.html]
+directory = "htmlcov"

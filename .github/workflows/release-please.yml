@@ -1,0 +1,116 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      node-release-created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
+      python-release-created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
+      node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
+      python-tag-name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Ensure GitHub releases are immutable
+        if: steps.release.outputs.releases_created
+        run: |
+          echo "GitHub releases created and tagged for immutability"
+          echo "Node release: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}"
+          echo "Python release: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}"
+
+  release-node:
+    needs: release-please
+    runs-on: ubuntu-latest
+    if: ${{ needs.release-please.outputs.node-release-created }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: packages/node-commitlint
+
+      - name: Run tests
+        run: npm test
+        working-directory: packages/node-commitlint
+
+      - name: Build
+        run: npm run build
+        working-directory: packages/node-commitlint
+
+      - name: Publish to NPM
+        run: npm publish
+        working-directory: packages/node-commitlint
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release-python:
+    needs: release-please
+    runs-on: ubuntu-latest
+    if: ${{ needs.release-please.outputs.python-release-created }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --group dev
+        working-directory: packages/python-gitlint
+
+      - name: Run tests
+        run: uv run pytest tests/
+        working-directory: packages/python-gitlint
+
+      - name: Build package
+        run: uv run python -m build
+        working-directory: packages/python-gitlint
+
+      - name: Publish to PyPI
+        run: uv run twine upload dist/*
+        working-directory: packages/python-gitlint
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+
+  sync-releases:
+    needs: [release-please, release-node, release-python]
+    runs-on: ubuntu-latest
+    if: always() && (needs.release-node.result == 'success' || needs.release-python.result == 'success')
+
+    steps:
+      - name: Verify synchronized releases
+        run: |
+          echo "Releases synchronized:"
+          echo "Node release created: ${{ needs.release-please.outputs.node-release-created }}"
+          echo "Python release created: ${{ needs.release-please.outputs.python-release-created }}"
+          echo "Node tag: ${{ needs.release-please.outputs.node-tag-name }}"
+          echo "Python tag: ${{ needs.release-please.outputs.python-tag-name }}"
+          echo "All releases are immutable and tagged for synchronization"

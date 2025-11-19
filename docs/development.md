@@ -2,14 +2,6 @@
 
 Quick start guide for developers working on CheckMarK RAI Lint.
 
-## Prerequisites
-
-- Node.js >= 16.0.0
-- Python >= 3.9, < 3.13
-- Git
-- npm or yarn
-- pip
-
 ## Quick Setup
 
 ```bash
@@ -17,6 +9,7 @@ bash setup.sh
 ```
 
 This will:
+
 1. Install Node.js dependencies
 2. Create Python virtual environment
 3. Install Python dependencies
@@ -37,10 +30,9 @@ npm test
 ### Python Setup
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e "packages/python-gitlint[dev]"
-pytest packages/python-gitlint/tests
+cd packages/python-gitlint
+uv sync --locked --group dev
+uv run pytest tests
 ```
 
 ## Development Workflow
@@ -148,11 +140,8 @@ npm install
 ### Python Issues
 
 ```bash
-deactivate
-rm -rf .venv
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e "packages/python-gitlint[dev]"
+cd packages/python-gitlint
+uv sync --locked --group dev
 ```
 
 ## Contributing

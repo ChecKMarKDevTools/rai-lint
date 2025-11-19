@@ -12,18 +12,20 @@ A clear and concise description of the bug.
 
 ## Environment
 
-**Package**: 
+**Package**:
+
 - [ ] Node.js (@checkmark/commitlint-plugin-rai)
 - [ ] Python (checkmark-rai-lint)
 
-**Version**: 
+**Version**:
 
-**Node.js version** (if applicable): 
-**Python version** (if applicable): 
+**Node.js version** (if applicable):
+**Python version** (if applicable):
 
-**Operating System**: 
+**Operating System**:
 
 **Hook Manager**:
+
 - [ ] Lefthook
 - [ ] Husky
 - [ ] pre-commit
@@ -32,9 +34,9 @@ A clear and concise description of the bug.
 
 ## Steps to Reproduce
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Expected Behavior
 
@@ -59,9 +61,3 @@ What actually happened.
 ## Additional Context
 
 Add any other context about the problem here.
-
-## RAI Footer
-
-This issue was created with:
-- [ ] AI assistance
-- [ ] No AI assistance

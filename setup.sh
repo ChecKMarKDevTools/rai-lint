@@ -6,12 +6,17 @@ echo "🚀 Setting up CheckMarK RAI Lint development environment..."
 echo ""
 
 if ! command -v node &> /dev/null; then
-    echo "❌ Node.js not found. Please install Node.js >= 16.0.0"
+    echo "❌ Node.js not found. Please install Node.js >= 18.0.0"
     exit 1
 fi
 
 if ! command -v python3 &> /dev/null; then
-    echo "❌ Python3 not found. Please install Python >= 3.9"
+    echo "❌ Python3 not found. Please install Python >= 3.10, < 3.13"
+    exit 1
+fi
+
+if ! command -v uv &> /dev/null; then
+    echo "❌ uv not found. Please install uv"
     exit 1
 fi
 
@@ -21,12 +26,9 @@ echo "✅ Node.js dependencies installed"
 echo ""
 
 echo "📦 Installing Python dependencies..."
-if [ ! -d ".venv" ]; then
-    python3 -m venv .venv
-fi
-source .venv/bin/activate || . .venv/Scripts/activate
-pip install --upgrade pip
-pip install -e "packages/python-gitlint[dev]"
+cd packages/python-gitlint
+uv sync --locked --group dev
+cd ../..
 echo "✅ Python dependencies installed"
 echo ""
 
@@ -45,8 +47,9 @@ npm test
 cd ../..
 echo ""
 echo "Python tests:"
-source .venv/bin/activate || . .venv/Scripts/activate
-pytest packages/python-gitlint/tests -v
+cd packages/python-gitlint
+uv run pytest tests -v
+cd ../..
 echo "✅ All tests passed"
 echo ""
 
@@ -54,7 +57,7 @@ echo "✨ Setup complete! You're ready to develop."
 echo ""
 echo "Next steps:"
 echo "  1. For Node development: cd packages/node-commitlint && npm test"
-echo "  2. For Python development: source .venv/bin/activate && pytest packages/python-gitlint/tests"
+echo "  2. For Python development: cd packages/python-gitlint && uv run pytest tests"
 echo "  3. Run benchmarks: npm test benchmarks/"
 echo "  4. Install git hooks: npx lefthook install"
 echo ""

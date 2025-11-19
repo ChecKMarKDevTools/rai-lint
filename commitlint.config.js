@@ -15,17 +15,17 @@ export default {
             /^Co-authored-by:\s+.+\s+<.+@.+>$/im,
             /^Generated-by:\s+.+\s+<.+@.+>$/im,
           ];
-          
+
           const hasValidFooter = aiAttributionPatterns.some((pattern) => pattern.test(raw));
-          
+
           return [
             hasValidFooter,
             'Commit must include AI attribution footer:\n' +
-            '  1. "Authored-by: [Human] <email>" - Human only, no AI\n' +
-            '  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)\n' +
-            '  3. "Assisted-by: [AI Tool] <email>" - AI helped, primarily human\n' +
-            '  4. "Co-authored-by: [AI Tool] <email>" - 50/50 AI/human (40-60 leeway)\n' +
-            '  5. "Generated-by: [AI Tool] <email>" - Majority AI generated',
+              '  1. "Authored-by: [Human] <email>" - Human only, no AI\n' +
+              '  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)\n' +
+              '  3. "Assisted-by: [AI Tool] <email>" - AI helped, primarily human\n' +
+              '  4. "Co-authored-by: [AI Tool] <email>" - 50/50 AI/human (40-60 leeway)\n' +
+              '  5. "Generated-by: [AI Tool] <email>" - Majority AI generated',
           ];
         },
       },

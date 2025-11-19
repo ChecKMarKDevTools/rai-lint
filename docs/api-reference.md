@@ -23,10 +23,12 @@ const plugin: Plugin = {
 **Return Type**: `[boolean, string]`
 
 **Parameters**:
+
 - `parsed` (CommitMessage): Parsed commit message object
   - `parsed.raw` (string): Full commit message text
 
 **Return Value**:
+
 - Tuple of `[isValid, errorMessage]`
 - `isValid`: `true` if footer is present and valid, `false` otherwise
 - `errorMessage`: Empty string on success, error description on failure
@@ -37,7 +39,7 @@ const plugin: Plugin = {
 import aiAttributionExists from '@checkmark/commitlint-plugin-rai/rules/ai-attribution-exists';
 
 const parsed = {
-  raw: 'feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>'
+  raw: 'feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>',
 };
 
 const [isValid, message] = aiAttributionExists(parsed);
@@ -58,6 +60,7 @@ const AI_ATTRIBUTION_PATTERNS = [
 ```
 
 **Flags**:
+
 - `i`: Case-insensitive
 - `m`: Multiline (^ and $ match line boundaries)
 
@@ -70,6 +73,7 @@ const AI_ATTRIBUTION_PATTERNS = [
 **Base Class**: `gitlint.rules.CommitRule`
 
 **Class Attributes**:
+
 - `name` (str): `"rai-footer-exists"`
 - `id` (str): `"UC1"`
 - `target` (str): `"commit"`
@@ -79,12 +83,14 @@ const AI_ATTRIBUTION_PATTERNS = [
 #### validate(commit)
 
 **Parameters**:
+
 - `commit` (GitCommit): Gitlint commit object
   - `commit.message.full` (str): Full commit message text
 
 **Return Type**: `list[RuleViolation]`
 
 **Return Value**:
+
 - Empty list if validation passes
 - List with one `RuleViolation` if validation fails
 
@@ -115,6 +121,7 @@ AI_ATTRIBUTION_PATTERNS = [
 ```
 
 **Flags**:
+
 - `re.IGNORECASE`: Case-insensitive matching
 - `re.MULTILINE`: ^ and $ match line boundaries
 - Follow Git trailer format with tool name and email
@@ -138,6 +145,7 @@ export default {
 ```
 
 **Rule Configuration**:
+
 - `[0, 'always']`: Disabled
 - `[1, 'always']`: Warning
 - `[2, 'always']`: Error (recommended)
@@ -201,6 +209,7 @@ print(valid)  # True
 ### Invalid Footer Error
 
 **Node.js**:
+
 ```
 Commit must include AI attribution footer:
   1. "Authored-by: [Human] <email>" - Human only, no AI
@@ -211,6 +220,7 @@ Commit must include AI attribution footer:
 ```
 
 **Python**:
+
 ```
 UC1 Commit message must include a valid AI attribution footer:
   1. "Authored-by: [Human] <email>" - Human only, no AI

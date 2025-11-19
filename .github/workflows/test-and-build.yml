@@ -1,0 +1,109 @@
+name: Test and Build
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/PULL_REQUEST_TEMPLATE.md'
+  workflow_dispatch:
+
+jobs:
+  node-tests:
+    name: Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    strategy:
+      matrix:
+        node-version: [18, 20]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+        working-directory: packages/node-commitlint
+
+      - name: Build
+        run: npm run build
+        working-directory: packages/node-commitlint
+
+  python-tests:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: cd packages/python-gitlint && uv sync --locked --group dev
+
+      - name: Run Black and isort
+        run: |
+          cd packages/python-gitlint && uv run black --check checkmark_rai_lint tests/
+          cd packages/python-gitlint && uv run isort --check-only checkmark_rai_lint tests/
+
+      - name: Run tests with coverage
+        run: cd packages/python-gitlint && uv run pytest tests/ --cov=checkmark_rai_lint --cov-report=term-missing --cov-fail-under=80
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if package files changed
+        id: changed
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            package.json
+            package-lock.json
+            **/package.json
+            **/pyproject.toml
+            **/uv.lock
+            **/requirements*.txt
+
+      - name: Dependency Review
+        if: steps.changed.outputs.any_changed == 'true'
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: on-failure

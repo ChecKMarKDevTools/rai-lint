@@ -20,7 +20,6 @@
 
 <!-- List the key changes in bullet points -->
 
-
 ## Testing
 
 <!-- Describe how you tested your changes -->
@@ -31,6 +30,7 @@
 - [ ] Tested in CI environment
 
 **Test Environment**:
+
 - Node.js version (if applicable):
 - Python version (if applicable):
 
@@ -49,7 +49,6 @@
 - [ ] All tests pass locally
 - [ ] I have updated the CHANGELOG.md
 - [ ] My commits follow Conventional Commits format
-- [ ] All commits include required RAI footer
 
 ## Breaking Changes
 
@@ -58,14 +57,3 @@
 ## Additional Notes
 
 <!-- Any additional information that reviewers should know -->
-
----
-
-**RAI Attribution**:
-
-All commits in this PR include the required RAI footer:
-- [ ] Authored-by: [Human] <email> - Human only, no AI
-- [ ] Commit-generated-by: [AI Tool] <email> - Trivial AI work
-- [ ] Assisted-by: [AI Tool] <email> - AI helped, primarily human
-- [ ] Co-authored-by: [AI Tool] <email> - Roughly 50/50 AI/human
-- [ ] Generated-by: [AI Tool] <email> - Majority AI-generated

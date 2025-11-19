@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: true
+  commands:
+    make-format:
+      run: make format && make lint
+      stage_fixed: true
+    make-test:
+      run: make test
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}

@@ -39,18 +39,22 @@ The AI attribution validation is currently defined inline in `commitlint.config.
 Monorepo uses isolated virtual environments per package—**NEVER** install globally:
 
 **.env** (root level, gitignored)
+
 - Contains shared secrets: `NPM_TOKEN`, `PYPI_TOKEN` for release workflows
 
 **Node.js Environment** (`/packages/node-commitlint`)
+
 - Use `node_modules/.bin` or `npx` (do not use global npm)
 - Install with `npm ci` or `npm install` in package directory only
 - Never install to global npm registry or modify system node_modules
 
 **Python Environment** (`/packages/python-gitlint`)
-- Create isolated venv: `python3 -m venv venv`
-- Activate: `source venv/bin/activate`
-- Install with `pip install -e ".[dev]"` within venv only
-- **NEVER** use `pip install --global-site-packages` or install to system Python
-- Use `.env.python` for package-specific vars if needed
 
-Both packages must have zero impact on global pyenv or npm installations.
+- Prefer `uv` instead of `pip`
+
+## Rules for Implementation
+
+- Consider alternatives before starting work
+- Always execute validation step before returning to the user, which should include format and lint
+- All tests must pass successfully before returning a response to the user. If a failure occurs, you are expected to fix it.
+- Before returning final response to the user, look for the @commit subagent and follow rules to update the `commit.tmp` file and include valid attribution

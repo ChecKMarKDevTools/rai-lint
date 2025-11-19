@@ -82,7 +82,7 @@ export default {
 ### Python / Gitlint
 
 ```bash
-pip install checkmark-rai-lint
+uv add checkmark-rai-lint
 ```
 
 Configure in `.gitlint`:
@@ -121,28 +121,6 @@ repos:
         args: [--msg-filename]
         language: python
         stages: [commit-msg]
-```
-
-## Requirements
-
-- **Node**: 16.0.0 or higher (tested up to 24.x)
-- **Python**: 3.9 – 3.12
-
-## Development
-
-```bash
-npm install
-npm test
-npm run lint
-```
-
-For Python:
-
-```bash
-pip install -e "packages/python-gitlint[dev]"
-pytest packages/python-gitlint/tests
-black packages/python-gitlint
-isort packages/python-gitlint
 ```
 
 ## License

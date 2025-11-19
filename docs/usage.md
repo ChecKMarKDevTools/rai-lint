@@ -96,21 +96,25 @@ Assisted-by: GitHub Copilot <copilot@github.com>
 ### Node.js / Commitlint
 
 Test commit message from stdin:
+
 ```bash
 echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
 ```
 
 Validate last commit:
+
 ```bash
 npx commitlint --from HEAD~1
 ```
 
 Validate specific commit:
+
 ```bash
 npx commitlint --from abc123f
 ```
 
 Validate range:
+
 ```bash
 npx commitlint --from main --to develop
 ```
@@ -118,21 +122,25 @@ npx commitlint --from main --to develop
 ### Python / Gitlint
 
 Lint last commit:
+
 ```bash
 gitlint
 ```
 
 Lint specific commit:
+
 ```bash
 gitlint --commit abc123f
 ```
 
 Lint commit message from file:
+
 ```bash
 gitlint --msg-filename .git/COMMIT_EDITMSG
 ```
 
 Test message from stdin:
+
 ```bash
 echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | gitlint
 ```
@@ -245,6 +253,7 @@ git config alias.cai '!git commit -e -m "$(cat)" -m "" -m "Assisted-by: GitHub C
 ```
 
 Usage:
+
 ```bash
 echo "feat: add new feature" | git cai
 ```
@@ -272,6 +281,7 @@ All commits must include an RAI footer:
 **Problem**: Commit rejected even with footer present
 
 **Solutions**:
+
 1. Check for extra whitespace around the footer
 2. Ensure footer is on its own line
 3. Verify the footer keyword is spelled correctly
