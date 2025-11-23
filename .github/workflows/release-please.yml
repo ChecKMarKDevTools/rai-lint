@@ -14,10 +14,10 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     outputs:
+      release-created: ${{ steps.release.outputs.release_created }}
+      tag-name: ${{ steps.release.outputs.tag_name }}
       node-release-created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
       python-release-created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
-      node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
-      python-tag-name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -31,34 +31,79 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.release-please.outputs.node-release-created }}
     permissions:
+      contents: read
       id-token: write
+      attestations: write
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Build and publish
+      - name: Install dependencies
         working-directory: packages/node-commitlint
-        run: |
-          npm run build
-          npm publish --provenance --access public
+        run: npm ci
+
+      - name: Run tests
+        working-directory: packages/node-commitlint
+        run: npm test
+
+      - name: Build package
+        working-directory: packages/node-commitlint
+        run: npm run build
+
+      - name: Generate SBOM
+        working-directory: packages/node-commitlint
+        run: npx @cyclonedx/cyclonedx-npm --output-file sbom.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-sbom
+          path: packages/node-commitlint/sbom.json
+          retention-days: 90
+
+      - name: Generate build attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: packages/node-commitlint/dist/**/*
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-package-dist
+          path: packages/node-commitlint/dist/
+          retention-days: 90
+
+      - name: Publish to NPM with provenance
+        working-directory: packages/node-commitlint
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Summary
+        env:
+          TAG_NAME: ${{ needs.release-please.outputs.tag-name }}
         run: |
           echo "### NPM Package Published :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "- Package: \`@checkmark/commitlint-plugin-rai\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Tag: \`${{ needs.release-please.outputs.node-tag-name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** \`@checkmark/commitlint-plugin-rai\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** [npmjs.com](https://www.npmjs.com/package/@checkmark/commitlint-plugin-rai)" >> $GITHUB_STEP_SUMMARY
+          echo "**Provenance:** ✅ Published with build attestation" >> $GITHUB_STEP_SUMMARY
+          echo "**SBOM:** ✅ Generated (CycloneDX format)" >> $GITHUB_STEP_SUMMARY
 
   release-python:
     needs: release-please
     runs-on: ubuntu-latest
     if: ${{ needs.release-please.outputs.python-release-created }}
     permissions:
+      contents: read
       id-token: write
+      attestations: write
 
     steps:
       - uses: actions/checkout@v4
@@ -72,17 +117,65 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Build and publish
+      - name: Install dependencies
         working-directory: packages/python-gitlint
-        run: uv run python -m build
+        run: uv sync --frozen
 
-      - name: Publish to PyPI
+      - name: Run tests with coverage
+        working-directory: packages/python-gitlint
+        run: uv run pytest --cov --cov-report=term --cov-report=json
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-coverage
+          path: packages/python-gitlint/coverage.json
+          retention-days: 90
+
+      - name: Build package
+        working-directory: packages/python-gitlint
+        run: uv build
+
+      - name: Generate SBOM
+        working-directory: packages/python-gitlint
+        run: |
+          uv pip install cyclonedx-bom
+          uv run cyclonedx-py requirements pyproject.toml -o sbom.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-sbom
+          path: packages/python-gitlint/sbom.json
+          retention-days: 90
+
+      - name: Generate build attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: packages/python-gitlint/dist/*
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-dist
+          path: packages/python-gitlint/dist/
+          retention-days: 90
+
+      - name: Publish to PyPI with attestations
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: packages/python-gitlint/dist/
+          attestations: true
 
       - name: Summary
+        env:
+          TAG_NAME: ${{ needs.release-please.outputs.tag-name }}
         run: |
           echo "### PyPI Package Published :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "- Package: \`checkmark-rai-lint\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Tag: \`${{ needs.release-please.outputs.python-tag-name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** \`checkmark-rai-lint\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** [pypi.org](https://pypi.org/project/checkmark-rai-lint/)" >> $GITHUB_STEP_SUMMARY
+          echo "**Attestations:** ✅ Published with digital attestations" >> $GITHUB_STEP_SUMMARY
+          echo "**SBOM:** ✅ Generated (CycloneDX format)" >> $GITHUB_STEP_SUMMARY
+          echo "**Coverage:** ✅ Test coverage report uploaded" >> $GITHUB_STEP_SUMMARY

@@ -5,18 +5,19 @@
 CheckMarK RAI Lint is designed as a dual-language monorepo implementing identical commit validation logic across Node.js and Python ecosystems.
 
 ```mermaid
-graph TB
+%%{init: {'theme':'dark'}}%%
+flowchart TB
     A[Git Commit] --> B{Hook Trigger}
     B --> C[Lefthook/Husky/pre-commit]
     C --> D{Language}
-    D -->|Node| E[@commitlint]
+    D -->|Node.js| E[commitlint]
     D -->|Python| F[gitlint]
     E --> G[RAI Plugin Node]
     F --> H[RAI Plugin Python]
     G --> I{Validate Footer}
     H --> I
-    I -->|Valid| J[Accept Commit]
-    I -->|Invalid| K[Reject Commit]
+    I -->|Valid| J[Accept Commit ✅]
+    I -->|Invalid| K[Reject Commit ❌]
 ```
 
 ## Component Architecture
@@ -137,6 +138,7 @@ The framework supports three major Git hook managers:
 ### Workflow Integration
 
 ```mermaid
+%%{init: {'theme':'dark'}}%%
 sequenceDiagram
     participant Dev as Developer
     participant Git as Git

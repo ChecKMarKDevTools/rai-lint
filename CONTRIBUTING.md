@@ -14,7 +14,7 @@ All commits to this repository must include an AI attribution footer using stand
 
 Examples:
 
-```
+```plaintext
 Authored-by: Jane Doe <jane@example.com>
 Commit-generated-by: ChatGPT <chatgpt@openai.com>
 Assisted-by: GitHub Copilot <copilot@github.com>
@@ -80,7 +80,7 @@ pytest tests/ --cov=checkmark_rai_lint
 
 Follow Conventional Commits specification:
 
-```
+```plaintext
 <type>(<scope>): <subject>
 
 <body>

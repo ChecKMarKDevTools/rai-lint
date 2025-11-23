@@ -1,6 +1,6 @@
 {
   "name": "@checkmark/commitlint-plugin-rai",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Commitlint plugin for RAI footer validation",
   "type": "module",
   "main": "./dist/index.js",
@@ -32,6 +32,15 @@
   ],
   "author": "Ashley Childress",
   "license": "Polyform Shield 1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChecKMarKDevTools/rai-lint.git",
+    "directory": "packages/node-commitlint"
+  },
+  "bugs": {
+    "url": "https://github.com/ChecKMarKDevTools/rai-lint/issues"
+  },
+  "homepage": "https://github.com/ChecKMarKDevTools/rai-lint#readme",
   "peerDependencies": {
     "@commitlint/types": "^20.0.0"
   },

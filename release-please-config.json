@@ -3,7 +3,7 @@
     "packages/node-commitlint": {
       "release-type": "node",
       "package-name": "@checkmark/commitlint-plugin-rai",
-      "changelog-path": "packages/python-gitlint/CHANGELOG.md",
+      "component": "node-commitlint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "draft": false,
@@ -14,7 +14,7 @@
     "packages/python-gitlint": {
       "release-type": "python",
       "package-name": "checkmark-rai-lint",
-      "changelog-path": "packages/python-gitlint/CHANGELOG.md",
+      "component": "python-gitlint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "draft": false,
@@ -23,10 +23,28 @@
       "extra-files": ["pyproject.toml"]
     }
   },
-  "separate-pull-requests": true,
+  "plugins": [
+    {
+      "type": "linked-versions",
+      "groupName": "rai-lint",
+      "components": ["node-commitlint", "python-gitlint"]
+    }
+  ],
+  "changelog-path": "CHANGELOG.md",
+  "changelog-sections": [
+    { "type": "feat", "section": "✨ New Features", "hidden": false },
+    { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
+    { "type": "perf", "section": "⚡ Performance", "hidden": false },
+    { "type": "refactor", "section": "🔨 Refactoring", "hidden": false },
+    { "type": "docs", "section": "📝 Documentation", "hidden": false },
+    { "type": "test", "section": "✅ Tests", "hidden": false },
+    { "type": "build", "section": "📦 Build", "hidden": false },
+    { "type": "ci", "section": "🔁 CI/CD", "hidden": false },
+    { "type": "chore", "section": "🧰 Maintenance", "hidden": false }
+  ],
+  "separate-pull-requests": false,
   "fork": false,
-  "include-component-in-tag": true,
-  "tag-separator": "-",
+  "include-component-in-tag": false,
   "include-v-in-tag": true,
   "always-link-releases": true,
   "create-release": true
