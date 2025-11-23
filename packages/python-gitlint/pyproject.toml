@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "checkmark-rai-lint"
-version = "0.1.0"
+version = "0.1.1"
 description = "Gitlint plugin for RAI footer validation"
 requires-python = ">=3.10,<3.13"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
