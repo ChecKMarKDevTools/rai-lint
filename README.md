@@ -12,6 +12,8 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 [![GitHub Repo Stars](https://img.shields.io/github/stars/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/issues) [![GitHub Release](https://img.shields.io/github/v/release/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=EDC531)](https://github.com/ChecKMarKDevTools/rai-lint/releases) [![License: Polyform Shield](https://img.shields.io/badge/license-Polyform%20Shield%201.0.0-orange?style=for-the-badge)](LICENSE)
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ChecKMarKDevTools_rai-lint&metric=alert_status&style=for-the-badge)](https://sonarcloud.io/summary/new_code?id=ChecKMarKDevTools_rai-lint) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ChecKMarKDevTools_rai-lint&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ChecKMarKDevTools_rai-lint) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ChecKMarKDevTools_rai-lint&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ChecKMarKDevTools_rai-lint) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ChecKMarKDevTools_rai-lint&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ChecKMarKDevTools_rai-lint) [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ChecKMarKDevTools_rai-lint&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=ChecKMarKDevTools_rai-lint)
+
 ### 🗣️ Languages
 
 [![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![TypeScript Badge](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=for-the-badge)](https://www.typescriptlang.org/) [![Python Badge](https://img.shields.io/badge/Python-3670A0?logo=python&logoColor=ffdd54&style=for-the-badge)](https://www.python.org/)
@@ -26,7 +28,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 🔧 Quality & Standards
 
-[![Conventional Commits Badge](https://img.shields.io/badge/Conventional%20Commits-FE5196?logo=conventionalcommits&logoColor=fff&style=for-the-badge)](https://conventionalcommits.org/) [![commitlint Badge](https://img.shields.io/badge/commitlint-000?logo=commitlint&logoColor=fff&style=for-the-badge)](https://commitlint.js.org/) [![ESLint Badge](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=for-the-badge)](https://eslint.org/)
+[![Conventional Commits Badge](https://img.shields.io/badge/Conventional%20Commits-FE5196?logo=conventionalcommits&logoColor=fff&style=for-the-badge)](https://conventionalcommits.org/) [![commitlint Badge](https://img.shields.io/badge/commitlint-000?logo=commitlint&logoColor=fff&style=for-the-badge)](https://commitlint.js.org/) [![ESLint Badge](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=for-the-badge)](https://eslint.org/) ![Lefthook Badge](https://img.shields.io/badge/Lefthook-FF1E1E?logo=lefthook&logoColor=fff&style=for-the-badge)
 
 ---
 
@@ -175,6 +177,11 @@ contrib = checkmark_rai_lint.rules.RaiFooterExists
 <summary><b>Lefthook</b></summary>
 
 ```yaml
+pre-push:
+  commands:
+    sonar-scan:
+      run: npx dotenv -- npx sonar-scanner
+
 commit-msg:
   commands:
     commitlint:

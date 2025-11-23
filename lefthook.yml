@@ -7,6 +7,12 @@ pre-commit:
     make-test:
       run: make test
 
+pre-push:
+  parallel: true
+  commands:
+    sonar-scan:
+      run: npx dotenv -- npx sonar-scanner
+
 commit-msg:
   commands:
     commitlint:
