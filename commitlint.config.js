@@ -3,7 +3,7 @@ export default {
   rules: {
     'footer-max-line-length': [2, 'always', 100],
     'ai-attribution-exists': [2, 'always'],
-    'subject-case': [2, 'never', ['sentence-case', 'start-case', 'pascal-case', 'lower-case']],
+    'subject-case': [2, 'always', ['lower-case']],
   },
   plugins: [
     {
