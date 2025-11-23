@@ -51,6 +51,19 @@ jobs:
         working-directory: packages/node-commitlint
         run: npm test
 
+      - name: Upload Node coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-coverage
+          path: packages/node-commitlint/coverage/coverage-final.json
+          retention-days: 90
+
+      - name: Attach Node coverage to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/node-commitlint/coverage/coverage-final.json
+
       - name: Build package
         working-directory: packages/node-commitlint
         run: npm run build
@@ -66,6 +79,12 @@ jobs:
           path: packages/node-commitlint/sbom.json
           retention-days: 90
 
+      - name: Attach SBOM to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/node-commitlint/sbom.json
+
       - name: Generate build attestation
         uses: actions/attest-build-provenance@v2
         with:
@@ -78,11 +97,19 @@ jobs:
           path: packages/node-commitlint/dist/
           retention-days: 90
 
-      - name: Publish to NPM with provenance
+      - name: Package tarball (npm pack)
+        working-directory: packages/node-commitlint
+        run: npm pack
+
+      - name: Publish to npm (Trusted Publishing)
         working-directory: packages/node-commitlint
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Attach tarball to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/node-commitlint/*.tgz
 
       - name: Summary
         env:
@@ -95,6 +122,9 @@ jobs:
           echo "**Registry:** [npmjs.com](https://www.npmjs.com/package/@checkmark/commitlint-plugin-rai)" >> $GITHUB_STEP_SUMMARY
           echo "**Provenance:** ✅ Published with build attestation" >> $GITHUB_STEP_SUMMARY
           echo "**SBOM:** ✅ Generated (CycloneDX format)" >> $GITHUB_STEP_SUMMARY
+          echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifacts:** node-package-dist, node-sbom, node-coverage (see run artifacts)" >> $GITHUB_STEP_SUMMARY
+          echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
 
   release-python:
     needs: release-please
@@ -132,6 +162,12 @@ jobs:
           path: packages/python-gitlint/coverage.json
           retention-days: 90
 
+      - name: Attach Python coverage to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/python-gitlint/coverage.json
+
       - name: Build package
         working-directory: packages/python-gitlint
         run: uv build
@@ -149,6 +185,14 @@ jobs:
           path: packages/python-gitlint/sbom.json
           retention-days: 90
 
+      - name: Attach Python dist and SBOM to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: |
+            packages/python-gitlint/dist/*
+            packages/python-gitlint/sbom.json
+
       - name: Generate build attestation
         uses: actions/attest-build-provenance@v2
         with:
@@ -161,11 +205,13 @@ jobs:
           path: packages/python-gitlint/dist/
           retention-days: 90
 
-      - name: Publish to PyPI with attestations
+      - name: Publish to PyPI with Trusted Publishing
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Summary
         env:
@@ -178,4 +224,6 @@ jobs:
           echo "**Registry:** [pypi.org](https://pypi.org/project/checkmark-rai-lint/)" >> $GITHUB_STEP_SUMMARY
           echo "**Attestations:** ✅ Published with digital attestations" >> $GITHUB_STEP_SUMMARY
           echo "**SBOM:** ✅ Generated (CycloneDX format)" >> $GITHUB_STEP_SUMMARY
-          echo "**Coverage:** ✅ Test coverage report uploaded" >> $GITHUB_STEP_SUMMARY
+          echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifacts:** python-package-dist, python-sbom, python-coverage (see run artifacts)" >> $GITHUB_STEP_SUMMARY
+          echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
