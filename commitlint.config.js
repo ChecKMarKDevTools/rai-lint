@@ -9,11 +9,11 @@ export default {
       rules: {
         'ai-attribution-exists': ({ raw }) => {
           const aiAttributionPatterns = [
-            /^Authored-by:\s+.+\s+<.+@.+>$/im,
-            /^Commit-generated-by:\s+.+\s+<.+@.+>$/im,
-            /^Assisted-by:\s+.+\s+<.+@.+>$/im,
-            /^Co-authored-by:\s+.+\s+<.+@.+>$/im,
-            /^Generated-by:\s+.+\s+<.+@.+>$/im,
+            /^Authored-by:\s+.+$/im,
+            /^Commit-generated-by:\s+.+$/im,
+            /^Assisted-by:\s+.+$/im,
+            /^Co-authored-by:\s+.+$/im,
+            /^Generated-by:\s+.+$/im,
           ];
 
           const hasValidFooter = aiAttributionPatterns.some((pattern) => pattern.test(raw));

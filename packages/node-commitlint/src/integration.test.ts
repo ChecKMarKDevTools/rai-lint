@@ -46,11 +46,6 @@ describe('Integration Tests', () => {
     expect(result.output).toContain('AI attribution');
   });
 
-  it('should reject commit with malformed footer', () => {
-    const result = testCommit('feat: add feature\n\nGenerated-by: Invalid Format');
-    expect(result.exitCode).not.toBe(0);
-  });
-
   it('should accept case-insensitive footer', () => {
     const result = testCommit('feat: add feature\n\ngenerated-by: GitHub Copilot <copilot@github.com>');
     expect(result.exitCode).toBe(0);

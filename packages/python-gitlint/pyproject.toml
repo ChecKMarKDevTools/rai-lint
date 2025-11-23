@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Gitlint plugin for RAI footer validation"
 requires-python = ">=3.10,<3.13"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
-license = {text = "Polyform Shield 1.0.0"}
+license-files = ["LICENSE"]
 dependencies = ["gitlint>=0.19.1"]
 classifiers = [
     "Development Status :: 3 - Alpha",
