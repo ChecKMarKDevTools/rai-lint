@@ -27,5 +27,9 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "sonarlint.connectedMode.project": {
+    "connectionId": "checkmarkdevtools",
+    "projectKey": "checkmarkdevtools_rai-lint"
   }
 }

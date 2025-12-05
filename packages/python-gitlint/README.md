@@ -1,11 +1,11 @@
-# checkmark-rai-lint
+# checkmarkdevtools-gitlint-plugin-rai
 
 Gitlint plugin for enforcing AI attribution in commit messages using standard Git trailers.
 
 ## Installation
 
 ```bash
-uv add checkmark-rai-lint
+uv add checkmarkdevtools-gitlint-plugin-rai
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ uv add checkmark-rai-lint
 Install the plugin via uv:
 
 ```bash
-uv add checkmark-rai-lint
+uv add checkmarkdevtools-gitlint-plugin-rai
 ```
 
 The plugin will be auto-discovered by gitlint (>=0.19.1) via entry points. No additional configuration is required in your `.gitlint` file. To verify the rule is loaded, run:

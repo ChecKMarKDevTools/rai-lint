@@ -8,10 +8,10 @@
 2. Navigate to package settings → Publishing
 3. Add Trusted Publisher:
    - Provider: GitHub Actions
-   - Repository owner: `your-org`
+   - Repository owner: `checkmarkdevtools`
    - Repository name: `rai-lint`
    - Workflow: `.github/workflows/release-please.yml`
-   - Environment: (leave empty)
+   - Environment: `deploy`
 
 **Workflow configuration:**
 
@@ -32,11 +32,12 @@ permissions:
 1. Log in to PyPI
 2. Navigate to Account Settings → Publishing
 3. Add a new pending publisher:
-   - PyPI Project Name: `checkmark-rai-lint`
-   - Owner: `your-username`
-   - Repository: `rai-lint`
-   - Workflow: `release-please.yml`
-   - Environment: (leave empty)
+
+- PyPI Project Name: `checkmarkdevtools-gitlint-plugin-rai`
+- Owner: `checkmarkdevtools`
+- Repository: `rai-lint`
+- Workflow: `release-please.yml`
+- Environment: `deploy`
 
 **Workflow configuration:**
 

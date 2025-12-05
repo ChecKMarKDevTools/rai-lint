@@ -26,8 +26,8 @@ What alternative solutions or features have you considered?
 
 Which package(s) should this feature be added to?
 
-- [ ] Node.js (@checkmark/commitlint-plugin-rai)
-- [ ] Python (checkmark-rai-lint)
+- [ ] Node.js (@checkmarkdevtools/commitlint-plugin-rai)
+- [ ] Python (checkmarkdevtools-gitlint-plugin-rai)
 - [ ] Both packages
 - [ ] Documentation
 - [ ] Other:

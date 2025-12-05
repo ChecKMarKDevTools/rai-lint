@@ -1,6 +1,6 @@
 # API Reference
 
-## Node.js (@checkmark/commitlint-plugin-rai)
+## Node.js (@checkmarkdevtools/commitlint-plugin-rai)
 
 ### Plugin Interface
 
@@ -36,7 +36,7 @@ const plugin: Plugin = {
 **Example**:
 
 ```typescript
-import aiAttributionExists from '@checkmark/commitlint-plugin-rai/rules/ai-attribution-exists';
+import aiAttributionExists from '@checkmarkdevtools/commitlint-plugin-rai/rules/ai-attribution-exists';
 
 const parsed = {
   raw: 'feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>',
@@ -66,7 +66,7 @@ const AI_ATTRIBUTION_PATTERNS = [
 
 ---
 
-## Python (checkmark-rai-lint)
+## Python (checkmarkdevtools-gitlint-plugin-rai)
 
 ### Rule Class: RaiFooterExists
 
@@ -137,7 +137,7 @@ AI_ATTRIBUTION_PATTERNS = [
 ```javascript
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmark/commitlint-plugin-rai'],
+  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
     'ai-attribution-exists': [2, 'always'],
   },
@@ -210,7 +210,7 @@ print(valid)  # True
 
 **Node.js**:
 
-```
+```text
 Commit must include AI attribution footer:
   1. "Authored-by: [Human] <email>" - Human only, no AI
   2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)
@@ -221,7 +221,7 @@ Commit must include AI attribution footer:
 
 **Python**:
 
-```
+```text
 UC1 Commit message must include a valid AI attribution footer:
   1. "Authored-by: [Human] <email>" - Human only, no AI
   2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)

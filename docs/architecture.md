@@ -22,7 +22,7 @@ flowchart TB
 
 ## Component Architecture
 
-### Node Package (`@checkmark/commitlint-plugin-rai`)
+### Node Package (`@checkmarkdevtools/commitlint-plugin-rai`)
 
 ```
 packages/node-commitlint/
@@ -44,7 +44,7 @@ packages/node-commitlint/
 - Regex-based pattern matching for flexibility
 - Zero runtime dependencies (peer deps only)
 
-### Python Package (`checkmark-rai-lint`)
+### Python Package (`checkmarkdevtools-gitlint-plugin-rai`)
 
 ```
 packages/python-gitlint/

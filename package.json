@@ -1,6 +1,6 @@
 {
-  "name": "checkmark-rai-lint-monorepo",
-  "version": "0.1.0",
+  "name": "rai-lint",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "description": "Dual-language commit-message validation framework for AI-responsible development",
@@ -18,7 +18,7 @@
     "postinstall": "if [ -z \"$CI\" ]; then npx lefthook install; fi"
   },
   "devDependencies": {
-    "@checkmark/commitlint-plugin-rai": "^0.0.0",
+    "@checkmarkdevtools/commitlint-plugin-rai": "^0.0.0",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "^9.39.0",
@@ -32,7 +32,8 @@
     "lefthook": "^2.0.4",
     "markdownlint-cli2": "^0.19.0",
     "prettier": "^3.6.2",
-    "sonarqube-scanner": "^4.3.2",
+    "sonar-scanner": "^3.1.0",
+    "sonarqube-scanner": "^4.3.0",
     "vitest": "^4.0.7"
   },
   "keywords": [
@@ -43,6 +44,6 @@
     "commit-validation",
     "git-hooks"
   ],
-  "author": "",
-  "license": "SEE LICENSE IN LICENSE"
+  "author": "Ashley Childress",
+  "license": "Polyform Shield 1.0.0"
 }

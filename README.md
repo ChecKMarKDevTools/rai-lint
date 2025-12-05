@@ -20,7 +20,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📦 Packages
 
-[![NPM Version](https://img.shields.io/npm/v/@checkmark/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/@checkmark/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/checkmark-rai-lint?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/checkmark-rai-lint/)
+[![NPM Version](https://img.shields.io/npm/v/@checkmarkdevtools/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/@checkmarkdevtools/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/checkmarkdevtools-gitlint-plugin-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/checkmarkdevtools-gitlint-plugin-rai/)
 
 ### 🤖 AI & Automation
 
@@ -28,7 +28,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 🔧 Quality & Standards
 
-[![Conventional Commits Badge](https://img.shields.io/badge/Conventional%20Commits-FE5196?logo=conventionalcommits&logoColor=fff&style=for-the-badge)](https://conventionalcommits.org/) [![commitlint Badge](https://img.shields.io/badge/commitlint-000?logo=commitlint&logoColor=fff&style=for-the-badge)](https://commitlint.js.org/) [![ESLint Badge](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=for-the-badge)](https://eslint.org/) ![Lefthook Badge](https://img.shields.io/badge/Lefthook-FF1E1E?logo=lefthook&logoColor=fff&style=for-the-badge)
+[![Conventional Commits Badge](https://img.shields.io/badge/Conventional%20Commits-FE5196?logo=conventionalcommits&logoColor=fff&style=for-the-badge)](https://conventionalcommits.org/) [![commitlint Badge](https://img.shields.io/badge/commitlint-000?logo=commitlint&logoColor=fff&style=for-the-badge)](https://commitlint.js.org/) [![ESLint Badge](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=for-the-badge)](https://eslint.org/) ![Lefthook Badge](https://img.shields.io/badge/Lefthook-FF1E1E?logo=lefthook&logoColor=fff&style=for-the-badge) ![SonarQube Cloud Badge](https://img.shields.io/badge/SonarQube%20Cloud-126ED3?logo=sonarqubecloud&logoColor=fff&style=for-the-badge)
 
 ---
 
@@ -139,7 +139,7 @@ Every commit **must** include one of these Git trailer footers:
 ### Node.js / Commitlint
 
 ```bash
-npm install --save-dev @checkmark/commitlint-plugin-rai
+npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
 ```
 
 **Configure in `commitlint.config.js`:**
@@ -147,7 +147,7 @@ npm install --save-dev @checkmark/commitlint-plugin-rai
 ```javascript
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmark/commitlint-plugin-rai'],
+  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
     'ai-attribution-exists': [2, 'always'],
   },
@@ -157,7 +157,7 @@ export default {
 ### Python / Gitlint
 
 ```bash
-uv add checkmark-rai-lint
+uv add checkmarkdevtools-gitlint-plugin-rai
 ```
 
 **Configure in `.gitlint`:**

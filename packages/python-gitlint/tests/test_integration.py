@@ -4,8 +4,30 @@ from checkmark_rai_lint.rules import RaiFooterExists
 
 
 def create_commit(message: str):
+    """
+    Creates a Mock commit object with the given message and parsed trailers.
+
+    This simulates the behavior of gitlint, which parses commit messages and
+    provides a 'trailers' dictionary (key-value pairs from the footer) to the rules.
+    Since we are testing the rule in isolation, we need to manually parse the
+    trailers from the message string and populate the Mock object.
+    """
     commit = Mock()
     commit.message.full = message
+
+    trailers = {}
+    lines = message.split("\n")
+    for line in lines:
+        if ":" in line:
+            key, value = line.split(":", 1)
+            key = key.strip()
+            value = value.strip()
+            if key and value:
+                if key not in trailers:
+                    trailers[key] = []
+                trailers[key].append(value)
+
+    commit.message.trailers = trailers
     return commit
 
 

@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial monorepo structure with Node.js and Python packages
-- Node.js commitlint plugin (`@checkmark/commitlint-plugin-rai`)
-- Python gitlint plugin (`checkmark-rai-lint`)
+- Node.js commitlint plugin (`@checkmarkdevtools/commitlint-plugin-rai`)
+- Python gitlint plugin (`checkmarkdevtools-gitlint-plugin-rai`)
 - RAI footer validation with five supported formats
 - Shared test fixtures for cross-language validation
 - CI/CD matrix testing (Node 18-20, Python 3.11-3.12)

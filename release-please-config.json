@@ -2,7 +2,7 @@
   "packages": {
     "packages/node-commitlint": {
       "release-type": "node",
-      "package-name": "@checkmark/commitlint-plugin-rai",
+      "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
       "component": "node-commitlint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
@@ -13,7 +13,7 @@
     },
     "packages/python-gitlint": {
       "release-type": "python",
-      "package-name": "checkmark-rai-lint",
+      "package-name": "checkmarkdevtools-gitlint-plugin-rai",
       "component": "python-gitlint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,

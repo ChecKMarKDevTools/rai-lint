@@ -1,79 +1,95 @@
-.PHONY: help install clean test lint format build validate
-.PHONY: test-node test-python lint-node lint-python format-node format-python build-node build-python
+# Package paths
+NODE_PKG := packages/node-commitlint
+PYTHON_PKG := packages/python-gitlint
+PYTHON_SOURCES := checkmark_rai_lint/ tests/
+
+.PHONY: help install clean validate
+.PHONY: test test-node test-python
+.PHONY: lint lint-node lint-python lint-format
+.PHONY: format format-node format-python
+.PHONY: build build-node build-python
 
 help:
-	@printf "CheckMarK RAI Lint - Makefile Commands\n"
-	@printf "\n"
-	@printf "Main targets:\n"
-	@printf "  make validate       - Run all checks (lint, format-check, test, build)\n"
-	@printf "  make test           - Run all tests (Node + Python)\n"
-	@printf "  make lint           - Run all linters (Node + Python)\n"
-	@printf "  make format         - Format all code (Node + Python)\n"
-	@printf "  make build          - Build all packages\n"
-	@printf "  make install        - Install all dependencies\n"
-	@printf "  make clean          - Clean build artifacts\n"
-	@printf "\n"
-	@printf "Node-specific targets:\n"
-	@printf "  make test-node      - Run Node tests\n"
-	@printf "  make lint-node      - Run Node linter\n"
-	@printf "  make format-node    - Format Node code\n"
-	@printf "  make build-node     - Build Node package\n"
-	@printf "\n"
-	@printf "Python-specific targets:\n"
-	@printf "  make test-python    - Run Python tests\n"
-	@printf "  make lint-python    - Run Python linter (black check + isort check)\n"
-	@printf "  make format-python  - Format Python code (black + isort)\n"
-	@printf "  make build-python   - Build Python package\n"
+	@echo "Main targets:"
+	@echo "  validate    - Run all checks (lint, test, build) - CI ready"
+	@echo "  test        - Run all tests (Node + Python)"
+	@echo "  lint        - Run all linters (Node + Python)"
+	@echo "  format      - Format all code (Node + Python)"
+	@echo "  build       - Build all packages"
+	@echo "  install     - Install all dependencies"
+	@echo "  clean       - Clean build artifacts"
+
+# ============================================================================
+# Install & Clean
+# ============================================================================
 
 install:
 	npm install
-	cd packages/python-gitlint && uv sync --locked --group dev
+	cd $(PYTHON_PKG) && uv sync --locked --group dev
 
 clean:
-	rm -rf .venv
-	rm -rf node_modules
-	rm -rf packages/node-commitlint/dist
-	rm -rf packages/node-commitlint/node_modules
-	rm -rf packages/python-gitlint/build
-	rm -rf packages/python-gitlint/dist
-	rm -rf packages/python-gitlint/*.egg-info
-	rm -rf packages/python-gitlint/htmlcov
-	rm -rf packages/python-gitlint/.venv
+	rm -rf .venv node_modules
+	rm -rf $(NODE_PKG)/dist $(NODE_PKG)/node_modules
+	rm -rf $(PYTHON_PKG)/build $(PYTHON_PKG)/dist $(PYTHON_PKG)/*.egg-info
+	rm -rf $(PYTHON_PKG)/htmlcov $(PYTHON_PKG)/.venv
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
 
-test-node:
-	cd packages/node-commitlint && npm test
-
-test-python:
-	cd packages/python-gitlint && uv run pytest tests/
+# ============================================================================
+# Test
+# ============================================================================
 
 test: test-node test-python
 
+test-node:
+	cd $(NODE_PKG) && npm test
+
+test-python:
+	cd $(PYTHON_PKG) && uv run pytest tests/
+
+# ============================================================================
+# Lint
+# ============================================================================
+
+lint: lint-format lint-node lint-python
+
+lint-format:
+	npm run format:check
+
 lint-node:
-	cd packages/node-commitlint && npm run lint
+	cd $(NODE_PKG) && npm run lint
 
 lint-python:
-	cd packages/python-gitlint && uv run black --check checkmark_rai_lint/ tests/
-	cd packages/python-gitlint && uv run isort --check-only checkmark_rai_lint/ tests/
+	cd $(PYTHON_PKG) && uv run black --check $(PYTHON_SOURCES)
+	cd $(PYTHON_PKG) && uv run isort --check-only $(PYTHON_SOURCES)
 
-lint: lint-node lint-python
+# ============================================================================
+# Format
+# ============================================================================
+
+format: format-node format-python
 
 format-node:
 	npm run format
 
 format-python:
-	cd packages/python-gitlint && uv run black checkmark_rai_lint/ tests/
-	cd packages/python-gitlint && uv run isort checkmark_rai_lint/ tests/
+	cd $(PYTHON_PKG) && uv run black $(PYTHON_SOURCES)
+	cd $(PYTHON_PKG) && uv run isort $(PYTHON_SOURCES)
 
-format: format-node format-python
-
-build-node:
-	cd packages/node-commitlint && npm run build
-
-build-python:
-	cd packages/python-gitlint && uv run python -m build
+# ============================================================================
+# Build
+# ============================================================================
 
 build: build-node build-python
 
-validate: format lint test build
+build-node:
+	cd $(NODE_PKG) && npm run build
+
+build-python:
+	cd $(PYTHON_PKG) && uv run python -m build --no-isolation
+
+# ============================================================================
+# Validate
+# ============================================================================
+
+validate: lint test build

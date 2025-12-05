@@ -3,8 +3,11 @@ requires = ["setuptools>=80.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "checkmark-rai-lint"
+name = "checkmarkdevtools-gitlint-plugin-rai"
 version = "0.0.0"
+authors = [
+  { name="Ashley Childress", email="human@checkmarkdevtools.dev" },
+]
 description = "Gitlint plugin for RAI footer validation"
 requires-python = ">=3.10,<3.13"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
@@ -14,9 +17,6 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
 ]
 
 [project.urls]
@@ -34,6 +34,8 @@ dev = [
     "isort>=7.0.0",
     "coverage>=7.0.0",
     "build>=0.10.0",
+    "setuptools>=68.0",
+    "wheel",
 ]
 
 [tool.setuptools.packages.find]
@@ -74,3 +76,11 @@ directory = "htmlcov"
 [tool.pytest.ini_options]
 addopts = "--cov=checkmark_rai_lint --cov-report=term-missing --cov-report=term --cov-fail-under=80"
 testpaths = ["tests"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+
+[tool.isort]
+profile = "black"
+line_length = 100

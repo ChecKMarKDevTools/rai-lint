@@ -1,5 +1,5 @@
 {
-  "name": "@checkmark/commitlint-plugin-rai",
+  "name": "@checkmarkdevtools/commitlint-plugin-rai",
   "version": "0.0.0",
   "description": "Commitlint plugin for RAI footer validation",
   "type": "module",
@@ -8,8 +8,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -23,7 +22,8 @@
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "lint": "eslint .",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build"
   },
   "keywords": [
     "commitlint",

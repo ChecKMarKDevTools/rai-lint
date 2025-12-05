@@ -19,7 +19,7 @@
 ### 1. Install the Plugin
 
 ```bash
-npm install --save-dev @checkmark/commitlint-plugin-rai @commitlint/cli @commitlint/config-conventional
+npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai @commitlint/cli @commitlint/config-conventional
 ```
 
 ### 2. Configure Commitlint
@@ -29,7 +29,7 @@ Create or update `commitlint.config.js` in your project root:
 ```javascript
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmark/commitlint-plugin-rai'],
+  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
     'ai-attribution-exists': [2, 'always'],
   },
@@ -81,13 +81,13 @@ npx husky add .husky/commit-msg 'npx commitlint --edit $1'
 ### 1. Install the Plugin
 
 ```bash
-uv add checkmark-rai-lint
+uv add checkmarkdevtools-gitlint-plugin-rai
 ```
 
 For development:
 
 ```bash
-uv add checkmark-rai-lint --dev
+uv add checkmarkdevtools-gitlint-plugin-rai --dev
 ```
 
 ### 2. Configure Gitlint
@@ -166,7 +166,7 @@ This should be rejected with an error message.
 
 ### Node.js Issues
 
-**Problem**: `Module not found: @checkmark/commitlint-plugin-rai`
+**Problem**: `Module not found: @checkmarkdevtools/commitlint-plugin-rai`
 
 **Solution**: Ensure the package is installed and listed in `package.json` devDependencies.
 
@@ -185,7 +185,7 @@ ls -la .git/hooks/commit-msg
 **Solution**: Reinstall the package:
 
 ```bash
-uv add --reinstall checkmark-rai-lint
+uv add --reinstall checkmarkdevtools-gitlint-plugin-rai
 ```
 
 **Problem**: Gitlint not finding the rule
