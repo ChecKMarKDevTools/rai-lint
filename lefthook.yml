@@ -1,5 +1,4 @@
 pre-commit:
-  parallel: true
   commands:
     make-format:
       run: make format && make lint
@@ -8,10 +7,9 @@ pre-commit:
       run: make test
 
 pre-push:
-  parallel: true
   commands:
     sonar-scan:
-      run: npx dotenv -- npx sonar-scanner
+      run: npx dotenv -- sonar-scanner -Dsonar.qualitygate.wait=true
 
 commit-msg:
   commands:
