@@ -3,7 +3,7 @@ NODE_PKG := packages/node-commitlint
 PYTHON_PKG := packages/python-gitlint
 PYTHON_SOURCES := checkmark_rai_lint/ tests/
 
-.PHONY: help install clean validate
+.PHONY: help install install-locked update-locks clean validate
 .PHONY: test test-node test-python
 .PHONY: lint lint-node lint-python lint-format
 .PHONY: format format-node format-python
@@ -11,21 +11,34 @@ PYTHON_SOURCES := checkmark_rai_lint/ tests/
 
 help:
 	@echo "Main targets:"
-	@echo "  validate    - Run all checks (lint, test, build) - CI ready"
-	@echo "  test        - Run all tests (Node + Python)"
-	@echo "  lint        - Run all linters (Node + Python)"
-	@echo "  format      - Format all code (Node + Python)"
-	@echo "  build       - Build all packages"
-	@echo "  install     - Install all dependencies"
-	@echo "  clean       - Clean build artifacts"
+	@echo "  validate      - Run all checks (lint, test, build) - CI ready"
+	@echo "  test          - Run all tests (Node + Python)"
+	@echo "  lint          - Run all linters (Node + Python)"
+	@echo "  format        - Format all code (Node + Python)"
+	@echo "  build         - Build all packages"
+	@echo "  install       - Install all dependencies and update lock files"
+	@echo "  install-locked- Install from existing lock files (CI mode)"
+	@echo "  update-locks  - Explicitly update all lock files"
+	@echo "  clean         - Clean build artifacts"
 
 # ============================================================================
 # Install & Clean
 # ============================================================================
 
+# Default install: updates lock files if dependencies changed
 install:
 	npm install
+	cd $(PYTHON_PKG) && uv sync --group dev
+
+# CI install: uses existing lock files (fails if out of sync)
+install-locked:
+	npm ci
 	cd $(PYTHON_PKG) && uv sync --locked --group dev
+
+# Explicitly update lock files
+update-locks:
+	npm install
+	cd $(PYTHON_PKG) && uv lock
 
 clean:
 	rm -rf .venv node_modules
