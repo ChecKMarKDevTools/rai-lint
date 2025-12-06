@@ -32,12 +32,16 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install workspace dependencies
         run: npm ci
         working-directory: packages/node-commitlint
 
       - name: Run linter
         run: npm run lint
+        working-directory: packages/node-commitlint
 
       - name: Run tests
         run: npm test
@@ -65,15 +69,18 @@ jobs:
           enable-cache: true
 
       - name: Install dependencies
-        run: cd packages/python-gitlint && uv sync --locked --group dev
+        working-directory: packages/python-gitlint
+        run: uv sync --locked --group dev
 
       - name: Run Black and isort
+        working-directory: packages/python-gitlint
         run: |
-          cd packages/python-gitlint && uv run black --check checkmark_rai_lint tests/
-          cd packages/python-gitlint && uv run isort --check-only checkmark_rai_lint tests/
+          uv run black --check checkmark_rai_lint tests/
+          uv run isort --check-only checkmark_rai_lint tests/
 
       - name: Run tests with coverage
-        run: cd packages/python-gitlint && uv run pytest tests/ --cov=checkmark_rai_lint --cov-report=term-missing --cov-fail-under=80
+        working-directory: packages/python-gitlint
+        run: uv run pytest tests/ --cov=checkmark_rai_lint --cov-report=term-missing --cov-fail-under=80
 
   dependency-review:
     name: Dependency Review
