@@ -32,6 +32,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      # Install root dependencies first to make shared dev tools (eslint, etc.) available
+      # This is required in the monorepo setup before workspace-specific dependencies
       - name: Install root dependencies
         run: npm ci
 
