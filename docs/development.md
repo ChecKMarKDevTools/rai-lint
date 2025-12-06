@@ -74,36 +74,6 @@ python benchmarks/python_benchmark.py
 npx lefthook install
 ```
 
-### Security Scanning (SonarCloud)
-
-To enable local security scanning on push, you need to set up your environment:
-
-1. Copy the example environment file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Add your SonarCloud token to `.env`:
-
-   ```bash
-   SONAR_TOKEN=your_token_here
-   ```
-
-The `pre-push` hook will automatically load this token using `dotenv`.
-
-Or with Husky:
-
-```bash
-npx husky install
-```
-
-Or with pre-commit:
-
-```bash
-pre-commit install --hook-type commit-msg
-```
-
 ## Testing Your Changes
 
 ### Unit Tests

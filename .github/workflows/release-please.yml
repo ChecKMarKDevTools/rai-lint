@@ -68,6 +68,10 @@ jobs:
         working-directory: packages/node-commitlint
         run: npm run build
 
+      - name: Prune dev dependencies
+        working-directory: packages/node-commitlint
+        run: npm prune --production
+
       - name: Generate SBOM
         working-directory: packages/node-commitlint
         run: npx @cyclonedx/cyclonedx-npm --output-file sbom.json
@@ -99,7 +103,7 @@ jobs:
 
       - name: Package tarball (npm pack)
         working-directory: packages/node-commitlint
-        run: npm pack
+        run: npm pack --ignore-scripts
 
       - name: Publish to npm (Test Registry - Dry Run)
         working-directory: packages/node-commitlint
@@ -167,6 +171,10 @@ jobs:
         with:
           tag_name: ${{ needs.release-please.outputs.tag-name }}
           files: packages/python-gitlint/coverage.json
+
+      - name: Prune dev dependencies
+        working-directory: packages/python-gitlint
+        run: uv sync --frozen --no-dev
 
       - name: Build package
         working-directory: packages/python-gitlint
