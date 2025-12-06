@@ -16,7 +16,7 @@ help:
 	@echo "  lint           - Run all linters (Node + Python)"
 	@echo "  format         - Format all code (Node + Python)"
 	@echo "  build          - Build all packages"
-	@echo "  install        - Install all dependencies and update lock files"
+	@echo "  install        - Install dependencies (updates locks if needed)"
 	@echo "  install-locked - Install from existing lock files (CI mode)"
 	@echo "  update-locks   - Explicitly update all lock files"
 	@echo "  clean          - Clean build artifacts"
@@ -25,8 +25,8 @@ help:
 # Install & Clean
 # ============================================================================
 
-# Default install: updates lock files if dependencies changed
-# This is the recommended mode for local development to keep dependencies current.
+# Default install: updates lock files if they need resolution (e.g., missing or invalid)
+# This is the recommended mode for local development.
 # For reproducible builds in CI, use 'install-locked' instead.
 install:
 	npm install
