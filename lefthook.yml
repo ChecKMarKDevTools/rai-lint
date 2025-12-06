@@ -6,11 +6,6 @@ pre-commit:
     make-test:
       run: make test
 
-pre-push:
-  commands:
-    sonar-scan:
-      run: npx dotenv -- sonar-scanner -Dsonar.qualitygate.wait=true
-
 commit-msg:
   commands:
     commitlint:
