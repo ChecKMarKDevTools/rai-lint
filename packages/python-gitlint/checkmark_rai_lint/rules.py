@@ -17,7 +17,8 @@ class RaiFooterExists(CommitRule):
     }
 
     # Value must be: Name <email>
-    AI_ATTRIBUTION_VALUE_PATTERN = re.compile(r"^.+ <.+>$")
+    # Use a safe regex to avoid ReDoS: Name (no <) <email (no >)>
+    AI_ATTRIBUTION_VALUE_PATTERN = re.compile(r"^[^<]+ <[^>]+>$")
 
     def validate(self, commit):
         # gitlint >= 0.15.0 provides parsed trailers
