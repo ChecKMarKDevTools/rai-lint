@@ -11,21 +11,23 @@ PYTHON_SOURCES := checkmark_rai_lint/ tests/
 
 help:
 	@echo "Main targets:"
-	@echo "  validate      - Run all checks (lint, test, build) - CI ready"
-	@echo "  test          - Run all tests (Node + Python)"
-	@echo "  lint          - Run all linters (Node + Python)"
-	@echo "  format        - Format all code (Node + Python)"
-	@echo "  build         - Build all packages"
-	@echo "  install       - Install all dependencies and update lock files"
-	@echo "  install-locked- Install from existing lock files (CI mode)"
-	@echo "  update-locks  - Explicitly update all lock files"
-	@echo "  clean         - Clean build artifacts"
+	@echo "  validate       - Run all checks (lint, test, build) - CI ready"
+	@echo "  test           - Run all tests (Node + Python)"
+	@echo "  lint           - Run all linters (Node + Python)"
+	@echo "  format         - Format all code (Node + Python)"
+	@echo "  build          - Build all packages"
+	@echo "  install        - Install all dependencies and update lock files"
+	@echo "  install-locked - Install from existing lock files (CI mode)"
+	@echo "  update-locks   - Explicitly update all lock files"
+	@echo "  clean          - Clean build artifacts"
 
 # ============================================================================
 # Install & Clean
 # ============================================================================
 
 # Default install: updates lock files if dependencies changed
+# This is the recommended mode for local development to keep dependencies current.
+# For reproducible builds in CI, use 'install-locked' instead.
 install:
 	npm install
 	cd $(PYTHON_PKG) && uv sync --group dev
