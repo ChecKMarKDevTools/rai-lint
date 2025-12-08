@@ -7,7 +7,7 @@ permissions:
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened]
     paths-ignore:
       - 'docs/**'
       - '**.md'
@@ -21,13 +21,13 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [22]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -35,10 +35,10 @@ jobs:
       # Install root dependencies first to make shared dev tools (eslint, etc.) available
       # This is required in the monorepo setup before workspace-specific dependencies
       - name: Install root dependencies
-        run: npm ci
+        run: npm ci --no-scripts
 
       - name: Install workspace dependencies
-        run: npm ci
+        run: npm ci --no-scripts
         working-directory: packages/node-commitlint
 
       - name: Run linter
@@ -55,10 +55,10 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.12']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -92,11 +92,11 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check if package files changed
         id: changed
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@24d32ffd492484c1d75e0c0b894501ddb9d30d62 # v47.0.0
         with:
           files: |
             package.json

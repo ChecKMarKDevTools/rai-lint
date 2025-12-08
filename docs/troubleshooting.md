@@ -227,7 +227,7 @@ Generated-by: GitHub Copilot <copilot@github.com>
 **Solution**: Use `fetch-depth: 0`
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
   with:
     fetch-depth: 0
 ```
