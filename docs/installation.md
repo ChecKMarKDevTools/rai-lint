@@ -31,7 +31,7 @@ export default {
   extends: ['@commitlint/config-conventional'],
   plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
-    'ai-attribution-exists': [2, 'always'],
+    'rai-footer-exists': [2, 'always'],
   },
 };
 ```

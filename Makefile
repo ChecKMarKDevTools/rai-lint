@@ -3,7 +3,7 @@ NODE_PKG := packages/node-commitlint
 PYTHON_PKG := packages/python-gitlint
 PYTHON_SOURCES := checkmark_rai_lint/ tests/
 
-.PHONY: help install install-locked update-locks clean validate
+.PHONY: help install install-locked update-locks clean validate ai-checks
 .PHONY: test test-node test-python
 .PHONY: lint lint-node lint-python lint-format
 .PHONY: format format-node format-python
@@ -12,6 +12,7 @@ PYTHON_SOURCES := checkmark_rai_lint/ tests/
 help:
 	@echo "Main targets:"
 	@echo "  validate       - Run all checks (lint, test, build) - CI ready"
+	@echo "  ai-checks      - Full env refresh + all checks (clean, install, validate)"
 	@echo "  test           - Run all tests (Node + Python)"
 	@echo "  lint           - Run all linters (Node + Python)"
 	@echo "  format         - Format all code (Node + Python)"
@@ -69,7 +70,7 @@ test-python:
 lint: lint-format lint-node lint-python
 
 lint-format:
-	npm run format:check
+	npm run format
 
 lint-node:
 	cd $(NODE_PKG) && npm run lint
@@ -104,7 +105,7 @@ build-python:
 	cd $(PYTHON_PKG) && uv run python -m build --no-isolation
 
 # ============================================================================
-# Validate
+# AI Checks
 # ============================================================================
 
-validate: lint test build
+ai-checks: clean install format lint test

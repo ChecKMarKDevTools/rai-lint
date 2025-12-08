@@ -130,7 +130,8 @@ Every commit **must** include one of these Git trailer footers:
 </tbody>
 </table>
 
-> **Note:** All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers).
+> [!NOTE]
+> All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers). Email format in `<>` is encouraged but not required.
 
 ---
 
@@ -149,7 +150,7 @@ export default {
   extends: ['@commitlint/config-conventional'],
   plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
-    'ai-attribution-exists': [2, 'always'],
+    'rai-footer-exists': [2, 'always'],
   },
 };
 ```

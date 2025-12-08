@@ -37,11 +37,11 @@ class RaiFooterExists(CommitRule):
             RuleViolation(
                 self.id,
                 "Commit message must include AI attribution footer:\n"
-                '  1. "Authored-by: [Human] <email>" - Human only, no AI\n'
-                '  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, commit msg, advice)\n'
-                '  3. "Assisted-by: [AI Tool] <email>" - AI helped, but primarily human code\n'
-                '  4. "Co-authored-by: [AI Tool] <email>" - Roughly 50/50 AI and human (40-60 leeway)\n'
-                '  5. "Generated-by: [AI Tool] <email>" - Majority of code was AI generated\n'
+                '  1. "Authored-by: [Human] <contact>" - Human only, no AI\n'
+                '  2. "Commit-generated-by: [AI Tool] <contact>" - Trivial AI (docs, commit msg, advice)\n'
+                '  3. "Assisted-by: [AI Tool] <contact>" - AI helped, but primarily human code\n'
+                '  4. "Co-authored-by: [AI Tool] <contact>" - Roughly 50/50 AI and human (40-60 leeway)\n'
+                '  5. "Generated-by: [AI Tool] <contact>" - Majority of code was AI generated\n'
                 "\n"
                 "Examples:\n"
                 '  - "Authored-by: Jane Doe <jane@example.com>"\n'
