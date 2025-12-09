@@ -8,14 +8,14 @@
     "packages/*"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20 <25"
   },
   "scripts": {
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,json,md}\"",
-    "postinstall": "if [ -z \"$CI\" ]; then npx lefthook install; fi"
+    "postinstall": "if [ -z \"$CI\" ] && [ \"$(git rev-parse --show-toplevel 2>/dev/null)\" = \"$PWD\" ]; then npx lefthook install; fi"
   },
   "devDependencies": {
     "@checkmarkdevtools/commitlint-plugin-rai": "^0.0.0",
@@ -44,5 +44,8 @@
     "git-hooks"
   ],
   "author": "Ashley Childress",
-  "license": "Polyform Shield 1.0.0"
+  "license": "Polyform Shield 1.0.0",
+  "volta": {
+    "node": "24.11.1"
+  }
 }

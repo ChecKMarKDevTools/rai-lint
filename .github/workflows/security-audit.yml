@@ -5,6 +5,10 @@ on:
     - cron: "03 2 * * 1" # Weekly on Monday at 2 AM
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -12,6 +16,7 @@ jobs:
   codeql:
     name: CodeQL
     runs-on: ubuntu-latest
+    timeout-minutes: 23
     permissions:
       actions: read
       contents: read
@@ -42,6 +47,7 @@ jobs:
   scorecard:
     name: Scorecard
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     permissions:
       security-events: write
       id-token: write
@@ -54,19 +60,24 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: "Run analysis"
-        uses: ossf/scorecard-action@62b2cac7ed8198b15735ed49ab1e5cf35480ba46 # v2.4.0
+      - name: "Run Trivy analysis"
+        uses: aquasecurity/trivy-action@0.33.1
         with:
-          results_file: results.sarif
-          results_format: sarif
-          publish_results: true
+          scan-type: 'repo'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'results.sarif'
+          severity: 'HIGH,CRITICAL'
+          ignore-unfixed: true
+        env:
+          TRIVY_SKIP_DB_UPDATE: 'true'
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@v5
         with:
           name: SARIF file
           path: results.sarif
-          retention-days: 5
+          retention-days: 60
 
       - name: "Upload to code-scanning"
         uses: github/codeql-action/upload-sarif@v4
@@ -76,6 +87,7 @@ jobs:
   license-scan:
     name: License Compliance
     runs-on: ubuntu-latest
+    timeout-minutes: 7
     env:
       LICENSE_ALLOWLIST_NODE: "MIT;BSD;Apache-2.0;ISC"
       LICENSE_ALLOWLIST_PYTHON: "MIT,BSD,Apache-2.0,ISC"
@@ -85,7 +97,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Install Node dependencies
         run: npm ci --ignore-scripts

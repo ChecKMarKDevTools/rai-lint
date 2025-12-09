@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -13,6 +17,7 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     outputs:
       release-created: ${{ steps.release.outputs.release_created }}
       tag-name: ${{ steps.release.outputs.tag_name }}
@@ -29,6 +34,7 @@ jobs:
   release-node:
     needs: release-please
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     if: ${{ needs.release-please.outputs.node-release-created }}
     permissions:
       contents: read
@@ -40,7 +46,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
@@ -56,7 +62,7 @@ jobs:
         with:
           name: node-coverage
           path: packages/node-commitlint/coverage/coverage-final.json
-          retention-days: 90
+          retention-days: 60
 
       - name: Attach Node coverage to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
@@ -81,7 +87,7 @@ jobs:
         with:
           name: node-sbom
           path: packages/node-commitlint/sbom.json
-          retention-days: 90
+          retention-days: 60
 
       - name: Attach SBOM to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
@@ -99,7 +105,7 @@ jobs:
         with:
           name: node-package-dist
           path: packages/node-commitlint/dist/
-          retention-days: 90
+          retention-days: 60
 
       - name: Package tarball (npm pack)
         working-directory: packages/node-commitlint
@@ -133,6 +139,7 @@ jobs:
   release-python:
     needs: release-please
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     if: ${{ needs.release-please.outputs.python-release-created }}
     permissions:
       contents: read
@@ -164,7 +171,7 @@ jobs:
         with:
           name: python-coverage
           path: packages/python-gitlint/coverage.json
-          retention-days: 90
+          retention-days: 60
 
       - name: Attach Python coverage to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
@@ -191,7 +198,7 @@ jobs:
         with:
           name: python-sbom
           path: packages/python-gitlint/sbom.json
-          retention-days: 90
+          retention-days: 60
 
       - name: Attach Python dist and SBOM to Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
@@ -211,7 +218,7 @@ jobs:
         with:
           name: python-package-dist
           path: packages/python-gitlint/dist/
-          retention-days: 90
+          retention-days: 60
 
       - name: Publish to TestPyPI with Trusted Publishing
         uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e

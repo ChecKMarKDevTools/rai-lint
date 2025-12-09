@@ -58,10 +58,19 @@ clean:
 test: test-node test-python
 
 test-node:
-	cd $(NODE_PKG) && npm test
+	cd $(NODE_PKG) && mkdir -p reports && npm test
 
 test-python:
-	cd $(PYTHON_PKG) && uv run pytest tests/
+	cd $(PYTHON_PKG) && mkdir -p reports && \
+		uv run pytest tests/ \
+		--cov=checkmark_rai_lint \
+		--junitxml=reports/junit-py.xml \
+		--cov-report=xml:coverage.xml \
+		--cov-report=html:htmlcov \
+		--cov-report=term-missing \
+		--cov-fail-under=80 && \
+		uv pip install coverage-lcov && \
+		uv run coverage-lcov -i .coverage -o coverage.lcov || true
 
 # ============================================================================
 # Lint
