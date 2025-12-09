@@ -68,7 +68,7 @@ jobs:
       - name: Upload Node coverage artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: node-coverage
+          name: node-coverage-${{ matrix.node-version }}
           path: packages/node-commitlint/coverage
           retention-days: 60
 
@@ -124,7 +124,7 @@ jobs:
       - name: Upload Python coverage artifacts
         uses: actions/upload-artifact@v5
         with:
-          name: python-coverage
+          name: python-coverage-${{ matrix.python-version }}
           path: |
             packages/python-gitlint/coverage.xml
             packages/python-gitlint/htmlcov
