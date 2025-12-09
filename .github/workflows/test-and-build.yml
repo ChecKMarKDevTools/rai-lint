@@ -55,14 +55,16 @@ jobs:
         working-directory: packages/node-commitlint
 
       - name: Upload Node test results to Codecov
-        uses: codecov/test-results-action@v1
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: node-tests
           files: packages/node-commitlint/reports/*.xml
 
       - name: Upload Node coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: packages/node-commitlint/coverage/lcov.info
           flags: node
           fail_ci_if_error: true
@@ -134,14 +136,16 @@ jobs:
           retention-days: 60
 
       - name: Upload Python test results to Codecov
-        uses: codecov/test-results-action@v1
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: python-tests
           files: packages/python-gitlint/reports/*.xml
 
       - name: Upload Python coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: |
             packages/python-gitlint/coverage.xml
             packages/python-gitlint/coverage.lcov
