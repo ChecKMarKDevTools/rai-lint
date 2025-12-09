@@ -44,18 +44,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Install root Node dependencies
+        run: npm ci
+
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Install dependencies
-        working-directory: packages/node-commitlint
-        run: npm ci --ignore-scripts
-
       - name: Run tests
-        working-directory: packages/node-commitlint
-        run: npm test
+        run: npm --workspace=packages/node-commitlint test
 
       - name: Upload Node coverage artifact
         uses: actions/upload-artifact@v5
@@ -71,12 +69,10 @@ jobs:
           files: packages/node-commitlint/coverage/coverage-final.json
 
       - name: Build package
-        working-directory: packages/node-commitlint
-        run: npm run build
+        run: npm --workspace=packages/node-commitlint run build
 
       - name: Prune dev dependencies
-        working-directory: packages/node-commitlint
-        run: npm prune --production
+        run: npm --workspace=packages/node-commitlint prune --production
 
       - name: Generate SBOM
         working-directory: packages/node-commitlint
@@ -108,12 +104,10 @@ jobs:
           retention-days: 60
 
       - name: Package tarball (npm pack)
-        working-directory: packages/node-commitlint
-        run: npm pack --ignore-scripts
+        run: npm --workspace=packages/node-commitlint pack --ignore-scripts
 
-      - name: Publish to npm (Test Registry - Dry Run)
-        working-directory: packages/node-commitlint
-        run: npm publish --dry-run --provenance --access public
+      - name: Publish to npm
+        run: npm --workspace=packages/node-commitlint publish --provenance --access public
 
       - name: Attach tarball to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe

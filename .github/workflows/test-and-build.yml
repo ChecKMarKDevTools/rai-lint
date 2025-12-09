@@ -42,17 +42,13 @@ jobs:
       - name: Install root dependencies
         run: npm ci
 
-      - name: Install workspace dependencies
-        run: npm ci --no-scripts
-        working-directory: packages/node-commitlint
-
+      # Workspace dependencies are installed at the repo root to ensure shared
+      # dev tools (eslint, etc.) are available to each matrix job.
       - name: Run linter
-        run: npm run lint
-        working-directory: packages/node-commitlint
+        run: npm run lint --workspace=packages/node-commitlint
 
       - name: Run tests
-        run: npm test
-        working-directory: packages/node-commitlint
+        run: npm test --workspace=packages/node-commitlint
 
       - name: Upload Node test results to Codecov
         uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
