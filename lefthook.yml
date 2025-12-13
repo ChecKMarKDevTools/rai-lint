@@ -1,10 +1,23 @@
 pre-commit:
   commands:
-    make-format:
-      run: make format && make lint
+    format:
+      glob: "*.{js,ts,json,md}"
+      run: npm run format
       stage_fixed: true
-    make-test:
-      run: make test
+    lint-node:
+      glob: "packages/node-commitlint/**/*.{js,ts}"
+      run: cd packages/node-commitlint && npm run lint
+      stage_fixed: true
+    lint-python:
+      glob: "packages/python-gitlint/**/*.py"
+      run: cd packages/python-gitlint && uv run black checkmark_rai_lint/ tests/ && uv run isort checkmark_rai_lint/ tests/
+      stage_fixed: true
+    test-node:
+      glob: "packages/node-commitlint/**/*.{js,ts}"
+      run: cd packages/node-commitlint && npm test
+    test-python:
+      glob: "packages/python-gitlint/**/*.py"
+      run: cd packages/python-gitlint && uv run pytest tests/ -v
 
 commit-msg:
   commands:

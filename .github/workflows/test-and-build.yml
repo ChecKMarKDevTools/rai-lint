@@ -40,7 +40,7 @@ jobs:
       # Install root dependencies first to make shared dev tools (eslint, etc.) available
       # This is required in the monorepo setup before workspace-specific dependencies
       - name: Install root dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts --omit=dev
 
       # Workspace dependencies are installed at the repo root to ensure shared
       # dev tools (eslint, etc.) are available to each matrix job.
@@ -66,7 +66,7 @@ jobs:
           fail_ci_if_error: true
 
       - name: Upload Node coverage artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: node-coverage-${{ matrix.node-version }}
           path: packages/node-commitlint/coverage
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -118,11 +118,10 @@ jobs:
       - name: Convert Python coverage to LCOV
         working-directory: packages/python-gitlint
         run: |
-          uv pip install coverage-lcov
-          uv run coverage-lcov -i .coverage -o coverage.lcov || true
+          uv run coverage lcov --data-file .coverage -o coverage.lcov || true
 
       - name: Upload Python coverage artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: python-coverage-${{ matrix.python-version }}
           path: |

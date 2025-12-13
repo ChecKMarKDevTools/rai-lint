@@ -69,8 +69,7 @@ test-python:
 		--cov-report=html:htmlcov \
 		--cov-report=term-missing \
 		--cov-fail-under=80 && \
-		uv pip install coverage-lcov && \
-		uv run coverage-lcov -i .coverage -o coverage.lcov || true
+		uv run coverage lcov --data-file .coverage -o coverage.lcov || true
 
 # ============================================================================
 # Lint

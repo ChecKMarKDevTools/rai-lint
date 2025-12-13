@@ -3,6 +3,9 @@ name: Security Audit
 on:
   schedule:
     - cron: "03 2 * * 1" # Weekly on Monday at 2 AM
+  push:
+    paths:
+      - '.github/workflows/security-audit.yml'
   workflow_dispatch:
 
 concurrency:
@@ -73,7 +76,7 @@ jobs:
           TRIVY_SKIP_DB_UPDATE: 'true'
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: SARIF file
           path: results.sarif

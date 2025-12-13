@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/release-please.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -56,7 +58,7 @@ jobs:
         run: npm --workspace=packages/node-commitlint test
 
       - name: Upload Node coverage artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: node-coverage
           path: packages/node-commitlint/coverage/coverage-final.json
@@ -79,7 +81,7 @@ jobs:
         run: npx @cyclonedx/cyclonedx-npm --output-file sbom.json
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: node-sbom
           path: packages/node-commitlint/sbom.json
@@ -97,7 +99,7 @@ jobs:
           subject-path: packages/node-commitlint/dist/**/*
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: node-package-dist
           path: packages/node-commitlint/dist/
@@ -143,7 +145,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -161,7 +163,7 @@ jobs:
         run: uv run pytest --cov --cov-report=term --cov-report=json
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: python-coverage
           path: packages/python-gitlint/coverage.json
@@ -183,12 +185,10 @@ jobs:
 
       - name: Generate SBOM
         working-directory: packages/python-gitlint
-        run: |
-          uv pip install cyclonedx-bom
-          uv run cyclonedx-py requirements pyproject.toml -o sbom.json
+        run: uvx cyclonedx-py requirements pyproject.toml -o sbom.json
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: python-sbom
           path: packages/python-gitlint/sbom.json
@@ -208,17 +208,18 @@ jobs:
           subject-path: packages/python-gitlint/dist/*
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: python-package-dist
           path: packages/python-gitlint/dist/
           retention-days: 60
 
-      - name: Publish to TestPyPI with Trusted Publishing
+      - name: Publish to PyPI with Trusted Publishing
         uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e
         with:
           packages-dir: packages/python-gitlint/dist/
-          repository-url: https://test.pypi.org/legacy/
+          # Use the default PyPI registry for production releases. Remove repository-url
+          # (previously pointed at TestPyPI) so publishing targets the main PyPI registry.
           attestations: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -7,7 +7,7 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "draft": false,
-      "prerelease": false,
+      "prerelease": true,
       "draft-pull-request": false,
       "extra-files": ["package.json"]
     },
@@ -18,7 +18,7 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "draft": false,
-      "prerelease": false,
+      "prerelease": true,
       "draft-pull-request": false,
       "extra-files": ["pyproject.toml"]
     }
