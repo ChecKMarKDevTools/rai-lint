@@ -48,9 +48,13 @@ jobs:
       - name: Install root Node dependencies
         run: npm ci --ignore-scripts
 
+      - name: Get Node version from Volta
+        id: node-version
+        run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
+
       - uses: actions/setup-node@v6
         with:
-          node-version: "24"
+          node-version: ${{ steps.node-version.outputs.version }}
           registry-url: "https://registry.npmjs.org"
 
       - name: Run tests
