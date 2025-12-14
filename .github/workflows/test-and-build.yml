@@ -40,7 +40,7 @@ jobs:
       # Install root dependencies first to make shared dev tools (eslint, etc.) available
       # This is required in the monorepo setup before workspace-specific dependencies
       - name: Install root dependencies
-        run: npm ci --ignore-scripts --omit=dev
+        run: npm install --ignore-scripts
 
       # Workspace dependencies are installed at the repo root to ensure shared
       # dev tools (eslint, etc.) are available to each matrix job.
