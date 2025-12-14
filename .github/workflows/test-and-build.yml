@@ -40,7 +40,7 @@ jobs:
       # Install root dependencies first to make shared dev tools (eslint, etc.) available
       # This is required in the monorepo setup before workspace-specific dependencies
       - name: Install root dependencies
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
 
       # Workspace dependencies are installed at the repo root to ensure shared
       # dev tools (eslint, etc.) are available to each matrix job.
@@ -56,6 +56,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           name: node-tests
           files: packages/node-commitlint/reports/*.xml
+          fail_ci_if_error: true
 
       - name: Upload Node coverage to Codecov
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
@@ -70,7 +71,7 @@ jobs:
         with:
           name: node-coverage-${{ matrix.node-version }}
           path: packages/node-commitlint/coverage
-          retention-days: 60
+          retention-days: 30
 
   python-tests:
     name: Python ${{ matrix.python-version }}
@@ -90,7 +91,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
+        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
         with:
           enable-cache: true
 
@@ -138,7 +139,7 @@ jobs:
           files: packages/python-gitlint/reports/*.xml
 
       - name: Upload Python coverage to Codecov
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
@@ -160,7 +161,7 @@ jobs:
 
       - name: Check if package files changed
         id: changed
-        uses: tj-actions/changed-files@24d32ffd492484c1d75e0c0b894501ddb9d30d62 # v47.0.0
+        uses: tj-actions/changed-files@e0021407031f5be11a464abee9a0776171c79891 # v47.0.1
         with:
           files: |
             package.json

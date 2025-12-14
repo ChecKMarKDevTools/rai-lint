@@ -24,26 +24,19 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ## Development Setup
 
-### Node.js Development
+### Project Development
+
+Projects are defined individually per solution, but are managed by workspaces and a single makefile.
 
 ```bash
-# Install root dependencies first (for monorepo)
-npm install
+make install
+make format
+make lint
+make test
+make build
 
-# Then work in the package directory
-cd packages/node-commitlint
-npm test
-npm run lint
-```
-
-### Python Development
-
-```bash
-cd packages/python-gitlint
-uv sync --locked --group dev
-pytest tests/
-black checkmark_rai_lint/
-isort checkmark_rai_lint/
+# For AI validation, instruct the agent to confirm results with
+maake ai-checks
 ```
 
 ## Running Tests

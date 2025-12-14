@@ -18,6 +18,14 @@ pre-commit:
     test-python:
       glob: "packages/python-gitlint/**/*.py"
       run: cd packages/python-gitlint && uv run pytest tests/ -v
+    update-npm-lock:
+      glob: "package.json"
+      run: npm install
+      stage_fixed: true
+    update-uv-lock:
+      glob: "packages/python-gitlint/pyproject.toml"
+      run: cd packages/python-gitlint && uv lock
+      stage_fixed: true
 
 commit-msg:
   commands:

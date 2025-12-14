@@ -48,7 +48,7 @@ jobs:
         with:
           name: SARIF file
           path: results.sarif
-          retention-days: 60
+          retention-days: 30
 
       - name: "Upload to code-scanning"
         uses: github/codeql-action/upload-sarif@v4
@@ -62,9 +62,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Get Node version from Volta
+      - name: Get Node version from package.json
         id: node-version
-        run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
+        run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -72,7 +72,7 @@ jobs:
           node-version: ${{ steps.node-version.outputs.version }}
 
       - name: Install Node dependencies
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
 
       - name: Setup uv
         uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
@@ -94,3 +94,44 @@ jobs:
           uv pip install pip-licenses &&
           pip-licenses --format=json > python-licenses.json &&
           python3 .github/scripts/check-licenses.py python-licenses.json
+
+  # CodeQL analysis configured for javascript, python, and GitHub Actions workflows
+  # Docs: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-the-codeql-action
+  codeql:
+    name: CodeQL analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      security-events: write
+      id-token: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
+          - language: actions
+            build-mode: none
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: "Initialize CodeQL"
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          packs: codeql/actions-queries
+
+      - name: "Build Node.js project"
+        if: ${{ matrix.language == 'javascript-typescript' }}
+        run: |
+          npm ci --ignore-scripts
+          npm run build --if-present
+
+      - name: "Perform CodeQL Analysis"
+        uses: github/codeql-action/analyze@v4

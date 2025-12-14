@@ -15,7 +15,7 @@
     "lint": "npm run lint --workspaces",
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,json,md}\"",
-    "postinstall": "if [ -z \"$CI\" ] && [ \"$(git rev-parse --show-toplevel 2>/dev/null)\" = \"$PWD\" ]; then npx lefthook install; fi"
+    "postinstall": "npx lefthook install"
   },
   "devDependencies": {
     "@checkmarkdevtools/commitlint-plugin-rai": "^0.0.0",

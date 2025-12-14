@@ -10,15 +10,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
     timeout-minutes: 3
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
     outputs:
       release-created: ${{ steps.release.outputs.release_created }}
       tag-name: ${{ steps.release.outputs.tag_name }}
