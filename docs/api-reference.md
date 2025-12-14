@@ -162,6 +162,7 @@ import { execSync } from 'child_process';
 
 function validateCommitMessage(message) {
   try {
+    // Safe: This is example code for documentation
     execSync('npx commitlint', {
       input: message,
       encoding: 'utf-8',

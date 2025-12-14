@@ -4,7 +4,7 @@
 
 ### For Node.js Projects
 
-- Node.js >= 18.0.0
+- Node.js >= 20.0.0, < 25.0.0
 - npm or yarn
 - Git repository
 
