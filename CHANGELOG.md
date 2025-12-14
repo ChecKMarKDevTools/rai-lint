@@ -1,10 +1,10 @@
 # Changelog
 
-## v1.0.0 (2025-12-14) — THE INAUGURAL SERMON 🙌
+## v0.5.0 (2025-12-14) — THE TENTATIVE FIRST STEP 🤞
 
-> _Brothers and sisters, can I get a HALLELUJAH for validated commit messages?!_
+> _Brothers and sisters, can I get a "maybe it works?" for validated commit messages?!_
 
-**FRIENDS,** we are GATHERED here today to witness the GLORY of **v1.0.0** — a release SO MOMENTOUS that it required not one, not two, but TWO whole programming languages to contain its magnificence! JavaScript couldn't handle it alone. Python had to step in. It's a MIRACLE of modern software development!
+**FRIENDS,** we are GATHERED here today to witness the DEBUT of **v0.5.0** — a release SO EXPERIMENTAL that we're not even confident it'll deploy, let alone work! But hey, it required TWO whole programming languages to contain its ambition! JavaScript couldn't handle it alone. Python had to step in. It's a MIRACLE we got this far!
 
 ### 🎪 THE MAIN EVENT: What Even IS This Thing?
 
@@ -18,7 +18,7 @@ And THAT, my friends, is where **rai-lint** comes swooping in like a BOOSTER PAC
 
 #### 🎯 Node.js Plugin (`@checkmarkdevtools/commitlint-plugin-rai`)
 
-Started at v1.0.0 because we're CONFIDENT like that! This baby validates your commit message footers with FIVE sacred attribution patterns:
+Started at v0.5.0 because we're REALISTIC like that! This baby _attempts_ to validate your commit message footers with FIVE sacred attribution patterns:
 
 - `Authored-by:` — All human, baby! (The endangered species)
 - `Commit-generated-by:` — AI did trivial stuff (docs, typos, existential advice)
@@ -30,7 +30,7 @@ Started at v1.0.0 because we're CONFIDENT like that! This baby validates your co
 
 #### 🐍 Python Plugin (`checkmarkdevtools-gitlint-plugin-rai`)
 
-Started at v0.1.0 because Python devs are humble like that (or we forgot to bump it, WHO'S COUNTING). Same five glorious patterns, different syntax, SAME ENERGY!
+Also at v0.5.0 because we're using linked versioning now (one version to worry about is ENOUGH, thank you). Same five glorious patterns, different syntax, SAME HOPEFUL ENERGY!
 
 **IMPLEMENTED IN:** Pure Python, type-hinted within an inch of its life, tested on Python 3.11/3.12 because we don't live in 2019 anymore, KAREN.
 
@@ -120,13 +120,14 @@ We're using **Polyform Shield 1.0.0** — the license that says "you can use thi
 
 ### 🙏 IN CONCLUSION 🙏
 
-v1.0.0 is HERE, it's TESTED, it's DOCUMENTED, and it's ready to validate your AI collaboration transparency like it's NOBODY'S BUSINESS (except it literally IS your business to disclose AI usage).
+v0.5.0 is HERE (we think), it's TESTED (locally), it's DOCUMENTED (mostly), and it's _theoretically_ ready to validate your AI collaboration transparency — assuming it deploys without catching fire!
 
-Will there be bugs? PROBABLY.  
-Will there be patches? ABSOLUTELY.  
-Will we keep this changelog format? **THAT DEPENDS ON YOUR FEEDBACK.**
+Will there be bugs? OH ABSOLUTELY.
+Will there be patches? DAILY, PROBABLY.
+Will we keep this changelog format? **THAT DEPENDS ON WHETHER WE SURVIVE THIS RELEASE.**
+Will this even work? **WE'RE ABOUT TO FIND OUT TOGETHER!**
 
-But for NOW, go forth and COMMIT RESPONSIBLY!
+But for NOW, go forth and COMMIT RESPONSIBLY (or at least attempt to)!
 
 **Package Links:**
 
@@ -136,5 +137,5 @@ But for NOW, go forth and COMMIT RESPONSIBLY!
 
 ---
 
-**Commit Attribution for This Changelog:**  
+**Commit Attribution for This Changelog:**
 `Generated-by: Verdent AI <verdent@verdent.ai>` _(with creative direction from a human who REALLY loves The Righteous Gemstones)_

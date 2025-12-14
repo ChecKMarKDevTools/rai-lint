@@ -57,7 +57,7 @@ wheels = [
 
 [[package]]
 name = "checkmarkdevtools-gitlint-plugin-rai"
-version = "0.0.0"
+version = "0.5.0"
 source = { editable = "." }
 dependencies = [
     { name = "gitlint" },
