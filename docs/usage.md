@@ -157,8 +157,8 @@ Install the Conventional Commits extension and add this to `.vscode/settings.jso
   "conventionalCommits.promptFooter": true,
   "conventionalCommits.footerPrefix": "Assisted-by: ",
   "conventionalCommits.footerType": [
-    "Authored-by: [Human] <email>",
-    "Commit-generated-by: [AI Tool] <email>",
+    "Authored-by: [Human] <email@example.com>",
+    "Commit-generated-by: [AI Tool] <email@example.com>",
     "Assisted-by: GitHub Copilot <copilot@github.com>",
     "Co-authored-by: GitHub Copilot <copilot@github.com>",
     "Generated-by: GitHub Copilot <copilot@github.com>"
@@ -193,11 +193,11 @@ jobs:
   commitlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
 
@@ -258,15 +258,11 @@ Usage:
 echo "feat: add new feature" | git cai
 ```
 
-### 4. Document Your Policy
-
-Add a `CONTRIBUTING.md` explaining when to use each footer type:
-
-```markdown
-## AI Attribution Policy
+## 4. AI Attribution Policy
 
 All commits must include an RAI footer:
 
+```markdown
 - Use `Authored-by: [Name] <email>` when no AI was involved
 - Use `Commit-generated-by: [AI Tool] <email>` for trivial AI help (docs, messages)
 - Use `Assisted-by: [AI Tool] <email>` when AI helped but you did primary work
@@ -301,6 +297,9 @@ To add footer to previous commit:
 git commit --amend -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
 ```
 
+> [!WARN]
+> Amending commits requires force push permissions on the repository. If force pushes are disabled, you must create new commits instead.
+
 ### Rebasing
 
 When rebasing, ensure all commits include RAI footers:
@@ -315,3 +314,6 @@ For each commit without a footer, use `edit` and add the footer:
 git commit --amend -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
 git rebase --continue
 ```
+
+> [!WARN]
+> Rebasing and amending commits requires force push permissions on the repository. If force pushes are disabled, you must create new commits instead.

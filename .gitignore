@@ -30,3 +30,12 @@ build/
 *.swo
 *~
 *.tmp
+
+# Coverage artifacts
+coverage.lcov
+lcov.info
+coverage.xml
+
+# Test report artifacts
+**/reports/
+**/reports/*.xml

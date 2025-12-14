@@ -7,88 +7,160 @@ permissions:
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened]
     paths-ignore:
       - 'docs/**'
       - '**.md'
       - '.github/ISSUE_TEMPLATE/**'
-      - '.github/PULL_REQUEST_TEMPLATE.md'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   node-tests:
     name: Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
+    timeout-minutes: 9
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20, 22, 24]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
-        working-directory: packages/node-commitlint
+      # Install root dependencies first to make shared dev tools (eslint, etc.) available
+      # This is required in the monorepo setup before workspace-specific dependencies
+      - name: Install root dependencies
+        run: npm install --ignore-scripts
 
+      # Workspace dependencies are installed at the repo root to ensure shared
+      # dev tools (eslint, etc.) are available to each matrix job.
       - name: Run linter
-        run: npm run lint
+        run: npm run lint --workspace=packages/node-commitlint
 
       - name: Run tests
-        run: npm test
-        working-directory: packages/node-commitlint
+        run: npm test --workspace=packages/node-commitlint
+
+      - name: Upload Node test results to Codecov
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: node-tests
+          files: packages/node-commitlint/reports/*.xml
+
+      - name: Upload Node coverage to Codecov
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/node-commitlint/coverage/lcov.info
+          flags: node
+          fail_ci_if_error: true
+
+      - name: Upload Node coverage artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: node-coverage-${{ matrix.node-version }}
+          path: packages/node-commitlint/coverage
+          retention-days: 60
 
   python-tests:
     name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
+    timeout-minutes: 9
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.11', '3.12']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
         with:
           enable-cache: true
 
       - name: Install dependencies
-        run: cd packages/python-gitlint && uv sync --locked --group dev
+        working-directory: packages/python-gitlint
+        run: uv sync --locked --group dev
 
       - name: Run Black and isort
+        working-directory: packages/python-gitlint
         run: |
-          cd packages/python-gitlint && uv run black --check checkmark_rai_lint tests/
-          cd packages/python-gitlint && uv run isort --check-only checkmark_rai_lint tests/
+          uv run black --check checkmark_rai_lint tests/
+          uv run isort --check-only checkmark_rai_lint tests/
 
       - name: Run tests with coverage
-        run: cd packages/python-gitlint && uv run pytest tests/ --cov=checkmark_rai_lint --cov-report=term-missing --cov-fail-under=80
+        working-directory: packages/python-gitlint
+        run: |
+          uv run pytest tests/ \
+            --cov=checkmark_rai_lint \
+            --junitxml=reports/junit-py.xml \
+            --cov-report=xml:coverage.xml \
+            --cov-report=html:htmlcov \
+            --cov-report=term-missing \
+            --cov-fail-under=80
+
+      - name: Convert Python coverage to LCOV
+        working-directory: packages/python-gitlint
+        run: |
+          uv run coverage lcov --data-file .coverage -o coverage.lcov || true
+
+      - name: Upload Python coverage artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-coverage-${{ matrix.python-version }}
+          path: |
+            packages/python-gitlint/coverage.xml
+            packages/python-gitlint/htmlcov
+            packages/python-gitlint/coverage.lcov
+          retention-days: 60
+
+      - name: Upload Python test results to Codecov
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: python-tests
+          files: packages/python-gitlint/reports/*.xml
+
+      - name: Upload Python coverage to Codecov
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: |
+            packages/python-gitlint/coverage.xml
+            packages/python-gitlint/coverage.lcov
+          flags: python
+          fail_ci_if_error: true
 
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     permissions:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check if package files changed
         id: changed
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@24d32ffd492484c1d75e0c0b894501ddb9d30d62 # v47.0.0
         with:
           files: |
             package.json

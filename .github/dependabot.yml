@@ -1,0 +1,38 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+  - package-ecosystem: "npm"
+    directory: "/packages/node-commitlint"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+  - package-ecosystem: "pip"
+    directory: "/packages/python-gitlint"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    groups:
+      dependencies:
+        patterns:
+          - "*"

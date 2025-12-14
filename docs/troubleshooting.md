@@ -4,21 +4,21 @@
 
 ### Node.js / Commitlint Issues
 
-#### Issue: "Cannot find module '@checkmark/commitlint-plugin-rai'"
+#### Issue: "Cannot find module '@checkmarkdevtools/commitlint-plugin-rai'"
 
 **Cause**: Package not installed or not in node_modules
 
 **Solution**:
 
 ```bash
-npm install --save-dev @checkmark/commitlint-plugin-rai
+npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 ---
 
-#### Issue: "Plugin not found: @checkmark/commitlint-plugin-rai"
+#### Issue: "Plugin not found: @checkmarkdevtools/commitlint-plugin-rai"
 
 **Cause**: Plugin not added to `commitlint.config.js`
 
@@ -27,7 +27,7 @@ Ensure your config includes:
 
 ```javascript
 export default {
-  plugins: ['@checkmark/commitlint-plugin-rai'],
+  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
   },
@@ -87,7 +87,7 @@ export default { ... }
 **Solution**:
 
 ```bash
-uv add checkmark-rai-lint
+uv add checkmarkdevtools-gitlint-plugin-rai
 uv run python -c "import checkmark_rai_lint; print('Installed')"
 ```
 
@@ -227,7 +227,7 @@ Generated-by: GitHub Copilot <copilot@github.com>
 **Solution**: Use `fetch-depth: 0`
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
   with:
     fetch-depth: 0
 ```
@@ -347,18 +347,20 @@ gitlint --config
 
 If you're still experiencing issues:
 
-1. Check [GitHub Issues](https://github.com/your-org/checkmark-rai-lint/issues)
+1. Check [GitHub Issues](https://github.com/ChecKMarKDevTools/rai-lint/issues)
 2. Run with `--debug` or `--verbose` flags
 3. Verify versions:
 
-   ```bash
+   ```markdown
    # Node
+
    node --version
-   npm list @checkmark/commitlint-plugin-rai
+   npm list @checkmarkdevtools/commitlint-plugin-rai
 
    # Python
+
    python --version
-   pip show checkmark-rai-lint
+   pip show checkmarkdevtools-gitlint-plugin-rai
    ```
 
 4. Create a minimal reproduction case

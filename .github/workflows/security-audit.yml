@@ -1,0 +1,126 @@
+name: Security Audit
+
+on:
+  schedule:
+    - cron: "03 2 * * 1" # Weekly on Monday at 2 AM
+  push:
+    paths:
+      - '.github/workflows/security-audit.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["javascript", "python", "typescript"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{matrix.language}}"
+
+  scorecard:
+    name: Scorecard
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: "Run Trivy analysis"
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+        with:
+          scan-type: 'repo'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'results.sarif'
+          severity: 'HIGH,CRITICAL'
+          ignore-unfixed: true
+        env:
+          TRIVY_SKIP_DB_UPDATE: 'true'
+
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v6
+        with:
+          name: SARIF file
+          path: results.sarif
+          retention-days: 60
+
+      - name: "Upload to code-scanning"
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results.sarif
+
+  license-scan:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    env:
+      LICENSE_ALLOWLIST_NODE: "MIT;BSD;Apache-2.0;ISC"
+      LICENSE_ALLOWLIST_PYTHON: "MIT,BSD,Apache-2.0,ISC"
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Install Python dependencies
+        run: |
+          uv pip install -r <(uv pip compile packages/python-gitlint/pyproject.toml)
+
+      - name: Check Node licenses
+        run: |
+          npx --yes license-checker-rseidelsohn --onlyAllow="$LICENSE_ALLOWLIST_NODE"
+
+      - name: Check Python licenses
+        run: >-
+          uv pip install pip-licenses &&
+          pip-licenses --format=json > python-licenses.json &&
+          python -c "import json,os,sys; allowed=set(os.environ['LICENSE_ALLOWLIST_PYTHON'].split(',')); data=json.load(open('python-licenses.json')); bad=[(p.get('Name'),p.get('License')) for p in data if p.get('License') not in allowed]; (print('Disallowed Python licenses found:') or [print('  {}: {}'.format(n,l)) for n,l in bad] or sys.exit(1)) if bad else None"

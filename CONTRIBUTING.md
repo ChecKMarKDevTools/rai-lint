@@ -14,7 +14,7 @@ All commits to this repository must include an AI attribution footer using stand
 
 Examples:
 
-```
+```plaintext
 Authored-by: Jane Doe <jane@example.com>
 Commit-generated-by: ChatGPT <chatgpt@openai.com>
 Assisted-by: GitHub Copilot <copilot@github.com>
@@ -27,8 +27,11 @@ Generated-by: GitHub Copilot <copilot@github.com>
 ### Node.js Development
 
 ```bash
-cd packages/node-commitlint
+# Install root dependencies first (for monorepo)
 npm install
+
+# Then work in the package directory
+cd packages/node-commitlint
 npm test
 npm run lint
 ```
@@ -80,7 +83,7 @@ pytest tests/ --cov=checkmark_rai_lint
 
 Follow Conventional Commits specification:
 
-```
+```plaintext
 <type>(<scope>): <subject>
 
 <body>

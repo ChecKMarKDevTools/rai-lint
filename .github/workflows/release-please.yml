@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -13,13 +18,14 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     outputs:
+      release-created: ${{ steps.release.outputs.release_created }}
+      tag-name: ${{ steps.release.outputs.tag_name }}
       node-release-created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
       python-release-created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
-      node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
-      python-tag-name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.0.0
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -29,60 +35,203 @@ jobs:
   release-node:
     needs: release-please
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     if: ${{ needs.release-please.outputs.node-release-created }}
     permissions:
+      contents: read
       id-token: write
+      attestations: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - name: Install root Node dependencies
+        run: npm ci --ignore-scripts
+
+      - uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Build and publish
+      - name: Run tests
+        run: npm --workspace=packages/node-commitlint test
+
+      - name: Upload Node coverage artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: node-coverage
+          path: packages/node-commitlint/coverage/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
+          retention-days: 60
+
+      - name: Attach Node coverage to GitHub Release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/node-commitlint/coverage/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
+
+      - name: Build package
+        run: npm --workspace=packages/node-commitlint run build
+
+      - name: Prune dev dependencies
+        run: npm --workspace=packages/node-commitlint prune --production
+
+      - name: Generate SBOM
         working-directory: packages/node-commitlint
-        run: |
-          npm run build
-          npm publish --provenance --access public
+        run: npx @cyclonedx/cyclonedx-npm --output-file sbom.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: node-sbom
+          path: packages/node-commitlint/sbom.json
+          retention-days: 60
+
+      - name: Attach SBOM to GitHub Release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/node-commitlint/sbom.json
+
+      - name: Generate build attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: packages/node-commitlint/dist/**/*
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: node-package-dist
+          path: packages/node-commitlint/dist/
+          retention-days: 60
+
+      - name: Package tarball (npm pack)
+        run: npm --workspace=packages/node-commitlint pack --ignore-scripts
+
+      - name: Publish to npm
+        run: npm --workspace=packages/node-commitlint publish --provenance --access public
+
+      - name: Attach tarball to GitHub Release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/node-commitlint/*.tgz
 
       - name: Summary
+        env:
+          TAG_NAME: ${{ needs.release-please.outputs.tag-name }}
         run: |
           echo "### NPM Package Published :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "- Package: \`@checkmark/commitlint-plugin-rai\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Tag: \`${{ needs.release-please.outputs.node-tag-name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** \`@checkmarkdevtools/commitlint-plugin-rai\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** [npmjs.com](https://www.npmjs.com/package/@checkmarkdevtools/commitlint-plugin-rai)" >> $GITHUB_STEP_SUMMARY
+          echo "**Provenance:** ✅ Published with build attestation" >> $GITHUB_STEP_SUMMARY
+          echo "**SBOM:** ✅ Generated (CycloneDX format)" >> $GITHUB_STEP_SUMMARY
+          echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifacts:** node-package-dist, node-sbom, node-coverage (see run artifacts)" >> $GITHUB_STEP_SUMMARY
+          echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
 
   release-python:
     needs: release-please
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     if: ${{ needs.release-please.outputs.python-release-created }}
     permissions:
+      contents: read
       id-token: write
+      attestations: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
         with:
           enable-cache: true
 
-      - name: Build and publish
+      - name: Install dependencies
         working-directory: packages/python-gitlint
-        run: uv run python -m build
+        run: uv sync --frozen
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Run tests with coverage
+        working-directory: packages/python-gitlint
+        run: uv run pytest --cov --cov-report=term --cov-report=json
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-coverage
+          path: packages/python-gitlint/coverage.json
+          retention-days: 60
+
+      - name: Attach Python coverage to GitHub Release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: packages/python-gitlint/coverage.json
+
+      - name: Prune dev dependencies
+        working-directory: packages/python-gitlint
+        run: uv sync --frozen --no-dev
+
+      - name: Build package
+        working-directory: packages/python-gitlint
+        run: uv build
+
+      - name: Generate SBOM
+        working-directory: packages/python-gitlint
+        run: uvx cyclonedx-py requirements pyproject.toml -o sbom.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-sbom
+          path: packages/python-gitlint/sbom.json
+          retention-days: 60
+
+      - name: Attach Python dist and SBOM to Release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          files: |
+            packages/python-gitlint/dist/*
+            packages/python-gitlint/sbom.json
+
+      - name: Generate build attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: packages/python-gitlint/dist/*
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-package-dist
+          path: packages/python-gitlint/dist/
+          retention-days: 60
+
+      - name: Publish to PyPI with Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e
         with:
           packages-dir: packages/python-gitlint/dist/
+          attestations: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Summary
+        env:
+          TAG_NAME: ${{ needs.release-please.outputs.tag-name }}
         run: |
           echo "### PyPI Package Published :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "- Package: \`checkmark-rai-lint\`" >> $GITHUB_STEP_SUMMARY
-          echo "- Tag: \`${{ needs.release-please.outputs.python-tag-name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** \`checkmarkdevtools-gitlint-plugin-rai\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** [pypi.org](https://pypi.org/project/checkmarkdevtools-gitlint-plugin-rai/)" >> $GITHUB_STEP_SUMMARY
+          echo "**Attestations:** ✅ Published with digital attestations" >> $GITHUB_STEP_SUMMARY
+          echo "**SBOM:** ✅ Generated (CycloneDX format)" >> $GITHUB_STEP_SUMMARY
+          echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifacts:** python-package-dist, python-sbom, python-coverage (see run artifacts)" >> $GITHUB_STEP_SUMMARY
+          echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY

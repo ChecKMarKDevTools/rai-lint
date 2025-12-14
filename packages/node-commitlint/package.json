@@ -1,14 +1,15 @@
 {
-  "name": "@checkmark/commitlint-plugin-rai",
-  "version": "0.1.0",
+  "name": "@checkmarkdevtools/commitlint-plugin-rai",
+  "version": "0.0.0",
   "description": "Commitlint plugin for RAI footer validation",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -16,13 +17,14 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20 <25"
   },
   "scripts": {
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "lint": "eslint .",
-    "build": "tsc"
+    "lint": "eslint . --fix",
+    "build": "tsc",
+    "prepare": "npm run build"
   },
   "keywords": [
     "commitlint",
@@ -32,6 +34,15 @@
   ],
   "author": "Ashley Childress",
   "license": "Polyform Shield 1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChecKMarKDevTools/rai-lint.git",
+    "directory": "packages/node-commitlint"
+  },
+  "bugs": {
+    "url": "https://github.com/ChecKMarKDevTools/rai-lint/issues"
+  },
+  "homepage": "https://github.com/ChecKMarKDevTools/rai-lint#readme",
   "peerDependencies": {
     "@commitlint/types": "^20.0.0"
   },
@@ -41,5 +52,8 @@
     "@vitest/coverage-v8": "^4.0.13",
     "typescript": "^5.9.3",
     "vitest": "^4.0.7"
+  },
+  "volta": {
+    "node": "24.11.1"
   }
 }

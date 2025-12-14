@@ -1,6 +1,6 @@
 # API Reference
 
-## Node.js (@checkmark/commitlint-plugin-rai)
+## Node.js (@checkmarkdevtools/commitlint-plugin-rai)
 
 ### Plugin Interface
 
@@ -9,12 +9,12 @@ import type { Plugin } from '@commitlint/types';
 
 const plugin: Plugin = {
   rules: {
-    'ai-attribution-exists': aiAttributionExists,
+    'rai-footer-exists': raiFooterExists,
   },
 };
 ```
 
-### Rule: ai-attribution-exists
+### Rule: rai-footer-exists
 
 **Type**: `Rule`
 
@@ -36,37 +36,32 @@ const plugin: Plugin = {
 **Example**:
 
 ```typescript
-import aiAttributionExists from '@checkmark/commitlint-plugin-rai/rules/ai-attribution-exists';
+import raiFooterExists from '@checkmarkdevtools/commitlint-plugin-rai/rules/rai-footer-exists';
 
 const parsed = {
   raw: 'feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>',
 };
 
-const [isValid, message] = aiAttributionExists(parsed);
+const [isValid, message] = raiFooterExists(parsed);
 // isValid: true
 // message: ''
 ```
 
 ### Supported Patterns
 
-```typescript
-const AI_ATTRIBUTION_PATTERNS = [
-  /^Authored-by:\s+.+\s+<.+@.+>$/im,
-  /^Commit-generated-by:\s+.+\s+<.+@.+>$/im,
-  /^Assisted-by:\s+.+\s+<.+@.+>$/im,
-  /^Co-authored-by:\s+.+\s+<.+@.+>$/im,
-  /^Generated-by:\s+.+\s+<.+@.+>$/im,
-];
-```
+The plugin validates commit messages for the presence of one of these footer patterns (case-insensitive):
 
-**Flags**:
+- `Authored-by: [Name] <contact>`
+- `Commit-generated-by: [AI Tool] <contact>`
+- `Assisted-by: [AI Tool] <contact>`
+- `Co-authored-by: [AI Tool] <contact>`
+- `Generated-by: [AI Tool] <contact>`
 
-- `i`: Case-insensitive
-- `m`: Multiline (^ and $ match line boundaries)
+Where `<contact>` can be an email address or any identifier (email format is encouraged but not required).
 
 ---
 
-## Python (checkmark-rai-lint)
+## Python (checkmarkdevtools-gitlint-plugin-rai)
 
 ### Rule Class: RaiFooterExists
 
@@ -110,21 +105,15 @@ class TestCase(BaseTestCase):
 
 ### Supported Patterns
 
-```python
-AI_ATTRIBUTION_PATTERNS = [
-    re.compile(r"^Authored-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^Commit-generated-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^Assisted-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^Co-authored-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^Generated-by:\s+.+\s+<.+@.+>$", re.IGNORECASE | re.MULTILINE),
-]
-```
+The plugin validates commit messages for the presence of one of these footer patterns (case-insensitive):
 
-**Flags**:
+- `Authored-by: [Name] <contact>`
+- `Commit-generated-by: [AI Tool] <contact>`
+- `Assisted-by: [AI Tool] <contact>`
+- `Co-authored-by: [AI Tool] <contact>`
+- `Generated-by: [AI Tool] <contact>`
 
-- `re.IGNORECASE`: Case-insensitive matching
-- `re.MULTILINE`: ^ and $ match line boundaries
-- Follow Git trailer format with tool name and email
+Where `<contact>` can be an email address or any identifier (email format is encouraged but not required).
 
 ---
 
@@ -137,9 +126,9 @@ AI_ATTRIBUTION_PATTERNS = [
 ```javascript
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmark/commitlint-plugin-rai'],
+  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
-    'ai-attribution-exists': [2, 'always'],
+    'rai-footer-exists': [2, 'always'],
   },
 };
 ```
@@ -173,6 +162,7 @@ import { execSync } from 'child_process';
 
 function validateCommitMessage(message) {
   try {
+    // Safe: This is example code for documentation
     execSync('npx commitlint', {
       input: message,
       encoding: 'utf-8',
@@ -208,27 +198,7 @@ print(valid)  # True
 
 ### Invalid Footer Error
 
-**Node.js**:
-
-```
-Commit must include AI attribution footer:
-  1. "Authored-by: [Human] <email>" - Human only, no AI
-  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)
-  3. "Assisted-by: [AI Tool] <email>" - AI helped, primarily human
-  4. "Co-authored-by: [AI Tool] <email>" - 50/50 AI/human (40-60 leeway)
-  5. "Generated-by: [AI Tool] <email>" - Majority AI generated
-```
-
-**Python**:
-
-```
-UC1 Commit message must include a valid AI attribution footer:
-  1. "Authored-by: [Human] <email>" - Human only, no AI
-  2. "Commit-generated-by: [AI Tool] <email>" - Trivial AI (docs, msg, advice)
-  3. "Assisted-by: [AI Tool] <email>" - AI helped, primarily human
-  4. "Co-authored-by: [AI Tool] <email>" - 50/50 AI/human (40-60 leeway)
-  5. "Generated-by: [AI Tool] <email>" - Majority AI generated
-```
+When validation fails, both Node.js (commitlint) and Python (gitlint) plugins display similar error messages listing the required footer formats. The exact wording varies slightly between implementations but conveys the same information about required AI attribution footers.
 
 ---
 

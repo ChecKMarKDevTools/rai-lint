@@ -1,11 +1,11 @@
-# @checkmark/commitlint-plugin-rai
+# @checkmarkdevtools/commitlint-plugin-rai
 
 Commitlint plugin for enforcing AI attribution in commit messages using standard Git trailers.
 
 ## Installation
 
 ```bash
-npm install --save-dev @checkmark/commitlint-plugin-rai
+npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ Add to your `commitlint.config.js`:
 ```javascript
 export default {
   extends: ['@commitlint/config-conventional'],
-  plugins: ['@checkmark/commitlint-plugin-rai'],
+  plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
   },

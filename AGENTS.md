@@ -1,5 +1,11 @@
 # Agent Operating Instructions
 
+## Primary Goals
+
+1. **Follow KISS and YAGNI Principles**: Keep implementations simple and avoid unnecessary features. Breaking changes during this prerelease patch-only development stage are not only permissible but encouraged. Do not indicate breaking changes in commits or changelogs until a stable release exists.
+
+2. **Minimum Viable Product Focus**: Aim for the simplest working solution. Documentation should be concise and practical, not exhaustive. Avoid over-engineering for edge cases.
+
 ## AI Attribution Footer
 
 When committing changes in this project, I must include one of these five footer formats:
@@ -16,13 +22,25 @@ The commitlint rule enforces this via regex patterns (case-insensitive). All com
 
 ## Release Process
 
-The project currently uses a manual release workflow (`.github/workflows/release.yml`). This is **not ideal** but is the current system:
+Use Release Please for automated versioning.
 
-- Manual `workflow_dispatch` trigger required
-- Manual version input (semver format)
-- Manual release-type selection (patch/minor/major)
-- Separate workflows for Node.js (NPM) and Python (PyPI) packages
-- Dry-run publishing (not actual releases)
+- On push to `main`, the action opens a Release PR ("proposed release").
+- Only after that PR is merged, an actual GitHub Release and semantic tag are created.
+- Monorepo outputs are path-prefixed (use bracket syntax: `steps.release.outputs['packages/node-commitlint--release_created']`).
+
+### Token Policy
+
+- No Personal Access Tokens (PAT) are used.
+- Use `GITHUB_TOKEN` for Release Please operations and attaching artifacts.
+- PyPI publishing uses Trusted Publishing (OIDC) — no `PYPI_TOKEN`.
+- npm publishing uses Trusted Publishing (OIDC) — no `NPM_TOKEN`.
+
+### Trusted Publishing (OIDC) — npm and PyPI
+
+- permissions: `id-token: write` is required in workflows.
+- npm: configure the package as a Trusted Publisher (link repo/branch); then `npm publish` works with OIDC.
+- PyPI: enable Trusted Publishing for the project; then `gh-action-pypi-publish` works with OIDC.
+- Attach artifacts to the GitHub Release (e.g., tarballs, wheels, SBOMs) for provenance and distribution.
 
 ## Custom Commitlint Plugin
 
@@ -55,6 +73,5 @@ Monorepo uses isolated virtual environments per package—**NEVER** install glob
 ## Rules for Implementation
 
 - Consider alternatives before starting work
-- Always execute validation step before returning to the user, which should include format and lint
-- All tests must pass successfully before returning a response to the user. If a failure occurs, you are expected to fix it.
+- Always execute validation step before returning to the user, which means run `make ai-checks` to perform full environment cleanup, re-installation, and all validations; ensure it passes without failures
 - Before returning final response to the user, look for the @commit subagent and follow rules to update the `commit.tmp` file and include valid attribution
