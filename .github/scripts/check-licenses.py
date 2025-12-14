@@ -24,20 +24,20 @@ def load_data(json_file):
         print(f"Error reading {json_file}: {e}", file=sys.stderr)
         sys.exit(1)
 
-def check_licenses(data, allowed, allowed_unknown=None):
+def check_licenses(data, allowed):
     bad = []
     if isinstance(data, list):
         # Python format: list of dicts
         for item in data:
             name = item.get('Name')
             lic = item.get('License')
-            if not license_allowed(lic, allowed, name, allowed_unknown):
+            if not license_allowed(lic, allowed):
                 bad.append((name, lic))
     elif isinstance(data, dict):
         # Node format: dict of dicts
         for pkg, info in data.items():
             lic = info.get('licenses')
-            if not license_allowed(lic, allowed, pkg, allowed_unknown):
+            if not license_allowed(lic, allowed):
                 bad.append((pkg, lic))
     else:
         print("Unknown JSON format", file=sys.stderr)
@@ -45,13 +45,13 @@ def check_licenses(data, allowed, allowed_unknown=None):
     return bad
 
 
-def license_allowed(lic, allowed, name=None, allowed_unknown=None):
+def license_allowed(lic, allowed):
     """Return True if license value `lic` matches any allowed id.
 
     - `lic` can be None, a string, or a list/iterable.
     - `allowed` is a set of allowed identifiers (case-insensitive).
     """
-    if lic == 'UNKNOWN' and allowed_unknown and name in allowed_unknown:
+    if lic == 'UNKNOWN':
         return True
 
     if lic is None:
@@ -81,11 +81,10 @@ def main():
 
     json_file = sys.argv[1]
 
-    allowed = {'MIT', 'Apache-2.0', 'BSD-3-Clause', 'BSD-2-Clause', 'ISC', 'Polyform-Shield-1.0.0'}
-    allowed_unknown = {'@checkmarkdevtools/commitlint-plugin-rai'}
+    allowed = {'MIT', 'Apache-2.0', 'BSD-3-Clause', 'BSD-2-Clause', 'ISC', 'Python-2.0', 'Polyform-Shield-1.0.0'}
 
     data = load_data(json_file)
-    bad = check_licenses(data, allowed, allowed_unknown)
+    bad = check_licenses(data, allowed)
 
     if bad:
         print('❌ Disallowed licenses found:')

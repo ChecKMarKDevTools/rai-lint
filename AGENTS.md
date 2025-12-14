@@ -18,8 +18,6 @@ When committing changes in this project, I must include one of these five footer
 
 The commitlint rule enforces this via regex patterns (case-insensitive). All commits without a valid footer are rejected.
 
-**Default:** Use `Generated-by: Verdent AI <verdent@verdent.ai>` for code I generate.
-
 ## Release Process
 
 Use Release Please for automated versioning.
