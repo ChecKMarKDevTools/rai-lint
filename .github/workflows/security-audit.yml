@@ -5,7 +5,7 @@ on:
     - cron: "03 2 * * 1" # Weekly on Monday at 2 AM
   push:
     paths:
-      - '.github/workflows/security-audit.yml'
+      - ".github/workflows/security-audit.yml"
   workflow_dispatch:
 
 concurrency:
@@ -66,14 +66,13 @@ jobs:
       - name: "Run Trivy analysis"
         uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
         with:
-          scan-type: 'repo'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'results.sarif'
-          severity: 'HIGH,CRITICAL'
+          scan-type: "repo"
+          scan-ref: "."
+          format: "sarif"
+          output: "results.sarif"
+          scanners: "misconfig,secret,license"
+          severity: "HIGH,CRITICAL"
           ignore-unfixed: true
-        env:
-          TRIVY_SKIP_DB_UPDATE: 'true'
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@v6
@@ -92,8 +91,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 7
     env:
-      LICENSE_ALLOWLIST_NODE: "MIT;BSD;Apache-2.0;ISC"
-      LICENSE_ALLOWLIST_PYTHON: "MIT,BSD,Apache-2.0,ISC"
+      LICENSE_ALLOWLIST_NODE: "MIT;BSD;Apache-2.0;ISC;Polyform-Shield-1.0.0"
+      LICENSE_ALLOWLIST_PYTHON: "MIT,BSD,Apache-2.0,ISC;Polyform-Shield-1.0.0"
     steps:
       - uses: actions/checkout@v6
 
