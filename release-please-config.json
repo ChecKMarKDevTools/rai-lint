@@ -9,7 +9,8 @@
       "draft": false,
       "prerelease": true,
       "draft-pull-request": false,
-      "extra-files": ["package.json"]
+      "extra-files": ["package.json"],
+      "labels": ["🤖 AutoSummon"]
     },
     "packages/python-gitlint": {
       "release-type": "python",
@@ -20,7 +21,8 @@
       "draft": false,
       "prerelease": true,
       "draft-pull-request": false,
-      "extra-files": ["pyproject.toml"]
+      "extra-files": ["pyproject.toml"],
+      "labels": ["🤖 AutoSummon"]
     }
   },
   "plugins": [
