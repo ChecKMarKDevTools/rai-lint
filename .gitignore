@@ -39,3 +39,5 @@ coverage.xml
 # Test report artifacts
 **/reports/
 **/reports/*.xml
+
+*-license.json
