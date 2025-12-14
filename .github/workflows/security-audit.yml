@@ -90,9 +90,6 @@ jobs:
     name: License Compliance
     runs-on: ubuntu-latest
     timeout-minutes: 7
-    env:
-      LICENSE_ALLOWLIST_NODE: "MIT;BSD;Apache-2.0;ISC;Polyform-Shield-1.0.0"
-      LICENSE_ALLOWLIST_PYTHON: "MIT,BSD,Apache-2.0,ISC;Polyform-Shield-1.0.0"
     steps:
       - uses: actions/checkout@v6
 
@@ -102,7 +99,7 @@ jobs:
           node-version: "24"
 
       - name: Install Node dependencies
-        run: npm ci --ignore-scripts
+        run: npm install --ignore-scripts
 
       - name: Setup uv
         uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
@@ -116,10 +113,11 @@ jobs:
 
       - name: Check Node licenses
         run: |
-          npx --yes license-checker-rseidelsohn --onlyAllow="$LICENSE_ALLOWLIST_NODE"
+          npx --yes license-checker --json --excludePrivatePackages > node-licenses.json
+          python3 .github/scripts/check-licenses.py node-licenses.json
 
       - name: Check Python licenses
         run: >-
           uv pip install pip-licenses &&
           pip-licenses --format=json > python-licenses.json &&
-          python -c "import json,os,sys; allowed=set(os.environ['LICENSE_ALLOWLIST_PYTHON'].split(',')); data=json.load(open('python-licenses.json')); bad=[(p.get('Name'),p.get('License')) for p in data if p.get('License') not in allowed]; (print('Disallowed Python licenses found:') or [print('  {}: {}'.format(n,l)) for n,l in bad] or sys.exit(1)) if bad else None"
+          python3 .github/scripts/check-licenses.py python-licenses.json

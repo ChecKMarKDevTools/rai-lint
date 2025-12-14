@@ -1,6 +1,5 @@
 {
   "name": "rai-lint",
-  "version": "0.0.0",
   "private": true,
   "type": "module",
   "description": "Dual-language commit-message validation framework for AI-responsible development",
