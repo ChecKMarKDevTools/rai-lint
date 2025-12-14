@@ -1,4 +1,3 @@
 {
-  "packages/node-commitlint": "1.0.0",
-  "packages/python-gitlint": "0.1.0"
+  ".": "1.0.0"
 }
