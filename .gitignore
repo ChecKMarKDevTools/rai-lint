@@ -40,4 +40,4 @@ coverage.xml
 **/reports/
 **/reports/*.xml
 
-*-license.json
+*-licenses.json

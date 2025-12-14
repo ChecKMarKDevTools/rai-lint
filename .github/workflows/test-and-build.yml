@@ -9,9 +9,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '.github/ISSUE_TEMPLATE/**'
+      - "docs/**"
+      - "**.md"
+      - ".github/ISSUE_TEMPLATE/**"
   workflow_dispatch:
 
 concurrency:
@@ -35,7 +35,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
 
       # Install root dependencies first to make shared dev tools (eslint, etc.) available
       # This is required in the monorepo setup before workspace-specific dependencies
@@ -79,7 +79,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     strategy:
       matrix:
-        python-version: ['3.11', '3.12']
+        python-version: ["3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v6
