@@ -70,11 +70,11 @@ show_missing = true
 precision = 2
 fail_under = 80
 
-[tool.coverage.html]
-directory = "htmlcov"
+[tool.coverage.xml]
+output = "coverage.xml"
 
 [tool.pytest.ini_options]
-addopts = "--cov=checkmark_rai_lint --cov-report=term-missing --cov-report=term --cov-fail-under=80"
+addopts = "--cov=checkmark_rai_lint --cov-report=term-missing --cov-report=term --cov-fail-under=80 --junitxml=reports/junit-py.xml"
 testpaths = ["tests"]
 
 [tool.black]
