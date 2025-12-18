@@ -5,4 +5,5 @@
 - [ ] brew package (windows equivalent?)
 - [ ] Starlight astral docs w/ mermaid support (in color theme)
 - [ ] WE NEED A PERSONALITY
-- [ ] add logo and social banner
+- [x] add social banner
+- [ ] create logo

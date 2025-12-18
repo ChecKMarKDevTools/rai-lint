@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 > _Where feature flags go to live rent-free while we nervously watch CI pipelines._
 
+### Recent Plumbing 🔧
+
+> _Dec 2025: Release automation saga and CI dependency hygiene._
+
+**For Maintainers** (you, probably)
+
+- Configured Release Please for monorepo with linked versions (build commit c4f883e)
+- Extracted license checking to dedicated Python script (refactor commit 09501b9)
+- Workflows now dynamically pull Node version from Volta config (refactor commit a5897e2)
+- Added Python-2.0 to allowed license list, simplified validation logic (refactor commit af7e7ca)
+- Security audit workflow standardized and cleaned up (ci commit c4af288)
+- Fixed release-please label configuration (chore commit ded9ea2)
+
+---
+
 ### From align-for-release Branch (Squashed) 🎭
 
 > Your author spent quality time arguing with GitHub Actions. The Actions won.
