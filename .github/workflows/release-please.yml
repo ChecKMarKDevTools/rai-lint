@@ -24,6 +24,28 @@ jobs:
       node-release-created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
       python-release-created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
     steps:
+      - name: Check for AutoSummon label
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABEL_NAME: "🤖 AutoSummon"
+          ENCODED_LABEL: ${{ env.LABEL_NAME }} # we'll URL-encode in-shell
+        run: |
+          set -e
+          # URL-encode label
+          encode() { python -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=''))" "$1"; }
+          encoded=$(encode "$LABEL_NAME")
+          status=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/labels/${encoded}" || echo "000")
+          if [ "$status" = "200" ]; then
+            echo "Label exists: $LABEL_NAME"
+          elif [ "$status" = "404" ]; then
+            echo "WARNING: Label '$LABEL_NAME' not found in repo (org seed may be pending). Proceeding without creating it."
+          elif [ "$status" = "403" ]; then
+            echo "WARNING: Forbidden checking label (org policy / permission). Proceeding without changes."
+          else
+            echo "NOTICE: Label check returned HTTP $status; proceeding."
+          fi
       - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.0.0
         id: release
         with:
