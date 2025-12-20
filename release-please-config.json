@@ -45,10 +45,10 @@
     {
       "type": "linked-versions",
       "groupName": "rai-lint",
-      "components": [".", "packages/node-commitlint", "packages/python-gitlint"]
+      "components": ["packages/node-commitlint", "packages/python-gitlint"]
     }
   ],
-  "labels": ["🤖 AutoSummon"],
+  "labels": [":robot: AutoSummon"],
   "separate-pull-requests": false,
   "fork": false,
   "include-component-in-tag": false,
