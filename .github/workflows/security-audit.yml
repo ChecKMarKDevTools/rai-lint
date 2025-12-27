@@ -92,7 +92,6 @@ jobs:
       - name: Check Python licenses
         working-directory: packages/python-gitlint
         run: |
-          uv sync --no-dev packages/python-gitlint/
           syft dir:. -o cyclonedx-json > ../../python-licenses.json
 
   # CodeQL analysis configured for javascript, python, and GitHub Actions workflows

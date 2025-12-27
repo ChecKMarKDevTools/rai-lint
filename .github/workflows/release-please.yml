@@ -25,29 +25,7 @@ jobs:
       node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
       python-tag-name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
     steps:
-      - name: Check for AutoSummon label
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABEL_NAME: "🤖 AutoSummon"
-          ENCODED_LABEL: ${{ env.LABEL_NAME }} # we'll URL-encode in-shell
-        run: |
-          set -e
-          # URL-encode label
-          encode() { python -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=''))" "$1"; }
-          encoded=$(encode "$LABEL_NAME")
-          status=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/labels/${encoded}" || echo "000")
-          if [ "$status" = "200" ]; then
-            echo "Label exists: $LABEL_NAME"
-          elif [ "$status" = "404" ]; then
-            echo "WARNING: Label '$LABEL_NAME' not found in repo (org seed may be pending). Proceeding without creating it."
-          elif [ "$status" = "403" ]; then
-            echo "WARNING: Forbidden checking label (org policy / permission). Proceeding without changes."
-          else
-            echo "NOTICE: Label check returned HTTP $status; proceeding."
-          fi
-      - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.0.0
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +68,7 @@ jobs:
           retention-days: 60
 
       - name: Attach Node coverage to GitHub Release
-        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/coverage/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
@@ -113,7 +91,7 @@ jobs:
           retention-days: 60
 
       - name: Attach SBOM to GitHub Release
-        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/sbom.json
@@ -137,7 +115,7 @@ jobs:
         run: npm --workspace=packages/node-commitlint publish --provenance --access public
 
       - name: Attach tarball to GitHub Release
-        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/*.tgz
@@ -175,7 +153,7 @@ jobs:
           python-version: "3.12"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
+        uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
 
@@ -195,7 +173,7 @@ jobs:
           retention-days: 60
 
       - name: Attach Python coverage to GitHub Release
-        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.python-tag-name }}
           files: packages/python-gitlint/coverage.json
@@ -220,7 +198,7 @@ jobs:
           retention-days: 60
 
       - name: Attach Python dist and SBOM to Release
-        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.python-tag-name }}
           files: |
@@ -240,7 +218,7 @@ jobs:
           retention-days: 60
 
       - name: Publish to PyPI with Trusted Publishing
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e
+        uses: pypa/gh-action-pypi-publish@v1.13.0
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
