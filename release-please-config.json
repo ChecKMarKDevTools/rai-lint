@@ -11,7 +11,7 @@
       "prerelease": false,
       "draft-pull-request": false,
       "extra-files": ["package.json"],
-      "changelog-path": "packages/node-commitlint/CHANGELOG.md",
+      "changelog-path": "CHANGELOG.md",
       "changelog-sections": [
         { "type": "feat", "section": "✨ New Features", "hidden": false },
         { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
@@ -35,7 +35,7 @@
       "prerelease": false,
       "draft-pull-request": false,
       "extra-files": ["pyproject.toml"],
-      "changelog-path": "packages/python-gitlint/CHANGELOG.md",
+      "changelog-path": "CHANGELOG.md",
       "changelog-sections": [
         { "type": "feat", "section": "✨ New Features", "hidden": false },
         { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
