@@ -20,9 +20,10 @@ jobs:
       id-token: write
     outputs:
       release-created: ${{ steps.release.outputs.release_created }}
-      tag-name: ${{ steps.release.outputs.tag_name }}
       node-release-created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
       python-release-created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
+      node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
+      python-tag-name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
     steps:
       - name: Check for AutoSummon label
         env:
@@ -91,7 +92,7 @@ jobs:
       - name: Attach Node coverage to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
         with:
-          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/coverage/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Build package
@@ -114,7 +115,7 @@ jobs:
       - name: Attach SBOM to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
         with:
-          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/sbom.json
 
       - name: Generate build attestation
@@ -138,12 +139,12 @@ jobs:
       - name: Attach tarball to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
         with:
-          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/*.tgz
 
       - name: Summary
         env:
-          TAG_NAME: ${{ needs.release-please.outputs.tag-name }}
+          TAG_NAME: ${{ needs.release-please.outputs.node-tag-name }}
         run: |
           echo "### NPM Package Published :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -196,7 +197,7 @@ jobs:
       - name: Attach Python coverage to GitHub Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
         with:
-          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          tag_name: ${{ needs.release-please.outputs.python-tag-name }}
           files: packages/python-gitlint/coverage.json
 
       - name: Prune dev dependencies
@@ -221,7 +222,7 @@ jobs:
       - name: Attach Python dist and SBOM to Release
         uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe
         with:
-          tag_name: ${{ needs.release-please.outputs.tag-name }}
+          tag_name: ${{ needs.release-please.outputs.python-tag-name }}
           files: |
             packages/python-gitlint/dist/*
             packages/python-gitlint/sbom.json
@@ -248,7 +249,7 @@ jobs:
 
       - name: Summary
         env:
-          TAG_NAME: ${{ needs.release-please.outputs.tag-name }}
+          TAG_NAME: ${{ needs.release-please.outputs.python-tag-name }}
         run: |
           echo "### PyPI Package Published :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

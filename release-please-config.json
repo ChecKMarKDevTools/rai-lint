@@ -1,15 +1,14 @@
 {
   "packages": {
-    ".": {
+    "packages/node-commitlint": {
       "release-type": "node",
-      "package-name": "rai-lint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "draft": false,
       "prerelease": false,
       "draft-pull-request": false,
       "extra-files": ["package.json"],
-      "changelog-path": "CHANGELOG.md",
+      "changelog-path": "packages/node-commitlint/CHANGELOG.md",
       "changelog-sections": [
         { "type": "feat", "section": "✨ New Features", "hidden": false },
         { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
@@ -22,15 +21,6 @@
         { "type": "chore", "section": "🧰 Maintenance", "hidden": false }
       ]
     },
-    "packages/node-commitlint": {
-      "release-type": "node",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "draft": false,
-      "prerelease": false,
-      "draft-pull-request": false,
-      "extra-files": ["package.json"]
-    },
     "packages/python-gitlint": {
       "release-type": "python",
       "bump-minor-pre-major": true,
@@ -38,20 +28,25 @@
       "draft": false,
       "prerelease": false,
       "draft-pull-request": false,
-      "extra-files": ["pyproject.toml"]
+      "extra-files": ["pyproject.toml"],
+      "changelog-path": "packages/python-gitlint/CHANGELOG.md",
+      "changelog-sections": [
+        { "type": "feat", "section": "✨ New Features", "hidden": false },
+        { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
+        { "type": "perf", "section": "⚡ Performance", "hidden": false },
+        { "type": "refactor", "section": "🔨 Refactoring", "hidden": false },
+        { "type": "docs", "section": "📝 Documentation", "hidden": false },
+        { "type": "test", "section": "✅ Tests", "hidden": false },
+        { "type": "build", "section": "📦 Build", "hidden": false },
+        { "type": "ci", "section": "🔁 CI/CD", "hidden": false },
+        { "type": "chore", "section": "🧰 Maintenance", "hidden": false }
+      ]
     }
   },
-  "plugins": [
-    {
-      "type": "linked-versions",
-      "groupName": "rai-lint",
-      "components": ["packages/node-commitlint", "packages/python-gitlint"]
-    }
-  ],
   "labels": [":robot: AutoSummon"],
   "separate-pull-requests": false,
   "fork": false,
-  "include-component-in-tag": false,
+  "include-component-in-tag": true,
   "include-v-in-tag": true,
   "create-release": true
 }
