@@ -46,14 +46,7 @@ jobs:
 
       - name: Install root Node dependencies
         run: npm install --ignore-scripts
-      - name: Auto-commit lock file changes
-        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
-        with:
-          commit_message: "chore: update package-lock.json [skip ci]"
-          file_pattern: "package-lock.json **/package-lock.json"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
       - name: Get Node version from Volta
         id: node-version
         run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
@@ -160,15 +153,6 @@ jobs:
       - name: Install dependencies
         working-directory: packages/python-gitlint
         run: uv sync
-
-      - name: Auto-commit lock file changes
-        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
-        with:
-          commit_message: "chore: update uv.lock [skip ci]"
-          file_pattern: "packages/python-gitlint/uv.lock"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
