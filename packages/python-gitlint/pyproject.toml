@@ -3,7 +3,7 @@ requires = ["setuptools>=80.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "checkmarkdevtools-gitlint-plugin-rai"
+name = "gitlint-rai"
 version = "0.0.0"
 authors = [
   { name="Ashley Childress", email="human@checkmarkdevtools.dev" },
@@ -16,7 +16,14 @@ dependencies = ["gitlint>=0.19.1"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
+    "License :: OSI Approved :: PolyForm Shield License 1.0.0",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Typing :: Typed",
 ]
 
 [project.urls]
@@ -34,19 +41,18 @@ dev = [
     "isort>=7.0.0",
     "coverage>=7.0.0",
     "build>=0.10.0",
-    "setuptools>=68.0",
     "wheel",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["checkmark_rai_lint*"]
+include = ["gitlint_rai*"]
 
 [project.entry-points."gitlint.plugins"]
-rai-footer-exists = "checkmark_rai_lint.rules:RaiFooterExists"
+rai-footer-exists = "gitlint_rai.rules:RaiFooterExists"
 
 [tool.coverage.run]
-source = ["checkmark_rai_lint"]
+source = ["gitlint_rai"]
 omit = [
     "tests/*",
     "*/test_*",
@@ -71,15 +77,15 @@ precision = 2
 fail_under = 80
 
 [tool.coverage.xml]
-output = "coverage.xml"
+output = "reports/coverage.xml"
 
 [tool.pytest.ini_options]
-addopts = "--cov=checkmark_rai_lint --cov-report=term-missing --cov-report=term --cov-fail-under=80 --junitxml=reports/junit-py.xml"
+addopts = "--junitxml=reports/junit-py.xml"
 testpaths = ["tests"]
 
 [tool.black]
 line-length = 100
-target-version = ['py310', 'py311', 'py312']
+target-version = ['py311', 'py312']
 
 [tool.isort]
 profile = "black"

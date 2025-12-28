@@ -26,8 +26,8 @@
     },
     "packages/python-gitlint": {
       "release-type": "python",
-      "package-name": "checkmarkdevtools-gitlint-plugin-rai",
-      "component": "gitlint-plugin-rai",
+      "package-name": "gitlint-rai",
+      "component": "gitlint-rai",
       "initial-version": "0.1.0",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,

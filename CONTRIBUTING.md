@@ -54,7 +54,7 @@ npm run test:watch
 ```bash
 cd packages/python-gitlint
 pytest tests/ -v
-pytest tests/ --cov=checkmark_rai_lint
+pytest tests/ --cov=gitlint_rai
 ```
 
 ## Code Style

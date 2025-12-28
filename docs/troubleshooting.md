@@ -80,7 +80,7 @@ export default { ... }
 
 ### Python / Gitlint Issues
 
-#### Issue: "ModuleNotFoundError: No module named 'checkmark_rai_lint'"
+#### Issue: "ModuleNotFoundError: No module named 'gitlint_rai'"
 
 **Cause**: Package not installed
 
@@ -88,7 +88,7 @@ export default { ... }
 
 ```bash
 uv add checkmarkdevtools-gitlint-plugin-rai
-uv run python -c "import checkmark_rai_lint; print('Installed')"
+uv run python -c "import gitlint_rai; print('Installed')"
 ```
 
 For development:
@@ -108,14 +108,14 @@ uv sync --locked --group dev
 
 ```ini
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+contrib = gitlint_rai.rules.RaiFooterExists
 ```
 
 **Debug**:
 
 ```bash
 gitlint --debug
-python -c "from checkmark_rai_lint.rules import RaiFooterExists; print(RaiFooterExists)"
+python -c "from gitlint_rai.rules import RaiFooterExists; print(RaiFooterExists)"
 ```
 
 ---

@@ -20,7 +20,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📦 Packages
 
-[![NPM Version](https://img.shields.io/npm/v/@checkmarkdevtools/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/@checkmarkdevtools/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/checkmarkdevtools-gitlint-plugin-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/checkmarkdevtools-gitlint-plugin-rai/)
+[![NPM Version](https://img.shields.io/npm/v/@checkmarkdevtools/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/@checkmarkdevtools/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/gitlint-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/gitlint-rai/)
 
 ### 🤖 AI & Automation
 
@@ -160,14 +160,14 @@ export default {
 ### Python / Gitlint
 
 ```bash
-uv add checkmarkdevtools-gitlint-plugin-rai
+uv add gitlint-rai
 ```
 
 **Configure in `.gitlint`:**
 
 ```ini
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+contrib = gitlint_rai.rules.RaiFooterExists
 ```
 
 ---
@@ -248,7 +248,7 @@ rai-lint/
 │   │   └── package.json
 │   │
 │   └── python-gitlint/            # Python plugin
-│       ├── checkmark_rai_lint/
+│       ├── gitlint_rai/
 │       │   ├── __init__.py
 │       │   └── rules.py
 │       └── pyproject.toml

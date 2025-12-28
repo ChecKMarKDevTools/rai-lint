@@ -96,7 +96,7 @@ Create or update `.gitlint` in your project root:
 
 ```ini
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+contrib = gitlint_rai.rules.RaiFooterExists
 ```
 
 ### 3. Set Up Git Hooks
@@ -180,7 +180,7 @@ ls -la .git/hooks/commit-msg
 
 ### Python Issues
 
-**Problem**: `ImportError: No module named 'checkmark_rai_lint'`
+**Problem**: `ImportError: No module named 'gitlint_rai'`
 
 **Solution**: Reinstall the package:
 

@@ -42,3 +42,4 @@ coverage.xml
 
 *-licenses.json
 sbom.json
+requirements-frozen.txt

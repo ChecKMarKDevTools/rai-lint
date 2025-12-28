@@ -1,35 +1,47 @@
-# checkmarkdevtools-gitlint-plugin-rai
+# gitlint-rai
 
 Gitlint plugin for enforcing AI attribution in commit messages using standard Git trailers.
 
 ## Installation
 
 ```bash
-uv add checkmarkdevtools-gitlint-plugin-rai
+pip install gitlint-rai
+```
+
+or with uv:
+
+```bash
+uv add gitlint-rai
 ```
 
 ## Usage
 
-Install the plugin via uv:
+After installation, configure gitlint to load the plugin:
 
-```bash
-uv add checkmarkdevtools-gitlint-plugin-rai
+**`.gitlint` file:**
+
+```ini
+[general]
+extra-path=gitlint_rai
 ```
 
-The plugin will be auto-discovered by gitlint (>=0.19.1) via entry points. No additional configuration is required in your `.gitlint` file. To verify the rule is loaded, run:
+or use the CLI flag:
+
+```bash
+gitlint --extra-path gitlint_rai
+```
+
+Verify the rule is loaded:
 
 ```bash
 gitlint --list-rules | grep rai-footer-exists
 ```
 
-If auto-discovery is not working in your environment, configure gitlint to explicitly load the plugin:
+You should see:
 
-```ini
-[general]
-extra-paths = /path/to/site-packages
 ```
-
-Then list and validate rules as above.
+rai-footer-exists  Commit message must include a valid RAI footer
+```
 
 ## Valid Footer Formats
 
@@ -43,17 +55,8 @@ All patterns are case-insensitive.
 
 ## Requirements
 
-- Python >= 3.10, < 3.13
+- Python >= 3.11, < 3.13
 - gitlint >= 0.19.1
-
-## Development
-
-```bash
-uv sync --locked --group dev
-make test
-make lint
-make test-coverage
-```
 
 ## License
 

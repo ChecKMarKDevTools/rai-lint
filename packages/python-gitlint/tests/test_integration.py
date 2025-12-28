@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from checkmark_rai_lint.rules import RaiFooterExists
+from gitlint_rai.rules import RaiFooterExists
 
 
 def create_commit(message: str):

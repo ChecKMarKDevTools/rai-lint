@@ -48,7 +48,7 @@ packages/node-commitlint/
 
 ```
 packages/python-gitlint/
-├── checkmark_rai_lint/
+├── gitlint_rai/
 │   ├── __init__.py
 │   └── rules.py            # RaiFooterExists rule
 ├── tests/

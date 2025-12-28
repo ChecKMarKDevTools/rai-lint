@@ -102,34 +102,23 @@ jobs:
       - name: Run Black and isort
         working-directory: packages/python-gitlint
         run: |
-          uv run black --check checkmark_rai_lint tests/
-          uv run isort --check-only checkmark_rai_lint tests/
+          uv run black --check gitlint_rai tests/
+          uv run isort --check-only gitlint_rai tests/
 
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
         run: |
-          uv run pytest tests/ \
-            --cov=checkmark_rai_lint \
-            --junitxml=reports/junit-py.xml \
-            --cov-report=xml:coverage.xml \
-            --cov-report=html:htmlcov \
-            --cov-report=term-missing \
-            --cov-fail-under=80
-
-      - name: Convert Python coverage to LCOV
-        working-directory: packages/python-gitlint
-        run: |
-          uv run coverage lcov --data-file .coverage -o coverage.lcov || true
+          uv run pytest \
+            --cov \
+            --cov-report=xml \
+            --cov-report=term-missing
 
       - name: Upload Python coverage artifacts
         uses: actions/upload-artifact@v6
         with:
           name: python-coverage-${{ matrix.python-version }}
-          path: |
-            packages/python-gitlint/coverage.xml
-            packages/python-gitlint/htmlcov
-            packages/python-gitlint/coverage.lcov
-          retention-days: 60
+          path: packages/python-gitlint/reports/coverage.xml
+          retention-days: 30
 
       - name: Upload Python test results to Codecov
         uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
@@ -142,9 +131,7 @@ jobs:
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: |
-            packages/python-gitlint/coverage.xml
-            packages/python-gitlint/coverage.lcov
+          files: packages/python-gitlint/reports/coverage.xml
           flags: python
           fail_ci_if_error: true
 

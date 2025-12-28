@@ -55,10 +55,10 @@ source .venv/bin/activate
 cd packages/python-gitlint
 
 pytest tests/ -v
-pytest tests/ --cov=checkmark_rai_lint
+pytest tests/ --cov=gitlint_rai
 
-black checkmark_rai_lint/
-isort checkmark_rai_lint/
+black gitlint_rai/
+isort gitlint_rai/
 ```
 
 ## Running Benchmarks
@@ -200,7 +200,7 @@ environment before publishing.
 
    ```ini
    [general]
-   contrib = checkmark_rai_lint.rules.RaiFooterExists
+   contrib = gitlint_rai.rules.RaiFooterExists
    ```
 
    Test with a commit:

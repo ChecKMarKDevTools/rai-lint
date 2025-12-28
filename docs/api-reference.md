@@ -92,7 +92,7 @@ Where `<contact>` can be an email address or any identifier (email format is enc
 **Example**:
 
 ```python
-from checkmark_rai_lint.rules import RaiFooterExists
+from gitlint_rai.rules import RaiFooterExists
 from gitlint.tests.base import BaseTestCase
 
 class TestCase(BaseTestCase):
@@ -145,7 +145,7 @@ export default {
 
 ```ini
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+contrib = gitlint_rai.rules.RaiFooterExists
 
 [rai-footer-exists]
 # No additional configuration needed
