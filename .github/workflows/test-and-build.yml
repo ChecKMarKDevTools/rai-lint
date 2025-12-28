@@ -12,6 +12,8 @@ on:
       - "docs/**"
       - "**.md"
       - ".github/ISSUE_TEMPLATE/**"
+  push:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
