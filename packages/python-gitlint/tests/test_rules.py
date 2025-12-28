@@ -9,21 +9,10 @@ def create_commit(message: str):
     commit = Mock()
     commit.message.full = message
 
-    # Simple trailer parsing for tests
-    trailers = {}
     lines = message.split("\n")
-    for line in lines:
-        if ":" in line:
-            key, value = line.split(":", 1)
-            key = key.strip()
-            value = value.strip()
-            # This is a very basic parser, assuming one trailer per line and no multiline values
-            # It's enough for the current tests
-            if key not in trailers:
-                trailers[key] = []
-            trailers[key].append(value)
+    commit.message.title = lines[0] if lines else ""
+    commit.message.body = lines[1:] if len(lines) > 1 else []
 
-    commit.message.trailers = trailers
     return commit
 
 

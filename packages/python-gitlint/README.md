@@ -16,22 +16,32 @@ uv add gitlint-rai
 
 ## Usage
 
-After installation, configure gitlint to load the plugin:
-
-**`.gitlint` file:**
+Add to `.gitlint`:
 
 ```ini
 [general]
-contrib = gitlint_rai.rules.RaiFooterExists
+extra-path=gitlint_rai
 ```
 
-Verify the rule is loaded:
+Then run:
+
+```bash
+gitlint
+```
+
+Or use the standalone wrapper:
+
+```bash
+gitlint-rai
+```
+
+Verify the rule loaded:
 
 ```bash
 gitlint --list-rules | grep rai-footer-exists
 ```
 
-You should see:
+Expected output:
 
 ```
 rai-footer-exists  Commit message must include a valid RAI footer

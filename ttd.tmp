@@ -1,9 +1,10 @@
 # TTD
 
-- [ ] Semantic versioning + artifacts + SBOM
+- [x] Semantic versioning + artifacts + SBOM
 - [ ] commitizen implementation
 - [ ] brew package (windows equivalent?)
 - [ ] Starlight astral docs w/ mermaid support (in color theme)
 - [ ] WE NEED A PERSONALITY
 - [x] add social banner
 - [ ] create logo
+- [ ] The error message block is copy-pasted and long

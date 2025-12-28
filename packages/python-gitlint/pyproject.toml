@@ -51,6 +51,9 @@ include = ["gitlint_rai*"]
 [project.entry-points."gitlint.plugins"]
 rai-footer-exists = "gitlint_rai.rules:RaiFooterExists"
 
+[project.scripts]
+gitlint-rai = "gitlint_rai.__main__:main"
+
 [tool.coverage.run]
 source = ["gitlint_rai"]
 omit = [
@@ -59,6 +62,7 @@ omit = [
     "*/__pycache__/*",
     ".venv/*",
     "venv/*",
+    "gitlint_rai/__main__.py",
 ]
 
 [tool.coverage.report]

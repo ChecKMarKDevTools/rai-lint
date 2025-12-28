@@ -16,20 +16,47 @@ class RaiFooterExists(CommitRule):
         "Generated-by",
     }
 
-    # Value must be: Name <email>
-    # Use a safe regex to avoid ReDoS: Name (no <) <email (no >)>
     AI_ATTRIBUTION_VALUE_PATTERN = re.compile(r"^[^<]+ <[^>]+>$")
+    TRAILER_PATTERN = re.compile(r"^([A-Za-z][\w-]*)\s*:\s*(.+)$")
+
+    def _parse_trailers(self, message_body):
+        if not message_body:
+            return {}
+
+        lines = message_body if isinstance(message_body, list) else message_body.split("\n")
+        trailers = {}
+        in_trailer_block = False
+        trailer_lines = []
+
+        for i in range(len(lines) - 1, -1, -1):
+            line = lines[i].strip()
+            if not line:
+                if in_trailer_block:
+                    break
+                continue
+
+            match = self.TRAILER_PATTERN.match(line)
+            if match:
+                in_trailer_block = True
+                trailer_lines.insert(0, (match.group(1), match.group(2)))
+            elif in_trailer_block:
+                break
+
+        for key, value in trailer_lines:
+            normalized_key = key.lower()
+            if normalized_key not in trailers:
+                trailers[normalized_key] = []
+            trailers[normalized_key].append(value.strip())
+
+        return trailers
 
     def validate(self, commit):
-        # gitlint >= 0.15.0 provides parsed trailers
-        trailers = getattr(commit.message, "trailers", {})
-
-        # Normalize trailers keys to lowercase for comparison
-        normalized_trailers = {k.lower(): v for k, v in trailers.items()}
+        trailers = self._parse_trailers(commit.message.body)
 
         for key in self.AI_ATTRIBUTION_KEYS:
-            if key.lower() in normalized_trailers:
-                for value in normalized_trailers[key.lower()]:
+            normalized_key = key.lower()
+            if normalized_key in trailers:
+                for value in trailers[normalized_key]:
                     if self.AI_ATTRIBUTION_VALUE_PATTERN.match(value):
                         return []
 
