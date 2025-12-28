@@ -154,3 +154,12 @@ class TestRaiFooterExists:
         commit = create_commit("feat: add feature\n\nSome text\nKey: value")
         violations = rule.validate(commit)
         assert len(violations) == 1
+
+    def test_all_blank_body_lines(self):
+        """If message.body contains only blank lines, the trailer block finder
+        should return empty and parsing should report missing attribution."""
+        rule = RaiFooterExists()
+        # Title followed by two blank lines -> body becomes ['', '']
+        commit = create_commit("feat: add feature\n\n\n")
+        violations = rule.validate(commit)
+        assert len(violations) == 1

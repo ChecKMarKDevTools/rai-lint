@@ -24,7 +24,7 @@ jobs:
       node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
       python-tag-name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@6dba30c72c02e9b69848529b9106f56bc4ae2d87 # v17.1.3
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -67,7 +67,7 @@ jobs:
           retention-days: 60
 
       - name: Attach Node coverage to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/coverage/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
@@ -90,7 +90,7 @@ jobs:
           retention-days: 60
 
       - name: Attach SBOM to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/sbom.json
@@ -114,7 +114,7 @@ jobs:
         run: npm --workspace=packages/node-commitlint publish --provenance --access public
 
       - name: Attach tarball to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
           files: packages/node-commitlint/*.tgz
@@ -152,7 +152,7 @@ jobs:
           python-version: "3.12"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
         with:
           enable-cache: true
 
@@ -172,7 +172,7 @@ jobs:
           retention-days: 30
 
       - name: Attach Python coverage to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.python-tag-name }}
           files: packages/python-gitlint/reports/coverage.xml
@@ -204,7 +204,7 @@ jobs:
           retention-days: 30
 
       - name: Attach Python dist and SBOM to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.python-tag-name }}
           files: |
@@ -224,7 +224,7 @@ jobs:
           retention-days: 60
 
       - name: Publish to PyPI with Trusted Publishing
-        uses: pypa/gh-action-pypi-publish@v1.13.0
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
