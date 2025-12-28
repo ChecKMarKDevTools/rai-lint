@@ -19,7 +19,6 @@ jobs:
       pull-requests: write
       id-token: write
     outputs:
-      release-created: ${{ steps.release.outputs.release_created }}
       node-release-created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
       python-release-created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
       node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}

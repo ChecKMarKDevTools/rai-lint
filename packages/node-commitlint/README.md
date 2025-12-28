@@ -34,7 +34,7 @@ All patterns are case-insensitive.
 
 ## Requirements
 
-- Node.js >= 18.0.0
+- Node.js >= 20.0.0
 - @commitlint/cli >= 19.0.0
 
 ## License

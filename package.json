@@ -1,6 +1,5 @@
 {
   "name": "rai-lint",
-  "version": "0.0.0",
   "private": true,
   "type": "module",
   "description": "Dual-language commit-message validation framework for AI-responsible development",
@@ -15,7 +14,7 @@
     "lint": "npm run lint --workspaces",
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,json,md}\"",
-    "postinstall": "npx lefthook install"
+    "postinstall": "grep -q '\"private\": true' package.json && npx lefthook install || true"
   },
   "devDependencies": {
     "@checkmarkdevtools/commitlint-plugin-rai": "^0.0.0",
