@@ -1,10 +1,5 @@
 name: Test and Build
 
-permissions:
-  contents: write
-  pull-requests: write
-  checks: write
-
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -26,6 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 9
     if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
     strategy:
       matrix:
         node-version: [20, 22, 24]
@@ -90,6 +89,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 9
     if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
