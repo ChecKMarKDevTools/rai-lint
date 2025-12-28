@@ -47,7 +47,7 @@ jobs:
           retention-days: 30
 
       - name: "Upload to code-scanning"
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4.31.9
         with:
           sarif_file: results.sarif
 
@@ -69,11 +69,11 @@ jobs:
         with:
           node-version: ${{ steps.node-version.outputs.version }}
 
-      - name: Install Node dependencies
-        run: npm ci --omit=dev --ignore-scripts
+      - name: Install Node dependencies (locked)
+        run: npm ci --ignore-scripts
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@f94ec6bedd8674c4426838e6b50417d36b6ab231 # v5.3.1
+        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
         with:
           python-version: "3.12"
           enable-cache: true
@@ -84,7 +84,7 @@ jobs:
 
       - name: Check Node licenses
         run: |
-          npx --yes license-checker --json --excludePrivatePackages --production > node-licenses.json
+          npx --yes license-checker --json --excludePrivatePackages --production --start packages/node-commitlint > node-licenses.json
           python3 .github/scripts/check-licenses.py node-licenses.json
 
       - name: Generate Python SBOM
@@ -130,7 +130,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Initialize CodeQL"
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4.31.9
         with:
           languages: ${{ matrix.language }}
           packs: codeql/actions-queries
@@ -142,4 +142,4 @@ jobs:
           npm run build --if-present
 
       - name: "Perform CodeQL Analysis"
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4.31.9
