@@ -128,3 +128,29 @@ class TestRaiFooterExists:
         commit.message.body = []
         violations = rule.validate(commit)
         assert len(violations) == 1
+
+    def test_malformed_trailer_empty_key(self):
+        rule = RaiFooterExists()
+        commit = create_commit("feat: add feature\n\n: value only")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_malformed_trailer_non_alpha_start(self):
+        rule = RaiFooterExists()
+        commit = create_commit("feat: add feature\n\n123-key: value")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_trailer_block_stops_on_blank_line(self):
+        rule = RaiFooterExists()
+        commit = create_commit(
+            "feat: add feature\n\nKey: value\n\nGenerated-by: AI <ai@example.com>"
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
+    def test_non_trailer_stops_trailer_block(self):
+        rule = RaiFooterExists()
+        commit = create_commit("feat: add feature\n\nSome text\nKey: value")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
