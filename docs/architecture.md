@@ -1,8 +1,6 @@
 # Architecture Overview
 
-## System Design
-
-CheckMarK RAI Lint is designed as a dual-language monorepo implementing identical commit validation logic across Node.js and Python ecosystems.
+CheckMarK RAI Lint is a dual-language monorepo implementing identical commit validation logic across Node.js and Python ecosystems.
 
 ```mermaid
 %%{init: {'theme':'dark'}}%%
@@ -20,161 +18,28 @@ flowchart TB
     I -->|Invalid| K[Reject Commit ❌]
 ```
 
-## Component Architecture
-
-### Node Package (`@checkmarkdevtools/commitlint-plugin-rai`)
-
-```
-packages/node-commitlint/
-├── src/
-│   ├── index.ts           # Plugin entry point
-│   └── rules/
-│       ├── rai-footer-exists.ts
-│       └── rai-footer-exists.test.ts
-├── dist/                   # Compiled output
-├── package.json
-├── tsconfig.json
-└── vitest.config.ts
-```
-
-**Key Design Decisions:**
-
-- ESM-first with TypeScript for modern Node.js
-- Commitlint Rule API compliance
-- Regex-based pattern matching for flexibility
-- Zero runtime dependencies (peer deps only)
-
-### Python Package (`checkmarkdevtools-gitlint-plugin-rai`)
-
-```
-packages/python-gitlint/
-├── gitlint_rai/
-│   ├── __init__.py
-│   └── rules.py            # RaiFooterExists rule
-├── tests/
-│   └── test_rules.py
-├── pyproject.toml
-└── .gitlint
-```
-
-**Key Design Decisions:**
-
-- Gitlint contrib rule pattern
-- Identical regex patterns to Node version
-- Python 3.10+ baseline for compatibility
-- Minimal dependencies (gitlint only)
-
 ## RAI Footer Validation Logic
 
-Both implementations use identical validation patterns:
+Both implementations validate Git trailers (footers) using these patterns:
 
-1. **Authored-by Pattern**: `^Authored-by:\s+.+\s+<.+@.+>$`
-2. **Commit-generated-by Pattern**: `^Commit-generated-by:\s+.+\s+<.+@.+>$`
-3. **Assisted-by Pattern**: `^Assisted-by:\s+.+\s+<.+@.+>$`
-4. **Co-authored-by Pattern**: `^Co-authored-by:\s+.+\s+<.+@.+>$`
-5. **Generated-by Pattern**: `^Generated-by:\s+.+\s+<.+@.+>$`
+**Node.js** (regex-based):
 
-All patterns are:
-
-- Case-insensitive (`re.IGNORECASE` / `i` flag)
-- Multiline-aware (`re.MULTILINE` / `m` flag)
-- Anchored to line boundaries (`^` and `$`)
-- Follow Git trailer format with name and email
-
-## Testing Strategy
-
-### Shared Fixtures
-
-Both packages share identical test fixtures to ensure parity:
-
-```
-fixtures/
-├── commit-messages.ts      # Node fixtures
-└── commit_messages.py      # Python fixtures
+```javascript
+/^Authored-by:\s+[^<]+\s+<[^>]+>$/im
+/^Commit-generated-by:\s+[^<]+\s+<[^>]+>$/im
+/^Assisted-by:\s+[^<]+\s+<[^>]+>$/im
+/^Co-authored-by:\s+[^<]+\s+<[^>]+>$/im
+/^Generated-by:\s+[^<]+\s+<[^>]+>$/im
 ```
 
-Test cases cover:
+**Python** (trailer-aware):
 
-- ✅ Valid footers (all five patterns)
-- ✅ Case insensitivity
-- ❌ Missing footers
-- ❌ Malformed footers
-- ❌ Invalid footer text
+- Parses Git trailers via gitlint's built-in parser
+- Validates keys: `Authored-by`, `Commit-generated-by`, `Assisted-by`, `Co-authored-by`, `Generated-by` (case-insensitive)
+- Validates value format: `^[^<]+ <[^>]+>$` (name + email in angle brackets)
 
-### CI Matrix
+All patterns require:
 
-Automated testing across:
-
-- **Node**: 18, 20
-- **Python**: 3.11, 3.12
-
-Each matrix job runs:
-
-- Linting (ESLint/Black/isort)
-- Unit tests (Vitest/Pytest)
-- Build verification (TypeScript compilation)
-
-## Integration Points
-
-### Hook Managers
-
-The framework supports three major Git hook managers:
-
-1. **Lefthook** (Recommended)
-   - Fast, language-agnostic
-   - YAML configuration
-   - Parallel execution support
-
-2. **Husky** (Node-focused)
-   - Npm ecosystem standard
-   - Simple shell scripts
-   - Wide adoption
-
-3. **pre-commit** (Python-focused)
-   - Framework-agnostic
-   - Extensive plugin ecosystem
-   - YAML configuration
-
-### Workflow Integration
-
-```mermaid
-%%{init: {'theme':'dark'}}%%
-sequenceDiagram
-    participant Dev as Developer
-    participant Git as Git
-    participant Hook as Hook Manager
-    participant Lint as RAI Lint
-
-    Dev->>Git: git commit -m "message"
-    Git->>Hook: Trigger commit-msg hook
-    Hook->>Lint: Validate message
-    alt Has RAI Footer
-        Lint->>Hook: ✅ Pass
-        Hook->>Git: Accept
-        Git->>Dev: Commit created
-    else No RAI Footer
-        Lint->>Hook: ❌ Fail
-        Hook->>Git: Reject
-        Git->>Dev: Error message
-    end
-```
-
-## Extensibility
-
-### Future Enhancement Points
-
-1. **Custom Footer Patterns**
-   - Configuration-based pattern definitions
-   - Organization-specific footer formats
-
-2. **Footer Templates**
-   - CLI tools for footer generation
-   - IDE snippets and integrations
-
-3. **Reporting & Analytics**
-   - AI attribution metrics
-   - Compliance dashboards
-
-4. **Multi-Repository Enforcement**
-   - Centralized configuration
-   - Organization-wide policies
+- Case-insensitive matching
+- Name followed by contact in angle brackets (`Name <contact>`)
+- Valid Git trailer format

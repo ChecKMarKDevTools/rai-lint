@@ -1,3 +1,3 @@
 # Changelog
 
-All notable changes to `checkmarkdevtools-gitlint-plugin-rai` will be documented in this file.
+All notable changes to `gitlint-rai` will be documented in this file.

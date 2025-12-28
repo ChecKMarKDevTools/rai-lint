@@ -10,7 +10,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📊 Project Stats
 
-[![GitHub Repo Stars](https://img.shields.io/github/stars/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/issues) [![GitHub Release](https://img.shields.io/github/v/release/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=EDC531)](https://github.com/ChecKMarKDevTools/rai-lint/releases) [![License: Polyform Shield](https://img.shields.io/badge/license-Polyform%20Shield%201.0.0-orange?style=for-the-badge)](LICENSE)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=F0544B&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/ChecKMarKDevTools/rai-lint/issues) [![GitHub Release](https://img.shields.io/github/v/release/ChecKMarKDevTools/rai-lint?style=for-the-badge&color=EDC531)](https://github.com/ChecKMarKDevTools/rai-lint/releases) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE)
 
 [![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/checkmarkdevtools_rai-lint?color=brightgreen&server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&color=orange&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/checkmarkdevtools_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=checkmarkdevtools_rai-lint)
 
@@ -223,15 +223,7 @@ repos:
 
 ## 📚 Documentation
 
-| Document                                   | Description                    |
-| ------------------------------------------ | ------------------------------ |
-| [Installation Guide](docs/installation.md) | Detailed setup instructions    |
-| [Usage Guide](docs/usage.md)               | How to use the plugins         |
-| [API Reference](docs/api-reference.md)     | Complete API documentation     |
-| [Architecture](docs/architecture.md)       | System design and internals    |
-| [Deployment](docs/deployment.md)           | Publishing and release process |
-| [Development](docs/development.md)         | Contributing guidelines        |
-| [Troubleshooting](docs/troubleshooting.md) | Common issues and fixes        |
+See the [`docs/`](docs/) directory for comprehensive documentation.
 
 ---
 
@@ -269,7 +261,7 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 Look, I'm not gonna hide behind a wall of legalese here.
 
-This runs on [Polyform Shield 1.0.0](./LICENSE). That's **not open source** — but before you rage-quit, hear me out.
+This runs on [Polyform Shield License 1.0.0](./LICENSE). That's **not open source** — but before you rage-quit, hear me out.
 
 **What this means in actual English:**
 

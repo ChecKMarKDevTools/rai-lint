@@ -43,7 +43,7 @@
     "git-hooks"
   ],
   "author": "Ashley Childress",
-  "license": "Polyform-Shield-1.0.0",
+  "license": "LicenseRef-PolyForm-Shield-1.0.0",
   "volta": {
     "node": "24.11.1"
   }

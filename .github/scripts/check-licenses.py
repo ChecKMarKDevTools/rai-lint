@@ -81,7 +81,7 @@ def main():
 
     json_file = sys.argv[1]
 
-    allowed = {'MIT', 'Apache-2.0', 'BSD-3-Clause', 'BSD-2-Clause', 'ISC', 'Python-2.0', 'Polyform-Shield-1.0.0'}
+    allowed = {'MIT', 'Apache-2.0', 'BSD-3-Clause', 'BSD-2-Clause', 'ISC', 'Python-2.0', 'LicenseRef-PolyForm-Shield-1.0.0'}
 
     data = load_data(json_file)
     bad = check_licenses(data, allowed)

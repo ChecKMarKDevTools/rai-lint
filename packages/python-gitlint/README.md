@@ -1,6 +1,6 @@
 # gitlint-rai
 
-Gitlint plugin for enforcing AI attribution in commit messages using standard Git trailers.
+Gitlint plugin for enforcing AI attribution in commit messages using Git commit message trailers.
 
 ## Installation
 
@@ -22,13 +22,7 @@ After installation, configure gitlint to load the plugin:
 
 ```ini
 [general]
-extra-path=gitlint_rai
-```
-
-or use the CLI flag:
-
-```bash
-gitlint --extra-path gitlint_rai
+contrib = gitlint_rai.rules.RaiFooterExists
 ```
 
 Verify the rule is loaded:
@@ -60,4 +54,4 @@ All patterns are case-insensitive.
 
 ## License
 
-Polyform Shield 1.0.0
+PolyForm Shield License 1.0.0

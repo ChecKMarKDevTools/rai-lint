@@ -39,4 +39,4 @@ All patterns are case-insensitive.
 
 ## License
 
-Polyform Shield 1.0.0
+PolyForm Shield License 1.0.0
