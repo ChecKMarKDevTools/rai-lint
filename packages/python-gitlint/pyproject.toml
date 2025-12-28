@@ -8,15 +8,16 @@ version = "0.0.0"
 authors = [
   { name="Ashley Childress", email="human@checkmarkdevtools.dev" },
 ]
+readme = "README.md"
 description = "Gitlint plugin for RAI footer validation"
 requires-python = ">=3.11,<3.13"
 keywords = ["gitlint", "rai", "ai-attribution", "commit-validation"]
-license-files = ["LICENSE"]
 dependencies = ["gitlint>=0.19.1"]
+license = "LicenseRef-PolyForm-Shield-1.0.0"
+license-files = ["LICENSE"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: PolyForm Shield License 1.0.0",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
