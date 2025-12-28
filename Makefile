@@ -1,7 +1,7 @@
 # Package paths
 NODE_PKG := packages/node-commitlint
 PYTHON_PKG := packages/python-gitlint
-PYTHON_SOURCES := checkmark_rai_lint/ tests/
+PYTHON_SOURCES := gitlint_rai/ tests/
 
 .PHONY: help install install-locked update-locks clean validate ai-checks
 .PHONY: test test-node test-python
@@ -62,14 +62,10 @@ test-node:
 
 test-python:
 	cd $(PYTHON_PKG) && mkdir -p reports && \
-		uv run pytest tests/ \
-		--cov=checkmark_rai_lint \
-		--junitxml=reports/junit-py.xml \
-		--cov-report=xml:coverage.xml \
-		--cov-report=html:htmlcov \
-		--cov-report=term-missing \
-		--cov-fail-under=80 && \
-		uv run coverage lcov --data-file .coverage -o coverage.lcov || true
+		uv run pytest \
+			--cov \
+			--cov-report=xml \
+			--cov-report=term-missing
 
 # ============================================================================
 # Lint

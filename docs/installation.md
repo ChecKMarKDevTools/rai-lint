@@ -1,18 +1,25 @@
 # Installation Guide
 
+> [!TIP]
+> New to this whole RAI attribution thing? Start here: [Did AI Erase Attribution? Your Git History Is Missing a Co-Author](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l).
+
+---
+
 ## Prerequisites
 
-### For Node.js Projects
+### Node.js Projects
 
 - Node.js >= 20.0.0, < 25.0.0
 - npm or yarn
-- Git repository
+- A Git repository (obviously)
 
-### For Python Projects
+### Python Projects
 
-- Python >= 3.10, < 3.13
-- uv
-- Git repository
+- Python >= 3.11, < 3.13
+- uv (not pip—use uv)
+- A Git repository
+
+---
 
 ## Node.js Installation
 
@@ -24,7 +31,7 @@ npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai @commitlint/cli 
 
 ### 2. Configure Commitlint
 
-Create or update `commitlint.config.js` in your project root:
+Create or update `commitlint.config.js`:
 
 ```javascript
 export default {
@@ -38,9 +45,9 @@ export default {
 
 ### 3. Set Up Git Hooks
 
-#### Option A: Lefthook (Recommended)
+You need a hook manager. Pick one.
 
-Install Lefthook:
+#### Option A: Lefthook (I use this one)
 
 ```bash
 npm install --save-dev lefthook
@@ -63,47 +70,42 @@ npx lefthook install
 
 #### Option B: Husky
 
-Install Husky:
-
 ```bash
 npm install --save-dev husky
 npx husky install
-```
-
-Add commit-msg hook:
-
-```bash
 npx husky add .husky/commit-msg 'npx commitlint --edit $1'
 ```
+
+---
 
 ## Python Installation
 
 ### 1. Install the Plugin
 
 ```bash
-uv add checkmarkdevtools-gitlint-plugin-rai
+uv add gitlint-rai
 ```
 
-For development:
+For dev dependencies:
 
 ```bash
-uv add checkmarkdevtools-gitlint-plugin-rai --dev
+uv add gitlint-rai --dev
 ```
 
 ### 2. Configure Gitlint
 
-Create or update `.gitlint` in your project root:
+Create or update `.gitlint`:
 
 ```ini
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+contrib = gitlint_rai.rules.RaiFooterExists
 ```
 
 ### 3. Set Up Git Hooks
 
-#### Option A: pre-commit (Recommended)
+Again, pick a hook manager.
 
-Install pre-commit:
+#### Option A: pre-commit (standard for Python projects)
 
 ```bash
 uv add pre-commit
@@ -131,6 +133,8 @@ pre-commit install --hook-type commit-msg
 
 #### Option B: Manual Git Hook
 
+If you don't want a hook manager, do it manually.
+
 Create `.git/hooks/commit-msg`:
 
 ```bash
@@ -144,9 +148,11 @@ Make it executable:
 chmod +x .git/hooks/commit-msg
 ```
 
+---
+
 ## Verification
 
-Test your setup with a valid commit:
+Test everything with a valid commit:
 
 ```bash
 git commit -m "test: verify RAI lint setup
@@ -154,13 +160,15 @@ git commit -m "test: verify RAI lint setup
 Assisted-by: GitHub Copilot <copilot@github.com>"
 ```
 
-This should succeed. Try an invalid commit:
+This should succeed. Now try an invalid one:
 
 ```bash
 git commit -m "test: this should fail"
 ```
 
-This should be rejected with an error message.
+This should get rejected with an error message explaining what you need to add.
+
+---
 
 ## Troubleshooting
 
@@ -168,37 +176,37 @@ This should be rejected with an error message.
 
 **Problem**: `Module not found: @checkmarkdevtools/commitlint-plugin-rai`
 
-**Solution**: Ensure the package is installed and listed in `package.json` devDependencies.
+**Fix**: You didn't install it. Run the install command again and check `package.json`.
 
 **Problem**: Commitlint not running on commit
 
-**Solution**: Verify hooks are installed:
+**Fix**: Your hooks aren't installed. Check:
 
 ```bash
 ls -la .git/hooks/commit-msg
 ```
 
+If nothing's there, re-run the hook install step.
+
 ### Python Issues
 
-**Problem**: `ImportError: No module named 'checkmark_rai_lint'`
+**Problem**: `ImportError: No module named 'gitlint_rai'`
 
-**Solution**: Reinstall the package:
+**Fix**: Reinstall:
 
 ```bash
-uv add --reinstall checkmarkdevtools-gitlint-plugin-rai
+uv add --reinstall gitlint-rai
 ```
 
 **Problem**: Gitlint not finding the rule
 
-**Solution**: Check `.gitlint` configuration and ensure the contrib path is correct:
+**Fix**: Check your `.gitlint` config. Debug with:
 
 ```bash
 gitlint --debug
 ```
 
-## Multi-Language Projects
-
-For projects using both Node.js and Python, you can run both validators:
+---
 
 ### Lefthook Configuration
 

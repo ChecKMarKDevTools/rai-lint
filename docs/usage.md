@@ -1,12 +1,20 @@
 # Usage Guide
 
+## What This Actually Does
+
+CheckMarK RAI Lint enforces AI attribution in Git commit trailers. No attribution footer = rejected commit. Simple.
+
+**Read the full context**: [Did AI Erase Attribution? Your Git History Is Missing a Co-Author](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l)
+
+---
+
 ## Valid RAI Footer Formats
 
-CheckMarK RAI Lint accepts five footer formats. All patterns are **case-insensitive**.
+Five footer patterns. All case-insensitive. Pick **one** that represents the **majority AI contribution**.
 
-### 1. Authored-by Footer
+### 1. Authored-by
 
-Use when the work was done entirely by a human with no AI involvement:
+**When**: Zero AI involvement. You wrote everything.
 
 ```
 feat: implement user authentication
@@ -16,9 +24,9 @@ Add JWT-based authentication with refresh tokens and secure session management.
 Authored-by: Jane Doe <jane@example.com>
 ```
 
-### 2. Commit-generated-by Footer
+### 2. Commit-generated-by
 
-Use when AI contributed only trivially (docs, messages, advice - not code):
+**When**: AI only generated trivial stuff—docs, commit messages, advice. No actual code changes.
 
 ```
 docs: update README installation instructions
@@ -28,9 +36,9 @@ Improved clarity and added troubleshooting section.
 Commit-generated-by: GitHub Copilot <copilot@github.com>
 ```
 
-### 3. Assisted-by Footer
+### 3. Assisted-by
 
-Use when AI helped but the work was primarily human-driven:
+**When**: AI helped in spots, but the work is clearly yours.
 
 ```
 fix: resolve race condition in payment processing
@@ -40,9 +48,9 @@ Added mutex locks to prevent concurrent payment processing issues.
 Assisted-by: GitHub Copilot <copilot@github.com>
 ```
 
-### 4. Co-authored-by Footer
+### 4. Co-authored-by
 
-Use when AI and human contributed roughly equally (40-60 range):
+**When**: The work was meaningfully shared between you and AI.
 
 ```
 feat: add data validation pipeline
@@ -52,9 +60,9 @@ Implemented validation logic with custom rules and error handling.
 Co-authored-by: GitHub Copilot <copilot@github.com>
 ```
 
-### 5. Generated-by Footer
+### 5. Generated-by
 
-Use when the majority of the work was AI-generated:
+**When**: Most of the implementation came from AI output.
 
 ```
 chore: update dependencies to latest versions
@@ -64,56 +72,60 @@ Updated all npm packages to latest compatible versions.
 Generated-by: GitHub Copilot <copilot@github.com>
 ```
 
+---
+
 ## Commit Message Structure
 
-RAI footers should be placed at the end of the commit message, after the description and any other footers:
+RAI footers go at the end, after all other Git trailers:
 
 ```
 <type>(<scope>): <subject>
 
 <body>
 
-<other-footers>
+<other-git-trailers>
 
 <rai-footer>
 ```
 
-Example with multiple footers:
+Example with multiple trailers:
 
 ```
-feat(auth): add OAuth2 integration
+feat(auth)!: add OAuth2 integration
 
 Implemented OAuth2 authentication flow with Google and GitHub providers.
 Added automatic account linking for existing users.
 
 BREAKING CHANGE: Removed legacy session-based authentication
 Closes #123
-Assisted-by: GitHub Copilot <copilot@github.com>
+Co-authored-by: GitHub Copilot <copilot@github.com>
 ```
+
+---
 
 ## CLI Usage
 
 ### Node.js / Commitlint
 
-Test commit message from stdin:
+Test a commit message:
 
 ```bash
 echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
 ```
 
-Validate last commit:
+Validate the last commit:
 
 ```bash
 npx commitlint --from HEAD~1
 ```
 
-Validate specific commit:
+Validate a specific commit:
 
 ```bash
 npx commitlint --from abc123f
 ```
 
-Validate range:
+Validate a commit range:
 
 ```bash
 npx commitlint --from main --to develop
@@ -121,68 +133,43 @@ npx commitlint --from main --to develop
 
 ### Python / Gitlint
 
-Lint last commit:
+Lint the last commit:
 
 ```bash
 gitlint
 ```
 
-Lint specific commit:
+Lint a specific commit:
 
 ```bash
 gitlint --commit abc123f
 ```
 
-Lint commit message from file:
+Lint from a file:
 
 ```bash
 gitlint --msg-filename .git/COMMIT_EDITMSG
 ```
 
-Test message from stdin:
+Test a message via stdin:
 
 ```bash
 echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | gitlint
 ```
 
+---
+
 ## IDE Integration
 
-### VS Code
+Most IDEs don't natively support custom Git trailers. Add footers manually or use a GitHub Copilot custom prompt.
 
-Install the Conventional Commits extension and add this to `.vscode/settings.json`:
+**GitHub Copilot Instructions**: See [anchildress1/awesome-github-copilot#prompts](https://github.com/anchildress1/awesome-github-copilot?tab=readme-ov-file#prompts-%E2%80%8D) for a reusable Copilot prompt that auto-generates RAI footers in commit messages.
 
-```json
-{
-  "conventionalCommits.autoCommit": false,
-  "conventionalCommits.promptFooter": true,
-  "conventionalCommits.footerPrefix": "Assisted-by: ",
-  "conventionalCommits.footerType": [
-    "Authored-by: [Human] <email@example.com>",
-    "Commit-generated-by: [AI Tool] <email@example.com>",
-    "Assisted-by: GitHub Copilot <copilot@github.com>",
-    "Co-authored-by: GitHub Copilot <copilot@github.com>",
-    "Generated-by: GitHub Copilot <copilot@github.com>"
-  ]
-}
-```
-
-### JetBrains IDEs
-
-Configure commit template in Settings → Version Control → Commit:
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-Assisted-by: GitHub Copilot <copilot@github.com>
-```
+---
 
 ## CI/CD Integration
 
 ### GitHub Actions
-
-Add validation to your workflow:
 
 ```yaml
 name: Lint Commits
@@ -230,75 +217,47 @@ stage('Commit Lint') {
 }
 ```
 
-## Best Practices
-
-### 1. Choose the Right Footer
-
-- **Authored-by**: Human only, no AI involvement
-- **Commit-generated-by**: Trivial AI work (docs, messages, advice)
-- **Assisted-by**: AI helped, but primarily human work
-- **Co-authored-by**: Roughly 50/50 AI and human contribution
-- **Generated-by**: Majority AI-generated content
-
-### 2. Be Consistent
-
-Use the same footer format across your team/organization for consistency.
-
-### 3. Automate Footer Addition
-
-Create Git aliases to automatically add footers:
-
-```bash
-git config alias.cai '!git commit -e -m "$(cat)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"'
-```
-
-Usage:
-
-```bash
-echo "feat: add new feature" | git cai
-```
-
-## 4. AI Attribution Policy
-
-All commits must include an RAI footer:
-
-```markdown
-- Use `Authored-by: [Name] <email>` when no AI was involved
-- Use `Commit-generated-by: [AI Tool] <email>` for trivial AI help (docs, messages)
-- Use `Assisted-by: [AI Tool] <email>` when AI helped but you did primary work
-- Use `Co-authored-by: [AI Tool] <email>` when AI and human contributed equally
-- Use `Generated-by: [AI Tool] <email>` when AI generated most of the commit
-```
+---
 
 ## Common Issues
 
 ### Footer Not Detected
 
-**Problem**: Commit rejected even with footer present
+**Symptoms**: Commit rejected even though footer is present.
 
-**Solutions**:
+**Causes**:
 
-1. Check for extra whitespace around the footer
-2. Ensure footer is on its own line
-3. Verify the footer keyword is spelled correctly
-4. Check for typos in the email format
+1. Extra whitespace before the footer
+2. Footer not on its own line
+3. Typo in the footer keyword
+4. Missing angle brackets around email info
+
+**Example**:
+
+```bash
+# ❌ Wrong
+"Generatedby: GitHub Copilot copilot@github.com"
+
+# ✅ Correct
+"Generated-by: GitHub Copilot <copilot@github.com>"
+```
 
 ### Multiple Footers
 
-**Problem**: Can I include multiple RAI footers?
+**Question**: Can I include multiple RAI footers?
 
-**Answer**: No, only one RAI footer is needed per commit. Choose the most accurate one.
+**Answer**: No. Pick the one that represents the **majority AI contribution**.
 
 ### Amending Commits
 
-To add footer to previous commit:
+Add a footer to the previous commit:
 
 ```bash
 git commit --amend -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
 ```
 
-> [!WARN]
-> Amending commits requires force push permissions on the repository. If force pushes are disabled, you must create new commits instead.
+> [!WARNING]
+> Requires force push permissions. If force pushes are disabled, create a new commit instead.
 
 ### Rebasing
 
@@ -308,12 +267,12 @@ When rebasing, ensure all commits include RAI footers:
 git rebase -i HEAD~5
 ```
 
-For each commit without a footer, use `edit` and add the footer:
+For each commit without a footer, use `edit`:
 
 ```bash
 git commit --amend -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
 git rebase --continue
 ```
 
-> [!WARN]
-> Rebasing and amending commits requires force push permissions on the repository. If force pushes are disabled, you must create new commits instead.
+> [!WARNING]
+> Requires force push permissions. If force pushes are disabled, create a new commit instead.

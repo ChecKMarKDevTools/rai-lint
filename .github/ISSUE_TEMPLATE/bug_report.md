@@ -15,7 +15,7 @@ A clear and concise description of the bug.
 **Package**:
 
 - [ ] Node.js (@checkmarkdevtools/commitlint-plugin-rai)
-- [ ] Python (checkmarkdevtools-gitlint-plugin-rai)
+- [ ] Python (gitlint-rai)
 
 **Version**:
 

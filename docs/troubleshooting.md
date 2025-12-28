@@ -1,14 +1,17 @@
 # Troubleshooting Guide
 
-## Common Issues and Solutions
+> [!TIP]
+> If you're wondering why this matters, read the full story: [Did AI Erase Attribution? Your Git History Is Missing a Co-Author](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l).
 
-### Node.js / Commitlint Issues
+---
 
-#### Issue: "Cannot find module '@checkmarkdevtools/commitlint-plugin-rai'"
+## Node.js / Commitlint Issues
 
-**Cause**: Package not installed or not in node_modules
+### "Cannot find module '@checkmarkdevtools/commitlint-plugin-rai'"
 
-**Solution**:
+**What happened**: The package isn't installed or node_modules is broken.
+
+**Fix it**:
 
 ```bash
 npm install --save-dev @checkmarkdevtools/commitlint-plugin-rai
@@ -18,12 +21,11 @@ npm install
 
 ---
 
-#### Issue: "Plugin not found: @checkmarkdevtools/commitlint-plugin-rai"
+### "Plugin not found: @checkmarkdevtools/commitlint-plugin-rai"
 
-**Cause**: Plugin not added to `commitlint.config.js`
+**What happened**: You didn't add it to your `commitlint.config.js`.
 
-**Solution**:
-Ensure your config includes:
+**Fix it**: Add this to your config:
 
 ```javascript
 export default {
@@ -36,17 +38,17 @@ export default {
 
 ---
 
-#### Issue: Hook not running on commit
+### Hook not running on commit
 
-**Cause**: Git hooks not installed
+**What happened**: Git hooks aren't installed.
 
-**Solution for Lefthook**:
+**Fix it (Lefthook)**:
 
 ```bash
 npx lefthook install
 ```
 
-**Solution for Husky**:
+**Fix it (Husky)**:
 
 ```bash
 npx husky install
@@ -62,69 +64,66 @@ cat .git/hooks/commit-msg
 
 ---
 
-#### Issue: "ReferenceError: require is not defined"
+### "ReferenceError: require is not defined"
 
-**Cause**: Using CommonJS require in ESM module
+**What happened**: You're using CommonJS syntax in an ESM module.
 
-**Solution**: Convert to ESM syntax
+**Fix it**: Either convert to ESM or use `.cjs` extension:
 
 ```javascript
-// ❌ CommonJS
+// ❌ Wrong (CommonJS in .js file with "type": "module")
 module.exports = { ... }
 
-// ✅ ESM
+// ✅ Option 1: ESM syntax
 export default { ... }
+
+// ✅ Option 2: Rename to commitlint.config.cjs
+// commitlint.config.cjs
+module.exports = { ... }
 ```
 
 ---
 
-### Python / Gitlint Issues
+## Python / Gitlint Issues
 
-#### Issue: "ModuleNotFoundError: No module named 'checkmark_rai_lint'"
+### "ModuleNotFoundError: No module named 'gitlint_rai'"
 
-**Cause**: Package not installed
+**What happened**: Package isn't installed.
 
-**Solution**:
-
-```bash
-uv add checkmarkdevtools-gitlint-plugin-rai
-uv run python -c "import checkmark_rai_lint; print('Installed')"
-```
-
-For development:
+**Fix it**:
 
 ```bash
-cd packages/python-gitlint
-uv sync --locked --group dev
+uv add gitlint-rai
+uv run python -c "import gitlint_rai; print('Installed')"
 ```
 
 ---
 
-#### Issue: "gitlint.exceptions.GitLintError: No such contrib rule"
+### "gitlint.exceptions.GitLintError: No such contrib rule"
 
-**Cause**: Incorrect contrib path in `.gitlint`
+**What happened**: Your `.gitlint` config is wrong.
 
-**Solution**: Verify `.gitlint` configuration:
+**Fix it**: Make sure it says:
 
 ```ini
 [general]
-contrib = checkmark_rai_lint.rules.RaiFooterExists
+contrib = gitlint_rai.rules.RaiFooterExists
 ```
 
-**Debug**:
+**Debug it**:
 
 ```bash
 gitlint --debug
-python -c "from checkmark_rai_lint.rules import RaiFooterExists; print(RaiFooterExists)"
+python -c "from gitlint_rai.rules import RaiFooterExists; print(RaiFooterExists)"
 ```
 
 ---
 
-#### Issue: pre-commit hook not running
+### pre-commit hook not running
 
-**Cause**: Hooks not installed
+**What happened**: Hooks aren't installed.
 
-**Solution**:
+**Fix it**:
 
 ```bash
 pre-commit install --hook-type commit-msg
@@ -139,78 +138,78 @@ ls -la .git/hooks/commit-msg
 
 ---
 
-### Footer Validation Issues
+## Footer Validation Issues
 
-#### Issue: Valid footer rejected
+### Valid footer rejected
 
-**Symptoms**: Commit with footer still fails validation
+**Symptoms**: You added a footer but the commit still fails.
 
-**Common Causes**:
+**Common mistakes**:
 
 1. **Extra whitespace**
 
    ```bash
-   # ❌ Extra space before footer
+   # ❌ Wrong (leading space)
    " Generated-by: GitHub Copilot <copilot@github.com>"
 
-   # ✅ No leading space
+   # ✅ Right
    "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
 2. **Wrong keyword**
 
    ```bash
-   # ❌ Invalid keyword
+   # ❌ Wrong (not a valid keyword)
    "Created-by: GitHub Copilot <copilot@github.com>"
 
-   # ✅ Valid keyword
+   # ✅ Right
    "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
-3. **Typo in text**
+3. **Typo**
 
    ```bash
-   # ❌ Typo
+   # ❌ Wrong (missing hyphen)
    "Generatedby: GitHub Copilot <copilot@github.com>"
 
-   # ✅ Correct
+   # ✅ Right
    "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
-4. **Email format**
+4. **Missing angle brackets**
 
    ```bash
-   # ❌ Missing angle brackets
+   # ❌ Wrong (no brackets)
    "Generated-by: GitHub Copilot copilot@github.com"
 
-   # ✅ With angle brackets
+   # ✅ Right
    "Generated-by: GitHub Copilot <copilot@github.com>"
    ```
 
-**Debug**:
+**Debug it**:
 
 ```bash
 # Check exact bytes
 echo "Generated-by: GitHub Copilot <copilot@github.com>" | xxd
 
-# Test pattern
+# Test the pattern
 echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
 ```
 
 ---
 
-#### Issue: Footer appears but still fails
+### Footer appears but still fails
 
-**Cause**: Footer might not be on its own line
+**What happened**: Footer isn't on its own line.
 
-**Solution**: Ensure footer is separated by blank line
+**Fix it**: Add a blank line before the footer:
 
 ```bash
-# ❌ No blank line
+# ❌ Wrong (no blank line)
 feat: add feature
 Generated-by: GitHub Copilot <copilot@github.com>
 
-# ✅ Blank line before footer
+# ✅ Right (blank line before footer)
 feat: add feature
 
 Generated-by: GitHub Copilot <copilot@github.com>
@@ -218,13 +217,13 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ---
 
-### CI/CD Issues
+## CI/CD Issues
 
-#### Issue: GitHub Actions failing on commitlint
+### GitHub Actions failing on commitlint
 
-**Cause**: Shallow clone missing commit history
+**What happened**: Shallow clone doesn't have commit history.
 
-**Solution**: Use `fetch-depth: 0`
+**Fix it**: Use `fetch-depth: 0`:
 
 ```yaml
 - uses: actions/checkout@v6
@@ -234,11 +233,11 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ---
 
-#### Issue: Python tests failing in CI
+### Python tests failing in CI
 
-**Cause**: gitlint not installed
+**What happened**: gitlint isn't installed in the CI environment.
 
-**Solution**: Install with test dependencies
+**Fix it**: Install with test dependencies:
 
 ```yaml
 - name: Install dependencies
@@ -248,43 +247,13 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ---
 
-### Performance Issues
+## IDE Integration Issues
 
-#### Issue: Slow commit validation
+### VS Code not showing commit errors
 
-**Symptoms**: Commits take several seconds
+**What happened**: Extension isn't configured.
 
-**Solution**: Run benchmarks
-
-```bash
-# Node
-cd packages/node-commitlint
-npm test benchmarks/
-
-# Python
-cd packages/python-gitlint
-python ../../benchmarks/python_benchmark.py
-```
-
-**Expected Performance**:
-
-- Node.js: < 1ms per validation
-- Python: < 5ms per validation
-
-If slower, check for:
-
-- Large commit messages (> 10KB)
-- Network issues (if plugins are fetching remote configs)
-
----
-
-### IDE Integration Issues
-
-#### Issue: VS Code not showing commit errors
-
-**Cause**: Conventional Commits extension not configured
-
-**Solution**: Install extension and configure
+**Fix it**: Install the Conventional Commits extension and add to settings:
 
 ```json
 {
@@ -295,11 +264,11 @@ If slower, check for:
 
 ---
 
-#### Issue: JetBrains IDE not running hook
+### JetBrains IDE not running hook
 
-**Cause**: Git hooks not enabled in IDE
+**What happened**: Git hooks aren't enabled in the IDE.
 
-**Solution**:
+**Fix it**:
 
 1. Go to Settings → Version Control → Git
 2. Enable "Run Git hooks"
@@ -312,7 +281,7 @@ If slower, check for:
 ### Node.js
 
 ```bash
-# Test commit message
+# Test a commit message
 echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
 
 # Verbose output
@@ -328,7 +297,7 @@ npx commitlint --print-config
 ### Python
 
 ```bash
-# Test commit message
+# Test a commit message
 echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | gitlint
 
 # Verbose output
@@ -345,22 +314,20 @@ gitlint --config
 
 ## Getting Help
 
-If you're still experiencing issues:
+If none of this worked:
 
 1. Check [GitHub Issues](https://github.com/ChecKMarKDevTools/rai-lint/issues)
 2. Run with `--debug` or `--verbose` flags
-3. Verify versions:
+3. Verify your versions:
 
-   ```markdown
+   ```bash
    # Node
-
    node --version
    npm list @checkmarkdevtools/commitlint-plugin-rai
 
    # Python
-
    python --version
-   pip show checkmarkdevtools-gitlint-plugin-rai
+   uv pip show gitlint-rai
    ```
 
 4. Create a minimal reproduction case

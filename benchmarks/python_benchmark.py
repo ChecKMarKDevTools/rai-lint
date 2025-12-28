@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "packages" / "python-gitlint"))
 
-from checkmark_rai_lint.rules import RaiFooterExists
+from gitlint_rai.rules import RaiFooterExists
 from gitlint.tests.base import BaseTestCase
 
 

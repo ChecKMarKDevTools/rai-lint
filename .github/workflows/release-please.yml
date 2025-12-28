@@ -19,7 +19,6 @@ jobs:
       pull-requests: write
       id-token: write
     outputs:
-      release-created: ${{ steps.release.outputs.release_created }}
       node-release-created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
       python-release-created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
       node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
@@ -163,39 +162,46 @@ jobs:
 
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
-        run: uv run pytest --cov --cov-report=term --cov-report=json
+        run: uv run pytest --cov --cov-report=term --cov-report=xml
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v6
         with:
-          name: python-coverage
-          path: packages/python-gitlint/coverage.json
-          retention-days: 60
+          name: python-gitlint-coverage
+          path: packages/python-gitlint/reports/coverage.xml
+          retention-days: 30
 
       - name: Attach Python coverage to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.python-tag-name }}
-          files: packages/python-gitlint/coverage.json
-
-      - name: Prune dev dependencies
-        working-directory: packages/python-gitlint
-        run: uv sync --frozen --no-dev
+          files: packages/python-gitlint/reports/coverage.xml
 
       - name: Build package
         working-directory: packages/python-gitlint
         run: uv build
 
+      - name: Prune dev dependencies for SBOM
+        working-directory: packages/python-gitlint
+        run: uv sync --frozen --no-dev
+
       - name: Generate SBOM
         working-directory: packages/python-gitlint
-        run: uvx cyclonedx-py requirements pyproject.toml -o sbom.json
+        run: |
+          uvx --from cyclonedx-bom cyclonedx-py environment \
+            .venv/bin/python3 \
+            --pyproject pyproject.toml \
+            --mc-type library \
+            --output-reproducible \
+            --of JSON \
+            -o reports/sbom.json
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v6
         with:
           name: python-sbom
-          path: packages/python-gitlint/sbom.json
-          retention-days: 60
+          path: packages/python-gitlint/reports/sbom.json
+          retention-days: 30
 
       - name: Attach Python dist and SBOM to Release
         uses: softprops/action-gh-release@v2
@@ -203,7 +209,7 @@ jobs:
           tag_name: ${{ needs.release-please.outputs.python-tag-name }}
           files: |
             packages/python-gitlint/dist/*
-            packages/python-gitlint/sbom.json
+            packages/python-gitlint/reports/sbom.json
 
       - name: Generate build attestation
         uses: actions/attest-build-provenance@v3
@@ -222,8 +228,6 @@ jobs:
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Summary
         env:
@@ -231,9 +235,9 @@ jobs:
         run: |
           echo "### PyPI Package Published :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Package:** \`checkmarkdevtools-gitlint-plugin-rai\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** \`gitlint-rai\`" >> $GITHUB_STEP_SUMMARY
           echo "**Version:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Registry:** [pypi.org](https://pypi.org/project/checkmarkdevtools-gitlint-plugin-rai/)" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** [pypi.org](https://pypi.org/project/gitlint-rai/)" >> $GITHUB_STEP_SUMMARY
           echo "**Attestations:** ✅ Published with digital attestations" >> $GITHUB_STEP_SUMMARY
           echo "**SBOM:** ✅ Generated (CycloneDX format)" >> $GITHUB_STEP_SUMMARY
           echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY

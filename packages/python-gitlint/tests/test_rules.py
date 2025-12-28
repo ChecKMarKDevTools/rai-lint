@@ -2,28 +2,17 @@ from unittest.mock import Mock
 
 import pytest
 
-from checkmark_rai_lint.rules import RaiFooterExists
+from gitlint_rai.rules import RaiFooterExists
 
 
 def create_commit(message: str):
     commit = Mock()
     commit.message.full = message
 
-    # Simple trailer parsing for tests
-    trailers = {}
     lines = message.split("\n")
-    for line in lines:
-        if ":" in line:
-            key, value = line.split(":", 1)
-            key = key.strip()
-            value = value.strip()
-            # This is a very basic parser, assuming one trailer per line and no multiline values
-            # It's enough for the current tests
-            if key not in trailers:
-                trailers[key] = []
-            trailers[key].append(value)
+    commit.message.title = lines[0] if lines else ""
+    commit.message.body = lines[1:] if len(lines) > 1 else []
 
-    commit.message.trailers = trailers
     return commit
 
 
@@ -114,3 +103,54 @@ class TestRaiFooterExists:
         )
         violations = rule.validate(commit)
         assert len(violations) == 0
+
+    def test_redos_resistance_long_trailer_value(self):
+        rule = RaiFooterExists()
+        long_value = "A" * 10000
+        commit = create_commit(
+            f"feat: add feature\n\nGenerated-by: {long_value} <test@example.com>"
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
+    def test_redos_resistance_pathological_input(self):
+        rule = RaiFooterExists()
+        pathological = "A" * 5000 + ":" + "B" * 5000
+        commit = create_commit(f"feat: add feature\n\n{pathological}")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_empty_body(self):
+        rule = RaiFooterExists()
+        commit = Mock()
+        commit.message.full = "feat: add feature"
+        commit.message.title = "feat: add feature"
+        commit.message.body = []
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_malformed_trailer_empty_key(self):
+        rule = RaiFooterExists()
+        commit = create_commit("feat: add feature\n\n: value only")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_malformed_trailer_non_alpha_start(self):
+        rule = RaiFooterExists()
+        commit = create_commit("feat: add feature\n\n123-key: value")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_trailer_block_stops_on_blank_line(self):
+        rule = RaiFooterExists()
+        commit = create_commit(
+            "feat: add feature\n\nKey: value\n\nGenerated-by: AI <ai@example.com>"
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
+    def test_non_trailer_stops_trailer_block(self):
+        rule = RaiFooterExists()
+        commit = create_commit("feat: add feature\n\nSome text\nKey: value")
+        violations = rule.validate(commit)
+        assert len(violations) == 1

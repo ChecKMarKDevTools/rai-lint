@@ -10,7 +10,7 @@ pre-commit:
       stage_fixed: true
     lint-python:
       glob: "packages/python-gitlint/**/*.py"
-      run: cd packages/python-gitlint && uv run black checkmark_rai_lint/ tests/ && uv run isort checkmark_rai_lint/ tests/
+      run: cd packages/python-gitlint && uv run black gitlint_rai/ tests/ && uv run isort gitlint_rai/ tests/
       stage_fixed: true
     test-node:
       glob: "packages/node-commitlint/**/*.{js,ts}"

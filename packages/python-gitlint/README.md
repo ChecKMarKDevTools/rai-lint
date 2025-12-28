@@ -1,35 +1,51 @@
-# checkmarkdevtools-gitlint-plugin-rai
+# gitlint-rai
 
-Gitlint plugin for enforcing AI attribution in commit messages using standard Git trailers.
+Gitlint plugin for enforcing AI attribution in commit messages using Git commit message trailers.
 
 ## Installation
 
 ```bash
-uv add checkmarkdevtools-gitlint-plugin-rai
+pip install gitlint-rai
+```
+
+or with uv:
+
+```bash
+uv add gitlint-rai
 ```
 
 ## Usage
 
-Install the plugin via uv:
+Add to `.gitlint`:
 
-```bash
-uv add checkmarkdevtools-gitlint-plugin-rai
+```ini
+[general]
+extra-path=gitlint_rai
 ```
 
-The plugin will be auto-discovered by gitlint (>=0.19.1) via entry points. No additional configuration is required in your `.gitlint` file. To verify the rule is loaded, run:
+Then run:
+
+```bash
+gitlint
+```
+
+Or use the standalone wrapper:
+
+```bash
+gitlint-rai
+```
+
+Verify the rule loaded:
 
 ```bash
 gitlint --list-rules | grep rai-footer-exists
 ```
 
-If auto-discovery is not working in your environment, configure gitlint to explicitly load the plugin:
+Expected output:
 
-```ini
-[general]
-extra-paths = /path/to/site-packages
 ```
-
-Then list and validate rules as above.
+rai-footer-exists  Commit message must include a valid RAI footer
+```
 
 ## Valid Footer Formats
 
@@ -43,18 +59,9 @@ All patterns are case-insensitive.
 
 ## Requirements
 
-- Python >= 3.10, < 3.13
+- Python >= 3.11, < 3.13
 - gitlint >= 0.19.1
-
-## Development
-
-```bash
-uv sync --locked --group dev
-make test
-make lint
-make test-coverage
-```
 
 ## License
 
-Polyform Shield 1.0.0
+PolyForm Shield License 1.0.0
