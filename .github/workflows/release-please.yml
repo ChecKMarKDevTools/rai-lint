@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Install root Node dependencies
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
 
       - name: Get Node version from Volta
         id: node-version
@@ -152,7 +152,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/python-gitlint
-        run: uv sync
+        run: uv sync --frozen
 
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
