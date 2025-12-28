@@ -24,7 +24,7 @@ jobs:
       node-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
       python-tag-name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
     steps:
-      - uses: googleapis/release-please-action@6dba30c72c02e9b69848529b9106f56bc4ae2d87 # v17.1.3
+      - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -224,7 +224,7 @@ jobs:
           retention-days: 60
 
       - name: Publish to PyPI with Trusted Publishing
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        uses: pypa/gh-action-pypi-publish@106e0b0b7c337fa67ed433972f777c6357f78598 # v1.13.0
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
