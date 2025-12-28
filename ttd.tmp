@@ -8,3 +8,4 @@
 - [x] add social banner
 - [ ] create logo
 - [ ] The error message block is copy-pasted and long
+- [ ] Check commitlint footers instead of parsing manually

@@ -7,9 +7,10 @@ Usage: python3 check-licenses.py <json_file>
 Where:
 - json_file: Path to JSON file with license data
 
-Supports two formats:
+Supports three formats:
 - Node (license-checker): {"pkg": {"licenses": "MIT", ...}}
 - Python (pip-licenses): [{"Name": "pkg", "License": "MIT", ...}]
+- CycloneDX SBOM: {"components": [{"name": "pkg", "licenses": [...]}]}
 """
 
 import json
@@ -34,11 +35,28 @@ def check_licenses(data, allowed):
             if not license_allowed(lic, allowed):
                 bad.append((name, lic))
     elif isinstance(data, dict):
-        # Node format: dict of dicts
-        for pkg, info in data.items():
-            lic = info.get('licenses')
-            if not license_allowed(lic, allowed):
-                bad.append((pkg, lic))
+        # Check for CycloneDX SBOM format
+        if 'components' in data:
+            for component in data['components']:
+                name = component.get('name')
+                lic_entries = component.get('licenses', [])
+                # Extract license names/ids from nested structure
+                lics = []
+                for l in lic_entries:
+                    if isinstance(l, dict):
+                        lic_obj = l.get('license', {})
+                        lic_id = lic_obj.get('id') or lic_obj.get('name')
+                        if lic_id:
+                            lics.append(lic_id)
+                lic = lics[0] if len(lics) == 1 else lics if lics else None
+                if not license_allowed(lic, allowed):
+                    bad.append((name, lic))
+        else:
+            # Node format: dict of dicts
+            for pkg, info in data.items():
+                lic = info.get('licenses')
+                if not license_allowed(lic, allowed):
+                    bad.append((pkg, lic))
     else:
         print("Unknown JSON format", file=sys.stderr)
         sys.exit(1)
@@ -81,7 +99,14 @@ def main():
 
     json_file = sys.argv[1]
 
-    allowed = {'MIT', 'Apache-2.0', 'BSD-3-Clause', 'BSD-2-Clause', 'ISC', 'Python-2.0', 'LicenseRef-PolyForm-Shield-1.0.0'}
+    allowed = {
+        'MIT',
+        'Apache-2.0', 'Apache',
+        'BSD-3-Clause', 'BSD-2-Clause', 'BSD',
+        'ISC',
+        'Python-2.0', 'Python',
+        'LicenseRef-PolyForm-Shield-1.0.0', 'PolyForm', 'Shield'
+    }
 
     data = load_data(json_file)
     bad = check_licenses(data, allowed)

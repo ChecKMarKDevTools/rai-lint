@@ -22,7 +22,6 @@ jobs:
     timeout-minutes: 12
     permissions:
       security-events: write
-      id-token: write
       contents: read
       actions: read
 
@@ -89,10 +88,21 @@ jobs:
           npx --yes license-checker --json --excludePrivatePackages --production > node-licenses.json
           python3 .github/scripts/check-licenses.py node-licenses.json
 
-      - name: Check Python licenses
+      - name: Generate Python SBOM
         working-directory: packages/python-gitlint
         run: |
-          syft dir:. -o cyclonedx-json > ../../python-licenses.json
+          mkdir -p reports
+          uvx --from cyclonedx-bom==7.1.0 cyclonedx-py environment \
+            .venv/bin/python3 \
+            --mc-type library \
+            --output-reproducible \
+            --of JSON \
+            -o reports/python-licenses.json
+
+      - name: Check Python licenses
+        run: |
+          python3 .github/scripts/check-licenses.py packages/python-gitlint/reports/python-licenses.json
+
 
   # CodeQL analysis configured for javascript, python, and GitHub Actions workflows
   # Docs: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-the-codeql-action
@@ -103,7 +113,6 @@ jobs:
     permissions:
       actions: read
       security-events: write
-      id-token: write
       contents: read
     strategy:
       fail-fast: false
