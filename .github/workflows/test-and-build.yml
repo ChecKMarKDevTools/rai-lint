@@ -1,10 +1,5 @@
 name: Test and Build
 
-permissions:
-  contents: read
-  pull-requests: write
-  checks: write
-
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -26,6 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 9
     if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
     strategy:
       matrix:
         node-version: [20, 22, 24]
@@ -42,7 +41,17 @@ jobs:
       # Install root dependencies first to make shared dev tools (eslint, etc.) available
       # This is required in the monorepo setup before workspace-specific dependencies
       - name: Install root dependencies
-        run: npm ci --ignore-scripts
+        run: npm install --ignore-scripts
+
+      - name: Auto-commit lock file changes
+        if: github.event_name == 'pull_request' && matrix.node-version == 24
+        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+        with:
+          commit_message: "chore: update package-lock.json"
+          file_pattern: "package-lock.json **/package-lock.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
       # Workspace dependencies are installed at the repo root to ensure shared
       # dev tools (eslint, etc.) are available to each matrix job.
@@ -80,6 +89,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 9
     if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
@@ -99,7 +112,17 @@ jobs:
 
       - name: Install dependencies
         working-directory: packages/python-gitlint
-        run: uv sync --locked --group dev
+        run: uv sync --group dev
+
+      - name: Auto-commit lock file changes
+        if: github.event_name == 'pull_request' && matrix.python-version == '3.12'
+        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+        with:
+          commit_message: "chore: update uv.lock"
+          file_pattern: "packages/python-gitlint/uv.lock"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
       - name: Run Black and isort
         working-directory: packages/python-gitlint

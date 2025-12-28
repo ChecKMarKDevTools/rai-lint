@@ -37,7 +37,7 @@ jobs:
     timeout-minutes: 8
     if: ${{ needs.release-please.outputs.node-release-created }}
     permissions:
-      contents: read
+      contents: write
       id-token: write
       attestations: write
 
@@ -59,18 +59,14 @@ jobs:
       - name: Run tests
         run: npm --workspace=packages/node-commitlint test
 
-      - name: Upload Node coverage artifact
+      - name: Upload coverage artifacts
         uses: actions/upload-artifact@v6
         with:
           name: node-coverage
-          path: packages/node-commitlint/coverage/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
+          path: |
+            packages/node-commitlint/coverage/lcov.info
+            packages/node-commitlint/reports/junit-vitest.xml
           retention-days: 60
-
-      - name: Attach Node coverage to GitHub Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
-        with:
-          tag_name: ${{ needs.release-please.outputs.node-tag-name }}
-          files: packages/node-commitlint/coverage/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Build package
         run: npm --workspace=packages/node-commitlint run build
@@ -88,12 +84,6 @@ jobs:
           name: node-sbom
           path: packages/node-commitlint/sbom.json
           retention-days: 60
-
-      - name: Attach SBOM to GitHub Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
-        with:
-          tag_name: ${{ needs.release-please.outputs.node-tag-name }}
-          files: packages/node-commitlint/sbom.json
 
       - name: Generate build attestation
         uses: actions/attest-build-provenance@v3
@@ -113,11 +103,15 @@ jobs:
       - name: Publish to npm
         run: npm --workspace=packages/node-commitlint publish --provenance --access public
 
-      - name: Attach tarball to GitHub Release
+      - name: Attach artifacts to GitHub Release
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
-          files: packages/node-commitlint/*.tgz
+          files: |
+            packages/node-commitlint/*.tgz
+            packages/node-commitlint/sbom.json
+            packages/node-commitlint/coverage/lcov.info
+            packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Summary
         env:
@@ -140,7 +134,7 @@ jobs:
     timeout-minutes: 8
     if: ${{ needs.release-please.outputs.python-release-created }}
     permissions:
-      contents: read
+      contents: write
       id-token: write
       attestations: write
 
@@ -167,15 +161,9 @@ jobs:
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v6
         with:
-          name: python-gitlint-coverage
+          name: python-coverage
           path: packages/python-gitlint/reports/coverage.xml
-          retention-days: 30
-
-      - name: Attach Python coverage to GitHub Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
-        with:
-          tag_name: ${{ needs.release-please.outputs.python-tag-name }}
-          files: packages/python-gitlint/reports/coverage.xml
+          retention-days: 60
 
       - name: Build package
         working-directory: packages/python-gitlint
@@ -203,14 +191,6 @@ jobs:
           path: packages/python-gitlint/reports/sbom.json
           retention-days: 30
 
-      - name: Attach Python dist and SBOM to Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
-        with:
-          tag_name: ${{ needs.release-please.outputs.python-tag-name }}
-          files: |
-            packages/python-gitlint/dist/*
-            packages/python-gitlint/reports/sbom.json
-
       - name: Generate build attestation
         uses: actions/attest-build-provenance@v3
         with:
@@ -228,6 +208,15 @@ jobs:
         with:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
+
+      - name: Attach artifacts to GitHub Release
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        with:
+          tag_name: ${{ needs.release-please.outputs.python-tag-name }}
+          files: |
+            packages/python-gitlint/dist/*
+            packages/python-gitlint/reports/sbom.json
+            packages/python-gitlint/reports/coverage.xml
 
       - name: Summary
         env:
