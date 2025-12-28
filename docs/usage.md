@@ -38,7 +38,7 @@ Commit-generated-by: GitHub Copilot <copilot@github.com>
 
 ### 3. Assisted-by
 
-**When**: AI helped, but you did the primary work (~0-33% AI-generated code).
+**When**: AI helped in spots, but the work is clearly yours.
 
 ```
 fix: resolve race condition in payment processing
@@ -50,7 +50,7 @@ Assisted-by: GitHub Copilot <copilot@github.com>
 
 ### 4. Co-authored-by
 
-**When**: Roughly 50/50 split between you and AI (~34-66% AI-generated code).
+**When**: The work was meaningfully shared between you and AI.
 
 ```
 feat: add data validation pipeline
@@ -62,7 +62,7 @@ Co-authored-by: GitHub Copilot <copilot@github.com>
 
 ### 5. Generated-by
 
-**When**: AI generated the majority of the code (~67-100%).
+**When**: Most of the implementation came from AI output.
 
 ```
 chore: update dependencies to latest versions

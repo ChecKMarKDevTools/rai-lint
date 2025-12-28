@@ -22,21 +22,25 @@ flowchart TB
 
 Both implementations validate Git trailers (footers) using these patterns:
 
-**Node.js** (regex-based):
+**Node.js**:
 
-```javascript
-/^Authored-by:\s+[^<]+\s+<[^>]+>$/im
-/^Commit-generated-by:\s+[^<]+\s+<[^>]+>$/im
-/^Assisted-by:\s+[^<]+\s+<[^>]+>$/im
-/^Co-authored-by:\s+[^<]+\s+<[^>]+>$/im
-/^Generated-by:\s+[^<]+\s+<[^>]+>$/im
-```
+The Node implementation validates RAI footers directly from the raw commit message. It does not rely on structured trailer parsing, which keeps behavior explicit and easy to reason about when debugging failed commits.
 
-**Python** (trailer-aware):
+- Scans commit messages using regex rules
+- Matches known RAI footer keys:
+  `Authored-by`, `Commit-generated-by`, `Assisted-by`, `Co-authored-by`, `Generated-by`
+- Requires a readable name followed by contact info in angle brackets
+  (`Name <contact>`)
 
-- Parses Git trailers via gitlint's built-in parser
-- Validates keys: `Authored-by`, `Commit-generated-by`, `Assisted-by`, `Co-authored-by`, `Generated-by` (case-insensitive)
-- Validates value format: `^[^<]+ <[^>]+>$` (name + email in angle brackets)
+**Python**:
+
+The Python implementation intentionally mirrors Node’s behavior instead of relying on gitlint’s structured trailer parser. This keeps validation rules predictable across ecosystems and avoids subtle differences in how trailers are interpreted.
+
+- Scans commit messages using regex rules
+- Accepts the same footer keys as Node:
+  `Authored-by`, `Commit-generated-by`, `Assisted-by`, `Co-authored-by`, `Generated-by`
+- Requires a human-readable name followed by contact info in angle brackets
+  (`Name <contact>`)
 
 All patterns require:
 

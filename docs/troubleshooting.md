@@ -247,36 +247,6 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ---
 
-## Performance Issues
-
-### Slow commit validation
-
-**Symptoms**: Commits take several seconds.
-
-**Check performance**:
-
-```bash
-# Node
-cd packages/node-commitlint
-npm test benchmarks/
-
-# Python
-cd packages/python-gitlint
-python ../../benchmarks/python_benchmark.py
-```
-
-**Expected**:
-
-- Node.js: < 1ms per validation
-- Python: < 5ms per validation
-
-If it's slower, check for:
-
-- Large commit messages (> 10KB)
-- Network issues (if plugins are fetching remote configs)
-
----
-
 ## IDE Integration Issues
 
 ### VS Code not showing commit errors
@@ -357,7 +327,7 @@ If none of this worked:
 
    # Python
    python --version
-   uv pip show checkmarkdevtools-gitlint-rai
+   uv pip show gitlint-rai
    ```
 
 4. Create a minimal reproduction case

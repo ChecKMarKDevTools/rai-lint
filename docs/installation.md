@@ -195,7 +195,7 @@ If nothing's there, re-run the hook install step.
 **Fix**: Reinstall:
 
 ```bash
-uv add --reinstall checkmarkdevtools-gitlint-rai
+uv add --reinstall gitlint-rai
 ```
 
 **Problem**: Gitlint not finding the rule

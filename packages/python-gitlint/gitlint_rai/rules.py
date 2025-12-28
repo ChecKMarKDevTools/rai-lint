@@ -17,7 +17,7 @@ class RaiFooterExists(CommitRule):
     }
 
     AI_ATTRIBUTION_VALUE_PATTERN = re.compile(r"^[^<]+ <[^>]+>$")
-    TRAILER_PATTERN = re.compile(r"^([A-Za-z][\w-]*)\s*:\s*(.+)$")
+    TRAILER_PATTERN = re.compile(r"^([A-Za-z][\w-]*)\s*:\s*(.+?)$")
 
     def _parse_trailers(self, message_body):
         if not message_body:
@@ -39,8 +39,6 @@ class RaiFooterExists(CommitRule):
             if match:
                 in_trailer_block = True
                 trailer_lines.insert(0, (match.group(1), match.group(2)))
-            elif in_trailer_block:
-                break
 
         for key, value in trailer_lines:
             normalized_key = key.lower()

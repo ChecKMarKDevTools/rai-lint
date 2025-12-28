@@ -103,3 +103,28 @@ class TestRaiFooterExists:
         )
         violations = rule.validate(commit)
         assert len(violations) == 0
+
+    def test_redos_resistance_long_trailer_value(self):
+        rule = RaiFooterExists()
+        long_value = "A" * 10000
+        commit = create_commit(
+            f"feat: add feature\n\nGenerated-by: {long_value} <test@example.com>"
+        )
+        violations = rule.validate(commit)
+        assert len(violations) == 0
+
+    def test_redos_resistance_pathological_input(self):
+        rule = RaiFooterExists()
+        pathological = "A" * 5000 + ":" + "B" * 5000
+        commit = create_commit(f"feat: add feature\n\n{pathological}")
+        violations = rule.validate(commit)
+        assert len(violations) == 1
+
+    def test_empty_body(self):
+        rule = RaiFooterExists()
+        commit = Mock()
+        commit.message.full = "feat: add feature"
+        commit.message.title = "feat: add feature"
+        commit.message.body = []
+        violations = rule.validate(commit)
+        assert len(violations) == 1
