@@ -1,48 +1,61 @@
 # Changelog
 
+All notable changes to `@checkmarkdevtools/commitlint-plugin-rai` are documented here so I don’t have to rely on vibes, memory, or aggressively scrolling Git history later, because I promise you I will not remember why I did this six months from now.
+
+I did write about it some in ["Did AI Erase Attribution?"](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l). Though... it probably deserves a follow-up after this—I might think about that.
+
+This is the summary version but Git has the receipts if you want the play-by-play.
+
+---
+
 ## 0.1.0 (2025-12-28)
 
+_In which a commitlint plugin exists purely to ask one mildly uncomfortable but extremely reasonable question before you ship code._
 
-### ✨ New Features
+---
 
-* implement Node.js commitlint plugin for RAI footer validation ([7845d05](https://github.com/ChecKMarKDevTools/rai-lint/commit/7845d05218a5164f41e6c7e4361812c7adb92c95))
-* update AI attribution rules to enforce standard Git trailers ([2fbeed8](https://github.com/ChecKMarKDevTools/rai-lint/commit/2fbeed88527892b4fe505396a7a4e80753fac061))
+### What This Is 📦
 
+This is a commitlint plugin that will not let you commit until you say who actually helped write the code, which feels like a low bar and yet here we are.
 
-### 🐛 Bug Fixes
+It’s not a lecture, it’s not a manifesto, and it’s definitely not trying to solve the entire “AI ethics” discourse in a footer. It just wants you to be honest and move on with your day.
 
-* **ci:** remove root package from linked versions in release-please ([b46943d](https://github.com/ChecKMarKDevTools/rai-lint/commit/b46943daa8ffdcf075a87d991d33094c35c84663))
-* correct AI attribution footer definitions per article spec ([caf793d](https://github.com/ChecKMarKDevTools/rai-lint/commit/caf793d2cccbbe494cfcdca6a9ee1888f5e1ba99))
-* correct AI attribution footer definitions per article spec ([104cc3e](https://github.com/ChecKMarKDevTools/rai-lint/commit/104cc3e349add355a50a6807235db0278a057d8d))
-* correct AI attribution footer patterns per Git trailer spec ([c517864](https://github.com/ChecKMarKDevTools/rai-lint/commit/c517864d106417220f96b46e773c20ea2db9c106))
-* remove develop branch refs and update all license references ([ee7957e](https://github.com/ChecKMarKDevTools/rai-lint/commit/ee7957e5b1c9df566f7dcc1b9baac91d026e3657))
+It understands five Git trailers:
 
+- `Authored-by` — all you, no AI involved, pure human effort and probably caffeine
+- `Commit-generated-by` — AI wrote the commit message, you wrote the code, a perfectly reasonable division of labor
+- `Assisted-by` — AI helped a bit, but you were still driving and making the calls
+- `Co-authored-by` — you and the AI paired, roughly fifty-fifty, everyone gets credit
+- `Generated-by` — AI did most of the work, you supervised, still valid, just say so
 
-### 🔨 Refactoring
+Pick one and you’re done. Skip it and the commit fails immediately, calmly, and without entering into negotiations about how busy you are.
 
-* remove check commands from lefthook example files ([821a822](https://github.com/ChecKMarKDevTools/rai-lint/commit/821a822c8a7f9bb4b1bd1f17300b7b5e74e30ba7))
+There’s no telemetry, no tracking, no network calls, and no opinions about formatting or workflow. It doesn’t care how you work, it just wants the attribution written down so future humans aren’t guessing.
 
+Status: **Shipped.** Hopefully. 😄
 
-### ✅ Tests
+---
 
-* add integration tests for end-to-end validation ([9112748](https://github.com/ChecKMarKDevTools/rai-lint/commit/911274892285884dcd01ad8a7bf9e307eb1b40ac))
+### Why This Exists 🔧
 
+If two humans pair program, both names go on the commit. If an AI helps and we pretend it didn’t happen, that’s a choice, but it’s a weird one.
 
-### 🔁 CI/CD
+Git already supports trailers. Commits already support attribution. This plugin just closes the gap between “we could do this” and “we actually do this,” because enforcement turns philosophy into muscle memory.
 
-* update security audit workflow and standardize license format ([c4af288](https://github.com/ChecKMarKDevTools/rai-lint/commit/c4af288c79ff04d9a08a786d3559cec39ac90b3a))
+I got tired of debating it and built the boring solution instead.
 
+---
 
-### 🧰 Maintenance
+### The Extremely Short Version of Events 🗓️
 
-* add LICENSE, CONTRIBUTING, and CHANGELOG ([0caa139](https://github.com/ChecKMarKDevTools/rai-lint/commit/0caa139f9ce98dffd9d96d755bbdce9c4dcc2fea))
-* Clean up project structure and add agent documentation ([2bf1479](https://github.com/ChecKMarKDevTools/rai-lint/commit/2bf14794d87cfbad669476d8be3f7998f5be910f))
-* **deps:** Bump dependencies and migrate to ESLint flat config ([a4f9baf](https://github.com/ChecKMarKDevTools/rai-lint/commit/a4f9baf4390128ed33c310f2c5f5c6cac32f4296))
-* **deps:** Complete ESLint 9 migration and update major Python tooling ([1703ff6](https://github.com/ChecKMarKDevTools/rai-lint/commit/1703ff66589904853a6c2510ca3ab5e15be9f4b6))
-* Release prep ([#12](https://github.com/ChecKMarKDevTools/rai-lint/issues/12)) ([25c940b](https://github.com/ChecKMarKDevTools/rai-lint/commit/25c940bd8b970225843f09bd8c434e31c37ed600))
-* streamline CI/CD workflows and modernize package configs ([ea38de7](https://github.com/ChecKMarKDevTools/rai-lint/commit/ea38de73d42e88a09bce5f3b30993a769d71768d))
-* tweaks for merge ([#3](https://github.com/ChecKMarKDevTools/rai-lint/issues/3)) ([777d583](https://github.com/ChecKMarKDevTools/rai-lint/commit/777d583227b66daece190767e1bc066c984fbd28))
+I built this, plus the Python version, in a burst of enthusiasm and questionable time awareness, then spent the following weeks fixing things, cleaning things up, and making the tooling stop yelling at me long enough to ship something usable.
 
-## Changelog
+If you want the gritty details, Git is right there and very thorough. This is just the overview.
 
-All notable changes to `@checkmarkdevtools/commitlint-plugin-rai` will be documented in this file.
+---
+
+### December 28, 2025: v0.1.0 🚀
+
+It enforces attribution without overthinking it, it stays out of your way once you comply, and it does exactly one job on purpose.
+
+Everything else will evolve from here, along with the inevitable future mistakes and fixing the mistakes I missed this round.

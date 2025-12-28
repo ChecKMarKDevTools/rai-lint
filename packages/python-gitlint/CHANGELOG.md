@@ -1,43 +1,70 @@
 # Changelog
 
+All notable changes to `gitlint-rai` are documented here so I don’t have to reconstruct my own intent later from commit archaeology and vibes.
+
+If you want the long-form reasoning behind this whole thing, that lives over here:
+["Did AI Erase Attribution?"](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l) on dev.to. This file is the practical follow-through.
+
+---
+
 ## 0.1.0 (2025-12-28)
 
+_In which a very small gitlint plugin shows up, does exactly one job, and refuses to apologize for it._
 
-### ✨ New Features
+---
 
-* implement Python gitlint plugin for RAI footer validation ([42ad6ee](https://github.com/ChecKMarKDevTools/rai-lint/commit/42ad6ee35a18db726e0505bf1513fd5fb32d31dd))
-* update AI attribution rules to enforce standard Git trailers ([2fbeed8](https://github.com/ChecKMarKDevTools/rai-lint/commit/2fbeed88527892b4fe505396a7a4e80753fac061))
+### What This Is 📦
 
+This is a single-purpose Python plugin for gitlint that exists to enforce one extremely reasonable thing: if AI helped write the code, say so in the commit message.
 
-### 🐛 Bug Fixes
+It validates commit messages for **exactly one** AI attribution trailer and absolutely does not care which one you pick, as long as you pick one and stop pretending nothing happened.
 
-* **ci:** remove root package from linked versions in release-please ([b46943d](https://github.com/ChecKMarKDevTools/rai-lint/commit/b46943daa8ffdcf075a87d991d33094c35c84663))
-* correct AI attribution footer definitions per article spec ([104cc3e](https://github.com/ChecKMarKDevTools/rai-lint/commit/104cc3e349add355a50a6807235db0278a057d8d))
-* correct AI attribution footer patterns per Git trailer spec ([c517864](https://github.com/ChecKMarKDevTools/rai-lint/commit/c517864d106417220f96b46e773c20ea2db9c106))
-* remove develop branch refs and update all license references ([ee7957e](https://github.com/ChecKMarKDevTools/rai-lint/commit/ee7957e5b1c9df566f7dcc1b9baac91d026e3657))
-* standardize AI attribution trailers ([23900c3](https://github.com/ChecKMarKDevTools/rai-lint/commit/23900c31fb0bf563b6a81859a93801274da0bc78))
+It recognizes five trailers:
 
+- `Authored-by` — you wrote it, AI did not touch the keyboard, congratulations
+- `Commit-generated-by` — AI wrote the commit message, you wrote the code, extremely normal behavior
+- `Assisted-by` — AI helped some, maybe a third of the work, you were still making decisions
+- `Co-authored-by` — roughly a 50/50 split, like actual pair programming but quieter
+- `Generated-by` — AI did most of the work, you steered, which is still work
 
-### 🔨 Refactoring
+Choose one and move on. If you try to sneak past without attribution, the commit fails immediately and without commentary.
 
-* remove check commands from lefthook example files ([821a822](https://github.com/ChecKMarKDevTools/rai-lint/commit/821a822c8a7f9bb4b1bd1f17300b7b5e74e30ba7))
-* simplify trailer parsing and fix dupe code to omit tests ([39dfda6](https://github.com/ChecKMarKDevTools/rai-lint/commit/39dfda6c0f387db973ea7ab0f980c05cd388ac1d))
+There are no network calls, no telemetry, no tracking, and no debates about formatting or emojis. It’s just a regex, a rule, and a non-zero exit code when you’re being evasive about who or what wrote the code.
 
+If this feels boring, that’s intentional. Small tools that do one thing and get out of the way are the entire point.
 
-### ✅ Tests
+Status: **Shipped.** Hopefully. 😄
 
-* add integration tests for end-to-end validation ([9112748](https://github.com/ChecKMarKDevTools/rai-lint/commit/911274892285884dcd01ad8a7bf9e307eb1b40ac))
+---
 
+### Why This Exists 🔧
 
-### 🧰 Maintenance
+Because “we’ll remember who helped” turns out to be a lie Git history tells very convincingly.
 
-* add LICENSE, CONTRIBUTING, and CHANGELOG ([0caa139](https://github.com/ChecKMarKDevTools/rai-lint/commit/0caa139f9ce98dffd9d96d755bbdce9c4dcc2fea))
-* **deps:** Bump dependencies and migrate to ESLint flat config ([a4f9baf](https://github.com/ChecKMarKDevTools/rai-lint/commit/a4f9baf4390128ed33c310f2c5f5c6cac32f4296))
-* **deps:** Complete ESLint 9 migration and update major Python tooling ([1703ff6](https://github.com/ChecKMarKDevTools/rai-lint/commit/1703ff66589904853a6c2510ca3ab5e15be9f4b6))
-* Release prep ([#12](https://github.com/ChecKMarKDevTools/rai-lint/issues/12)) ([25c940b](https://github.com/ChecKMarKDevTools/rai-lint/commit/25c940bd8b970225843f09bd8c434e31c37ed600))
-* streamline CI/CD workflows and modernize package configs ([ea38de7](https://github.com/ChecKMarKDevTools/rai-lint/commit/ea38de73d42e88a09bce5f3b30993a769d71768d))
-* tweaks for merge ([#3](https://github.com/ChecKMarKDevTools/rai-lint/issues/3)) ([777d583](https://github.com/ChecKMarKDevTools/rai-lint/commit/777d583227b66daece190767e1bc066c984fbd28))
+This plugin exists to make attribution boring, consistent, and unavoidable, not because people are malicious, but because humans are busy and memory is optional once a commit is merged.
 
-## Changelog
+Git already supports trailers. Commits already support attribution. This just closes the gap between “technically possible” and “actually happens,” without turning it into a values debate every time someone opens a PR.
 
-All notable changes to `gitlint-rai` will be documented in this file.
+Tools are better at being annoying in exactly the same way every time. So I let the tool do it.
+
+---
+
+### The Short, Honest Timeline 🗓️
+
+This started with a single burst of energy where I built both the Node and Python versions in one go, because apparently I like my projects symmetrical and my timelines questionable.
+
+That initial push included the plugin itself, tests, docs, CI, release workflows, examples, and enough scaffolding to mildly regret my choices. Everything landed on October 31, which is either poetic or concerning.
+
+After that came the predictable phase where things were fixed, then fixed again, then fixed correctly once I stopped trying to parse Git trailers by intuition and actually read the spec.
+
+November was cleanup and modernization, December was release prep, and eventually I stopped touching it long enough to ship.
+
+If you want the blow-by-blow, Git has it. This is the version you read without sighing.
+
+---
+
+### December 28, 2025: v0.1.0 🚀
+
+The plugin runs locally, enforces attribution, and stays out of your way once you comply.
+
+Everything else will evolve from here, including future improvements and the inevitable bugs I haven’t met yet.
