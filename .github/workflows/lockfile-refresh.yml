@@ -13,13 +13,12 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
-permissions:
-    contents: write
-
 jobs:
     refresh-npm-lockfiles:
         name: Refresh npm lockfiles
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
         timeout-minutes: 8
         if: >
             (github.event_name == 'pull_request' &&
@@ -31,7 +30,8 @@ jobs:
              (startsWith(github.ref_name, 'release-please--') || github.ref_name == 'main'))
             ||
             (github.event_name == 'workflow_dispatch' &&
-             (startsWith(github.ref_name, 'release-please--') || github.ref_name == 'main'))
+             github.actor == 'anchildress1' &&
+             startsWith(github.ref_name, 'release-please--'))
 
         steps:
             - name: Checkout head branch
@@ -70,6 +70,8 @@ jobs:
     refresh-uv-lockfile:
         name: Refresh uv.lock
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
         timeout-minutes: 8
         if: >
             (github.event_name == 'pull_request' &&
@@ -81,7 +83,8 @@ jobs:
              (startsWith(github.ref_name, 'release-please--') || github.ref_name == 'main'))
             ||
             (github.event_name == 'workflow_dispatch' &&
-             (startsWith(github.ref_name, 'release-please--') || github.ref_name == 'main'))
+             github.actor == 'anchildress1' &&
+             startsWith(github.ref_name, 'release-please--'))
 
         steps:
             - name: Checkout head branch

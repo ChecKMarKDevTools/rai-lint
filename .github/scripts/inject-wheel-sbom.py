@@ -97,6 +97,7 @@ def inject_sbom(wheel_path: str, sbom_path: str) -> None:
             try:
                 os.remove(tmp_path)
             except FileNotFoundError:
+                # If the temporary file was already removed elsewhere, there is nothing left to clean up.
                 pass
 
 

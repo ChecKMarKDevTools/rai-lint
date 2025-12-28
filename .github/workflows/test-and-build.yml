@@ -165,3 +165,35 @@ jobs:
         with:
           fail-on-severity: moderate
           comment-summary-in-pr: on-failure
+
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    needs: [node-tests, python-tests]
+    if: (github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false) && !startsWith(github.head_ref, 'release-please--')
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Download Node coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: node-coverage-24
+          path: packages/node-commitlint/coverage
+
+      - name: Download Python coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: python-coverage-3.12
+          path: packages/python-gitlint/reports
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
