@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import plugin from './index';
+import plugin from '../src/index';
 
 describe('plugin export', () => {
   it('should export a valid commitlint plugin', () => {

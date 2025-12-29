@@ -31,8 +31,80 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  release-node:
+  test:
     needs: release-please
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    if: ${{ needs.release-please.outputs.node-release-created || needs.release-please.outputs.python-release-created }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Get Node version from Volta
+        if: ${{ needs.release-please.outputs.node-release-created }}
+        id: node-version
+        run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
+
+      - uses: actions/setup-node@v6
+        if: ${{ needs.release-please.outputs.node-release-created }}
+        with:
+          node-version: ${{ steps.node-version.outputs.version }}
+
+      - name: Install Node dependencies
+        if: ${{ needs.release-please.outputs.node-release-created }}
+        run: npm ci --ignore-scripts
+
+      - name: Run Node tests
+        if: ${{ needs.release-please.outputs.node-release-created }}
+        run: npm --workspace=packages/node-commitlint test
+
+      - name: Upload Node coverage artifacts
+        if: ${{ needs.release-please.outputs.node-release-created }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: node-coverage
+          path: |
+            packages/node-commitlint/reports/lcov.info
+            packages/node-commitlint/reports/junit-vitest.xml
+          retention-days: 60
+
+      - uses: actions/setup-python@v6
+        if: ${{ needs.release-please.outputs.python-release-created }}
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        if: ${{ needs.release-please.outputs.python-release-created }}
+        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
+        with:
+          enable-cache: true
+
+      - name: Install Python dependencies
+        if: ${{ needs.release-please.outputs.python-release-created }}
+        working-directory: packages/python-gitlint
+        run: uv sync --frozen
+
+      - name: Run Python tests with coverage
+        if: ${{ needs.release-please.outputs.python-release-created }}
+        working-directory: packages/python-gitlint
+        run: uv run pytest --cov --cov-report=term --cov-report=xml
+
+      - name: Run Python benchmarks
+        if: ${{ needs.release-please.outputs.python-release-created }}
+        working-directory: packages/python-gitlint
+        run: uv run python tests/python_benchmark.py
+
+      - name: Upload Python coverage artifacts
+        if: ${{ needs.release-please.outputs.python-release-created }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-coverage
+          path: |
+            packages/python-gitlint/reports/coverage.xml
+            packages/python-gitlint/reports/junit-py.xml
+          retention-days: 60
+
+  release-node:
+    needs: [release-please, test]
     runs-on: ubuntu-latest
     timeout-minutes: 8
     if: ${{ needs.release-please.outputs.node-release-created }}
@@ -44,7 +116,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-
       - name: Get Node version from Volta
         id: node-version
         run: echo "version=$(jq -r '.volta.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
@@ -54,42 +125,28 @@ jobs:
           node-version: ${{ steps.node-version.outputs.version }}
           registry-url: "https://registry.npmjs.org"
 
-      - name: Install root Node dependencies (locked)
-        run: npm ci --ignore-scripts
-
-      - name: Run tests
-        id: tests
-        run: npm --workspace=packages/node-commitlint test
-
-      - name: Upload coverage artifacts
-        uses: actions/upload-artifact@v6
+      - name: Create GitHub draft release
+        id: create-draft
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
-          name: node-coverage
-          path: |
-            packages/node-commitlint/coverage/lcov.info
-            packages/node-commitlint/reports/junit-vitest.xml
-          retention-days: 60
+          tag_name: ${{ needs.release-please.outputs.node-tag-name }}
+          draft: true
+
+      - name: Install all dependencies to build types
+        run: npm ci --ignore-scripts
 
       - name: Build package
         id: build
         run: npm --workspace=packages/node-commitlint run build
 
-      # Build requires dev dependencies (typescript, etc.).
-      # We prune *after* building so the SBOM reflects runtime deps only.
-      - name: Prune dev dependencies
-        id: prune
-        run: npm --workspace=packages/node-commitlint prune --omit=dev --ignore-scripts
 
       - name: Generate SBOM
         id: sbom
-        run: npx @cyclonedx/cyclonedx-npm --package-lock-only --omit dev --output-reproducible --output-file packages/node-commitlint/bom.json --mc-type library --workspace packages/node-commitlint
+        run: npx @cyclonedx/cyclonedx-npm --package-lock-only --omit dev --output-reproducible --output-file packages/node-commitlint/sbom.json --mc-type library --workspace packages/node-commitlint
 
-      - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: node-sbom
-          path: packages/node-commitlint/bom.json
-          retention-days: 60
+      - name: Package tarball (npm pack)
+        id: pack
+        run: npm --workspace=packages/node-commitlint pack --ignore-scripts --pack-destination packages/node-commitlint
 
       - name: Generate build attestation
         id: attest
@@ -97,48 +154,49 @@ jobs:
         with:
           subject-path: |
             packages/node-commitlint/dist/**/*
-            packages/node-commitlint/bom.json
+            packages/node-commitlint/sbom.json
 
-      - name: Upload build artifact
-        id: upload-dist
-        uses: actions/upload-artifact@v6
+      - name: Download test artifacts
+        uses: actions/download-artifact@v6
         with:
-          name: node-package-dist
-          path: packages/node-commitlint/dist/
-          retention-days: 60
+          name: node-coverage
+          path: packages/node-commitlint/reports/
 
-      - name: Package tarball (npm pack)
-        id: pack
-        run: npm --workspace=packages/node-commitlint pack --ignore-scripts --pack-destination packages/node-commitlint
+      - name: Attach artifacts to draft release
+        id: attach-artifacts
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        with:
+          tag_name: ${{ needs.release-please.outputs.node-tag-name }}
+          draft: true
+          files: |
+            packages/node-commitlint/*.tgz
+            packages/node-commitlint/sbom.json
+            packages/node-commitlint/reports/lcov.info
+            packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Publish to npm
         id: publish
         run: npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
 
-      - name: Attach artifacts to GitHub Release
-        id: gh-release
+      - name: Publish GitHub release
+        id: publish-release
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.node-tag-name }}
-          files: |
-            packages/node-commitlint/*.tgz
-            packages/node-commitlint/bom.json
-            packages/node-commitlint/coverage/lcov.info
-            packages/node-commitlint/reports/junit-vitest.xml
+          draft: false
 
       - name: Summary
         if: always()
         env:
           JOB_STATUS: ${{ job.status }}
           TAG_NAME: ${{ needs.release-please.outputs.node-tag-name }}
-          TESTS_OUTCOME: ${{ steps.tests.outcome }}
           BUILD_OUTCOME: ${{ steps.build.outcome }}
-          PRUNE_OUTCOME: ${{ steps.prune.outcome }}
+          PACK_OUTCOME: ${{ steps.pack.outcome }}
           SBOM_OUTCOME: ${{ steps.sbom.outcome }}
           ATTEST_OUTCOME: ${{ steps.attest.outcome }}
-          PACK_OUTCOME: ${{ steps.pack.outcome }}
+          ATTACH_OUTCOME: ${{ steps.attach-artifacts.outcome }}
           PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
-          GH_RELEASE_OUTCOME: ${{ steps.gh-release.outcome }}
+          PUBLISH_RELEASE_OUTCOME: ${{ steps.publish-release.outcome }}
         run: |
           icon() {
             case "$1" in
@@ -158,16 +216,14 @@ jobs:
           echo "**Job status:** \`${JOB_STATUS}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "#### Step outcomes" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${TESTS_OUTCOME}") Tests: \`${TESTS_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- $(icon "${BUILD_OUTCOME}") Build: \`${BUILD_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${PRUNE_OUTCOME}") Prune (runtime deps): \`${PRUNE_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${SBOM_OUTCOME}") SBOM generated (bom.json): \`${SBOM_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${ATTEST_OUTCOME}") Build attestation: \`${ATTEST_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- $(icon "${PACK_OUTCOME}") npm pack: \`${PACK_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${SBOM_OUTCOME}") SBOM generated (sbom.json): \`${SBOM_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${ATTEST_OUTCOME}") Build attestation: \`${ATTEST_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${ATTACH_OUTCOME}") Artifacts attached to draft: \`${ATTACH_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- $(icon "${PUBLISH_OUTCOME}") npm publish: \`${PUBLISH_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${GH_RELEASE_OUTCOME}") GitHub Release attachments: \`${GH_RELEASE_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${PUBLISH_RELEASE_OUTCOME}") Release published: \`${PUBLISH_RELEASE_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
-          echo "**Artifacts:** node-package-dist, node-sbom, node-coverage (see run artifacts)" >> $GITHUB_STEP_SUMMARY
           echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
 
           if [ "${JOB_STATUS}" != "success" ]; then
@@ -177,7 +233,7 @@ jobs:
           fi
 
   release-python:
-    needs: release-please
+    needs: [release-please, test]
     runs-on: ubuntu-latest
     timeout-minutes: 8
     if: ${{ needs.release-please.outputs.python-release-created }}
@@ -198,31 +254,14 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install dependencies
-        id: install
-        working-directory: packages/python-gitlint
-        run: uv sync --frozen
-
-      - name: Run tests with coverage
-        id: tests
-        working-directory: packages/python-gitlint
-        run: uv run pytest --cov --cov-report=term --cov-report=xml
-
-      - name: Upload coverage artifact
-        id: upload-coverage
-        uses: actions/upload-artifact@v6
+      - name: Create GitHub draft release
+        id: create-draft
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
-          name: python-coverage
-          path: packages/python-gitlint/reports/coverage.xml
-          retention-days: 60
+          tag_name: ${{ needs.release-please.outputs.python-tag-name }}
+          draft: true
 
-      - name: Build package
-        id: build
-        working-directory: packages/python-gitlint
-        run: uv build
-
-      - name: Prune dev dependencies for SBOM
-        id: prune
+      - name: Install prod-only dependencies
         working-directory: packages/python-gitlint
         run: uv sync --frozen --no-dev
 
@@ -236,22 +275,12 @@ jobs:
             --mc-type library \
             --output-reproducible \
             --of JSON \
-            -o reports/bom.json
+            -o gitlint_rai/sbom.cdx.json
 
-      - name: Inject SBOM into wheel (.dist-info/sboms/bom.json)
-        id: inject-sbom
-        run: |
-          python3 .github/scripts/inject-wheel-sbom.py \
-            --sbom packages/python-gitlint/reports/bom.json \
-            packages/python-gitlint/dist/*.whl
-
-      - name: Upload SBOM artifact
-        id: upload-sbom
-        uses: actions/upload-artifact@v6
-        with:
-          name: python-sbom
-          path: packages/python-gitlint/reports/bom.json
-          retention-days: 30
+      - name: Build wheel + sdist
+        id: build
+        working-directory: packages/python-gitlint
+        run: uv build
 
       - name: Generate build attestation
         id: attest
@@ -259,13 +288,23 @@ jobs:
         with:
           subject-path: packages/python-gitlint/dist/*
 
-      - name: Upload build artifact
-        id: upload-dist
-        uses: actions/upload-artifact@v6
+      - name: Download test artifacts
+        uses: actions/download-artifact@v6
         with:
-          name: python-package-dist
-          path: packages/python-gitlint/dist/
-          retention-days: 60
+          name: python-coverage
+          path: packages/python-gitlint/reports/
+
+      - name: Attach artifacts to draft release
+        id: attach-artifacts
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        with:
+          tag_name: ${{ needs.release-please.outputs.python-tag-name }}
+          draft: true
+          files: |
+            packages/python-gitlint/dist/*
+            packages/python-gitlint/gitlint_rai/sbom.cdx.json
+            packages/python-gitlint/reports/coverage.xml
+            packages/python-gitlint/reports/junit-py.xml
 
       - name: Publish to PyPI with Trusted Publishing
         id: publish
@@ -274,33 +313,25 @@ jobs:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
 
-      - name: Attach artifacts to GitHub Release
-        id: gh-release
+      - name: Publish GitHub release
+        id: publish-release
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.python-tag-name }}
-          files: |
-            packages/python-gitlint/dist/*
-            packages/python-gitlint/reports/bom.json
-            packages/python-gitlint/reports/coverage.xml
+          draft: false
 
       - name: Summary
         if: always()
         env:
           JOB_STATUS: ${{ job.status }}
           TAG_NAME: ${{ needs.release-please.outputs.python-tag-name }}
-          INSTALL_OUTCOME: ${{ steps.install.outcome }}
-          TESTS_OUTCOME: ${{ steps.tests.outcome }}
-          BUILD_OUTCOME: ${{ steps.build.outcome }}
-          PRUNE_OUTCOME: ${{ steps.prune.outcome }}
           SBOM_OUTCOME: ${{ steps.sbom.outcome }}
-          INJECT_SBOM_OUTCOME: ${{ steps.inject-sbom.outcome }}
-          UPLOAD_COVERAGE_OUTCOME: ${{ steps.upload-coverage.outcome }}
-          UPLOAD_SBOM_OUTCOME: ${{ steps.upload-sbom.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          EMBED_SBOM_OUTCOME: ${{ steps.embed-sbom.outcome }}
           ATTEST_OUTCOME: ${{ steps.attest.outcome }}
-          UPLOAD_DIST_OUTCOME: ${{ steps.upload-dist.outcome }}
+          ATTACH_OUTCOME: ${{ steps.attach-artifacts.outcome }}
           PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
-          GH_RELEASE_OUTCOME: ${{ steps.gh-release.outcome }}
+          PUBLISH_RELEASE_OUTCOME: ${{ steps.publish-release.outcome }}
         run: |
           icon() {
             case "$1" in
@@ -320,20 +351,14 @@ jobs:
           echo "**Job status:** \`${JOB_STATUS}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "#### Step outcomes" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${INSTALL_OUTCOME}") Install: \`${INSTALL_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${TESTS_OUTCOME}") Tests: \`${TESTS_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${SBOM_OUTCOME}") SBOM generated: \`${SBOM_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- $(icon "${BUILD_OUTCOME}") Build: \`${BUILD_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${PRUNE_OUTCOME}") Prune (no-dev): \`${PRUNE_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${SBOM_OUTCOME}") SBOM generated (bom.json): \`${SBOM_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${INJECT_SBOM_OUTCOME}") SBOM injected into wheel (.dist-info/sboms/): \`${INJECT_SBOM_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${UPLOAD_COVERAGE_OUTCOME}") Coverage uploaded: \`${UPLOAD_COVERAGE_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${UPLOAD_SBOM_OUTCOME}") SBOM uploaded: \`${UPLOAD_SBOM_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${EMBED_SBOM_OUTCOME}") SBOM embedded in wheel: \`${EMBED_SBOM_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- $(icon "${ATTEST_OUTCOME}") Build attestation: \`${ATTEST_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${UPLOAD_DIST_OUTCOME}") Dist uploaded: \`${UPLOAD_DIST_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${ATTACH_OUTCOME}") Artifacts attached to draft: \`${ATTACH_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- $(icon "${PUBLISH_OUTCOME}") PyPI publish: \`${PUBLISH_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- $(icon "${GH_RELEASE_OUTCOME}") GitHub Release attachments: \`${GH_RELEASE_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- $(icon "${PUBLISH_RELEASE_OUTCOME}") Release published: \`${PUBLISH_RELEASE_OUTCOME}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
-          echo "**Artifacts:** python-package-dist, python-sbom, python-coverage (see run artifacts)" >> $GITHUB_STEP_SUMMARY
           echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
 
           if [ "${JOB_STATUS}" != "success" ]; then

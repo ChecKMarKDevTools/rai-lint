@@ -14,8 +14,10 @@
   },
   "files": [
     "dist",
-    "bom.json",
-    "README.md"
+    "sbom.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=20 <25"

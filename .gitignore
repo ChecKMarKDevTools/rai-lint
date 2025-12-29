@@ -30,16 +30,12 @@ build/
 *.swo
 *~
 *.tmp
+*.tgz
 
-# Coverage artifacts
-coverage.lcov
-lcov.info
-coverage.xml
-
-# Test report artifacts
+# Report artifacts
 **/reports/
-**/reports/*.xml
 
 *-licenses.json
-sbom.json
+*sbom.json
+*.cdx.json
 requirements-frozen.txt
