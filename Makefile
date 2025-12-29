@@ -3,7 +3,7 @@ NODE_PKG := packages/node-commitlint
 PYTHON_PKG := packages/python-gitlint
 PYTHON_SOURCES := gitlint_rai/ tests/
 
-.PHONY: help install install-locked update-locks clean validate ai-checks
+.PHONY: help install install-locked update-locks clean ai-checks
 .PHONY: test test-node test-python
 .PHONY: lint lint-node lint-python lint-format
 .PHONY: format format-node format-python
@@ -11,8 +11,7 @@ PYTHON_SOURCES := gitlint_rai/ tests/
 
 help:
 	@echo "Main targets:"
-	@echo "  validate       - Run all checks (lint, test, build) - CI ready"
-	@echo "  ai-checks      - Full env refresh + all checks (clean, install, validate)"
+	@echo "  ai-checks      - Full env refresh + all checks (clean, install, lint, test, build)"
 	@echo "  test           - Run all tests (Node + Python)"
 	@echo "  lint           - Run all linters (Node + Python)"
 	@echo "  format         - Format all code (Node + Python)"
@@ -106,10 +105,10 @@ build-node:
 	cd $(NODE_PKG) && npm run build
 
 build-python:
-	cd $(PYTHON_PKG) && uv run python -m build --no-isolation
+	cd $(PYTHON_PKG) && uv build
 
 # ============================================================================
 # AI Checks
 # ============================================================================
 
-ai-checks: clean install format lint test
+ai-checks: clean install format lint test build

@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Dual-language commit-message validation framework for AI-responsible development",
   "workspaces": [
-    "packages/*"
+    "packages/node-commitlint"
   ],
   "engines": {
     "node": ">=20 <25"
