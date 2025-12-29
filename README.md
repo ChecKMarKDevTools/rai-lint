@@ -34,7 +34,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ---
 
-[Installation](#-installation) • [Quick Start](#-quick-start) • [Attribution Formats](#%EF%B8%8F-ai-attribution-formats) • [Documentation](#-documentation)
+[Installation](#-installation) • [Quick Start](#-quick-start) • [Attribution Formats](#%EF%B8%8F-ai-attribution-formats) • [Documentation](/docs)
 
 </div>
 
@@ -218,12 +218,6 @@ repos:
 ```
 
 </details>
-
----
-
-## 📚 Documentation
-
-See the [`docs/`](docs/) directory for comprehensive documentation.
 
 ---
 
