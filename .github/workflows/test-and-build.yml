@@ -46,21 +46,26 @@ jobs:
       - name: Run linter
         run: npm run lint --workspace=packages/node-commitlint
 
+      - name: Create reports directory
+        run: mkdir -p packages/node-commitlint/reports
+
       - name: Run tests
         run: npm test --workspace=packages/node-commitlint
 
       - name: Upload Node test results to Codecov
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+        env:
+          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           name: node-tests
           files: packages/node-commitlint/reports/*.xml
           fail_ci_if_error: true
 
       - name: Upload Node coverage to Codecov
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        env:
+          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           files: packages/node-commitlint/coverage/lcov.info
           flags: node
           fail_ci_if_error: true
@@ -106,6 +111,10 @@ jobs:
           uv run black --check gitlint_rai tests/
           uv run isort --check-only gitlint_rai tests/
 
+      - name: Create reports directory
+        working-directory: packages/python-gitlint
+        run: mkdir -p reports
+
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
         run: |
@@ -122,16 +131,18 @@ jobs:
           retention-days: 30
 
       - name: Upload Python test results to Codecov
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+        env:
+          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           name: python-tests
           files: packages/python-gitlint/reports/*.xml
 
       - name: Upload Python coverage to Codecov
-        uses: codecov/codecov-action@0561704f0f02c16a585d4c7555e57fa2e44cf909 # v5.5.2
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        env:
+          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           files: packages/python-gitlint/reports/coverage.xml
           flags: python
           fail_ci_if_error: true
