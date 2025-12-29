@@ -175,14 +175,14 @@ jobs:
           fetch-depth: 0
 
       - name: Download Node coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: node-coverage-*
           path: packages/node-commitlint/reports
           merge-multiple: true
 
       - name: Download Python coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: python-coverage-*
           path: packages/python-gitlint/reports

@@ -46,7 +46,7 @@ jobs:
               run: npm install --ignore-scripts --package-lock-only
 
             - name: Auto-commit npm lockfiles
-              uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+              uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
               with:
                   commit_message: "chore: refresh npm lockfiles"
                   file_pattern: package-lock.json
@@ -86,7 +86,7 @@ jobs:
               run: uv lock
 
             - name: Auto-commit uv.lock
-              uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+              uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
               with:
                   commit_message: "chore: refresh uv.lock"
                   file_pattern: packages/python-gitlint/uv.lock
