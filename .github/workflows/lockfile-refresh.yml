@@ -1,12 +1,13 @@
 name: Lockfile Refresh (release-please only)
 
 on:
-    pull_request:
-        types: [opened, reopened, synchronize]
-    push:
-        branches:
-            - main
-            - "release-please--**"
+    workflow_run:
+      workflows:
+        - Release Please
+      types:
+        - completed
+      branches:
+        - release-please--*
     workflow_dispatch:
 
 concurrency:
@@ -21,29 +22,15 @@ jobs:
             contents: write
         timeout-minutes: 8
         if: >
-            (github.event_name == 'pull_request' &&
-             startsWith(github.head_ref, 'release-please--') &&
-             (github.event.pull_request.user.login == 'release-please[bot]' || github.event.pull_request.user.login == 'github-actions[bot]'))
-            ||
-            (github.event_name == 'push' &&
-             (github.actor == 'release-please[bot]' || github.actor == 'github-actions[bot]') &&
-             (startsWith(github.ref_name, 'release-please--') || github.ref_name == 'main'))
-            ||
-            (github.event_name == 'workflow_dispatch' &&
-             github.actor == 'anchildress1' &&
-             startsWith(github.ref_name, 'release-please--'))
+          (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+          ||
+          (github.event_name == 'workflow_dispatch' && github.actor == 'anchildress1')
 
         steps:
             - name: Checkout head branch
               uses: actions/checkout@v6
               with:
                   ref: ${{ github.head_ref || github.ref_name }}
-
-            - name: Ensure jq is available
-              run: |
-                  command -v jq >/dev/null && exit 0
-                  sudo apt-get update
-                  sudo apt-get install -y jq
 
             - name: Get Node version from Volta
               id: node-version
@@ -62,10 +49,10 @@ jobs:
               uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
               with:
                   commit_message: "chore: refresh npm lockfiles"
-                  file_pattern: "package-lock.json **/package-lock.json"
-                  commit_user_name: "github-actions[bot]"
-                  commit_user_email: "github-actions[bot]@users.noreply.github.com"
-                  commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+                  file_pattern: package-lock.json
+                  commit_user_name: github-actions[bot]
+                  commit_user_email: github-actions[bot]@users.noreply.github.com
+                  commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
 
     refresh-uv-lockfile:
         name: Refresh uv.lock
@@ -74,17 +61,9 @@ jobs:
             contents: write
         timeout-minutes: 8
         if: >
-            (github.event_name == 'pull_request' &&
-             startsWith(github.head_ref, 'release-please--') &&
-             (github.event.pull_request.user.login == 'release-please[bot]' || github.event.pull_request.user.login == 'github-actions[bot]'))
-            ||
-            (github.event_name == 'push' &&
-             (github.actor == 'release-please[bot]' || github.actor == 'github-actions[bot]') &&
-             (startsWith(github.ref_name, 'release-please--') || github.ref_name == 'main'))
-            ||
-            (github.event_name == 'workflow_dispatch' &&
-             github.actor == 'anchildress1' &&
-             startsWith(github.ref_name, 'release-please--'))
+          (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+          ||
+          (github.event_name == 'workflow_dispatch' && github.actor == 'anchildress1')
 
         steps:
             - name: Checkout head branch
@@ -110,7 +89,7 @@ jobs:
               uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
               with:
                   commit_message: "chore: refresh uv.lock"
-                  file_pattern: "packages/python-gitlint/uv.lock"
-                  commit_user_name: "github-actions[bot]"
-                  commit_user_email: "github-actions[bot]@users.noreply.github.com"
-                  commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+                  file_pattern: packages/python-gitlint/uv.lock
+                  commit_user_name: github-actions[bot]
+                  commit_user_email: github-actions[bot]@users.noreply.github.com
+                  commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
