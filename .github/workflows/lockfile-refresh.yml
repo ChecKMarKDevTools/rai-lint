@@ -6,8 +6,6 @@ on:
         - Release Please
       types:
         - completed
-      branches:
-        - release-please--*
     workflow_dispatch:
 
 concurrency:
