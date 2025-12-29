@@ -27,13 +27,12 @@ def benchmark_validation(message, name, valid, iterations=10000):
     # Determine expected validity using the actual rule logic to avoid hard-coded checks.
     initial_result = rule.validate(commit)
     assert isinstance(initial_result, list), f"Expected list, got {type(initial_result)}"
-    expected_valid = len(initial_result) == 0
 
     start = time.perf_counter()
     for _ in range(iterations):
         result = rule.validate(commit)
         assert isinstance(result, list), f"Expected list, got {type(result)}"
-        if expected_valid:
+        if valid:
             assert len(result) == 0, f"Expected no violations for valid footer, got {result}"
         else:
             assert len(result) > 0, f"Expected violations for invalid footer, got {result}"
@@ -51,13 +50,13 @@ if __name__ == "__main__":
     print("RAI Footer Validation Benchmark\n")
 
     benchmark_validation(
-        "feat: add feature\n\n🛡️ RAI: AI-Generated",
+        "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>",
         "AI-Generated validation",
         valid=True,
     )
 
     benchmark_validation(
-        "fix: resolve bug\n\n🛡️ RAI: AI-Assisted",
+        "fix: resolve bug\n\nAssisted-by: GitHub Copilot <copilot@github.com>",
         "AI-Assisted validation",
         valid=True,
     )
