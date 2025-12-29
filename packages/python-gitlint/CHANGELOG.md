@@ -8,12 +8,13 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.1...gitlint-rai-v0.1.2) (2025-12-29)
+## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.1...gitlint-rai-v0.1.2) (2025-12-29) 📡 📡
 
+> _Update to the previous threat:_ not war. Yet. Just cleanup, alignment, and one more attempt to make releases mean the same thing everywhere.
 
-### :wrench: Structural Cleanup
+The plugin works as before. This release fixes CI/CD structure, test coverage, and publishing configuration so the release pipeline stops being a creative exercise.
 
-* restructure CI/CD workflow and add comprehensive tests ([#22](https://github.com/ChecKMarKDevTools/rai-lint/issues/22)) ([c5b5cec](https://github.com/ChecKMarKDevTools/rai-lint/commit/c5b5cecffa8c47ad87edf517738bb7b44d80e45e))
+---
 
 ## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.0...gitlint-rai-v0.1.1) (2025-12-29) 📡
 
