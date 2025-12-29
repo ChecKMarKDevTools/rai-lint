@@ -12,12 +12,15 @@ class MockCommit:
     class MockMessage:
         def __init__(self, text):
             self.full = text
+            lines = text.split("\n")
+            self.title = lines[0] if lines else ""
+            self.body = lines[1:] if len(lines) > 1 else []
 
     def __init__(self, text):
         self.message = self.MockMessage(text)
 
 
-def benchmark_validation(message, name, iterations=10000):
+def benchmark_validation(message, name, valid, iterations=10000):
     rule = RaiFooterExists()
     commit = MockCommit(message)
 
@@ -50,19 +53,23 @@ if __name__ == "__main__":
     benchmark_validation(
         "feat: add feature\n\n🛡️ RAI: AI-Generated",
         "AI-Generated validation",
+        valid=True,
     )
 
     benchmark_validation(
         "fix: resolve bug\n\n🛡️ RAI: AI-Assisted",
         "AI-Assisted validation",
+        valid=True,
     )
 
     benchmark_validation(
         "chore: update\n\nGenerated-by: Verdent AI <verdent@verdent.ai>",
         "Verdent AI validation",
+        valid=True,
     )
 
     benchmark_validation(
         "feat: add feature\n\nNo RAI footer",
         "Invalid footer validation",
+        valid=False,
     )

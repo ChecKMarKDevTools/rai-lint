@@ -5,14 +5,16 @@ PYTHON_SOURCES := gitlint_rai/ tests/
 
 .PHONY: help install install-locked update-locks clean ai-checks
 .PHONY: test test-node test-python
+.PHONY: benchmark benchmark-node benchmark-python
 .PHONY: lint lint-node lint-python lint-format
 .PHONY: format format-node format-python
 .PHONY: build build-node build-python
 
 help:
 	@echo "Main targets:"
-	@echo "  ai-checks      - Full env refresh + all checks (clean, install, lint, test, build)"
+	@echo "  ai-checks      - Full env refresh + all checks (clean, install, lint, test, benchmark, build)"
 	@echo "  test           - Run all tests (Node + Python)"
+	@echo "  benchmark      - Run all benchmarks (Node + Python)"
 	@echo "  lint           - Run all linters (Node + Python)"
 	@echo "  format         - Format all code (Node + Python)"
 	@echo "  build          - Build all packages"
@@ -67,6 +69,18 @@ test-python:
 			--cov-report=term-missing
 
 # ============================================================================
+# Benchmark
+# ============================================================================
+
+benchmark: benchmark-node benchmark-python
+
+benchmark-node:
+	npx vitest run benchmarks/node-benchmark.test.ts
+
+benchmark-python:
+	python benchmarks/python_benchmark.py
+
+# ============================================================================
 # Lint
 # ============================================================================
 
@@ -111,4 +125,4 @@ build-python:
 # AI Checks
 # ============================================================================
 
-ai-checks: clean install format lint test build
+ai-checks: clean install format lint test benchmark build
