@@ -40,6 +40,5 @@
   },
   "label": ":robot: AutoSummon",
   "pull-request-header": ":package: Release paperwork has been filed",
-  "include-v-in-tag": true,
-  "create-release": true
+  "include-v-in-tag": true
 }
