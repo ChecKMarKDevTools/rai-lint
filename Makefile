@@ -75,10 +75,10 @@ test-python:
 benchmark: benchmark-node benchmark-python
 
 benchmark-node:
-	npx vitest run benchmarks/node-benchmark.test.ts
+	cd $(NODE_PKG) && npx vitest run src/tests/node-benchmark.test.ts
 
 benchmark-python:
-	python benchmarks/python_benchmark.py
+	cd $(PYTHON_PKG) && uv run python tests/python_benchmark.py
 
 # ============================================================================
 # Lint

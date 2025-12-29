@@ -49,6 +49,9 @@ dev = [
 where = ["."]
 include = ["gitlint_rai*"]
 
+[tool.setuptools.package-data]
+gitlint_rai = ["py.typed", "sbom/sbom.cdx.json"]
+
 [project.entry-points."gitlint.plugins"]
 rai-footer-exists = "gitlint_rai.rules:RaiFooterExists"
 
