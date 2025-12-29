@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import raiFooterExists from '../packages/node-commitlint/src/rules/rai-footer-exists.js';
 
 const iterations = 10000;
@@ -11,7 +11,10 @@ describe('RAI Footer Validation Benchmark', () => {
 
     const start = performance.now();
     for (let i = 0; i < iterations; i++) {
-      raiFooterExists(parsed);
+      const result = raiFooterExists(parsed) as [boolean, string];
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toBe(false);
     }
     const end = performance.now();
 
@@ -26,7 +29,10 @@ describe('RAI Footer Validation Benchmark', () => {
 
     const start = performance.now();
     for (let i = 0; i < iterations; i++) {
-      raiFooterExists(parsed);
+      const result = raiFooterExists(parsed) as [boolean, string];
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toBe(false);
     }
     const end = performance.now();
 
@@ -41,7 +47,10 @@ describe('RAI Footer Validation Benchmark', () => {
 
     const start = performance.now();
     for (let i = 0; i < iterations; i++) {
-      raiFooterExists(parsed);
+      const result = raiFooterExists(parsed) as [boolean, string];
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toBe(true);
     }
     const end = performance.now();
 
@@ -56,7 +65,10 @@ describe('RAI Footer Validation Benchmark', () => {
 
     const start = performance.now();
     for (let i = 0; i < iterations; i++) {
-      raiFooterExists(parsed);
+      const result = raiFooterExists(parsed) as [boolean, string];
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toBe(false);
     }
     const end = performance.now();
 

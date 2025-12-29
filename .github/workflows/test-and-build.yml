@@ -2,7 +2,7 @@ name: Test and Build
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
     paths-ignore:
       - "docs/**"
       - "**.md"
@@ -46,22 +46,18 @@ jobs:
       - name: Run linter
         run: npm run lint --workspace=packages/node-commitlint
 
+      - name: Create reports directory
+        run: mkdir -p packages/node-commitlint/reports
+
       - name: Run tests
         run: npm test --workspace=packages/node-commitlint
 
-      - name: Upload Node test results to Codecov
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+      - name: Upload Node coverage and test results to Codecov
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        env:
+          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          name: node-tests
-          files: packages/node-commitlint/reports/*.xml
-          fail_ci_if_error: true
-
-      - name: Upload Node coverage to Codecov
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/node-commitlint/coverage/lcov.info
+          files: packages/node-commitlint/reports/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
           flags: node
           fail_ci_if_error: true
 
@@ -69,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: node-coverage-${{ matrix.node-version }}
-          path: packages/node-commitlint/coverage
+          path: packages/node-commitlint/reports
           retention-days: 30
 
   python-tests:
@@ -106,6 +102,10 @@ jobs:
           uv run black --check gitlint_rai tests/
           uv run isort --check-only gitlint_rai tests/
 
+      - name: Create reports directory
+        working-directory: packages/python-gitlint
+        run: mkdir -p reports
+
       - name: Run tests with coverage
         working-directory: packages/python-gitlint
         run: |
@@ -121,18 +121,12 @@ jobs:
           path: packages/python-gitlint/reports/coverage.xml
           retention-days: 30
 
-      - name: Upload Python test results to Codecov
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+      - name: Upload Python coverage and test results to Codecov
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        env:
+          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          name: python-tests
-          files: packages/python-gitlint/reports/*.xml
-
-      - name: Upload Python coverage to Codecov
-        uses: codecov/codecov-action@0561704f0f02c16a585d4c7555e57fa2e44cf909 # v5.5.2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/python-gitlint/reports/coverage.xml
+          files: packages/python-gitlint/reports/coverage.xml,packages/python-gitlint/reports/junit-py.xml
           flags: python
           fail_ci_if_error: true
 
@@ -181,19 +175,20 @@ jobs:
           fetch-depth: 0
 
       - name: Download Node coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
-          name: node-coverage-24
-          path: packages/node-commitlint/coverage
+          pattern: node-coverage-*
+          path: packages/node-commitlint/reports
+          merge-multiple: true
 
       - name: Download Python coverage artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
-          name: python-coverage-3.12
+          pattern: python-coverage-*
           path: packages/python-gitlint/reports
+          merge-multiple: true
 
       - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8 # v5.0.0
+        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9 # v7.0.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
