@@ -3,8 +3,11 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: "51 23 3,18 * *"
     open-pull-requests-limit: 2
+    labels:
+      - ":robot: AutoSummon"
     groups:
       dependencies:
         patterns:
@@ -12,8 +15,11 @@ updates:
   - package-ecosystem: "npm"
     directory: "/packages/node-commitlint"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: "51 23 3,18 * *"
     open-pull-requests-limit: 2
+    labels:
+      - ":robot: AutoSummon"
     groups:
       dependencies:
         patterns:
@@ -21,8 +27,11 @@ updates:
   - package-ecosystem: "pip"
     directory: "/packages/python-gitlint"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: "51 23 3,18 * *"
     open-pull-requests-limit: 2
+    labels:
+      - ":robot: AutoSummon"
     groups:
       dependencies:
         patterns:
@@ -30,8 +39,11 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: "51 23 3,18 * *"
     open-pull-requests-limit: 2
+    labels:
+      - ":robot: AutoSummon"
     groups:
       dependencies:
         patterns:
