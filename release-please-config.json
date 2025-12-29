@@ -38,7 +38,9 @@
       ]
     }
   },
-  "label": ":robot: AutoSummon",
   "pull-request-header": ":package: Release paperwork has been filed",
+  "separate-pull-requests": false,
+  "fork": false,
+  "include-component-in-tag": true,
   "include-v-in-tag": true
 }
