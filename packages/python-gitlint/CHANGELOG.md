@@ -2,26 +2,21 @@
 
 All notable changes to `gitlint-rai` are documented here so I don’t have to reconstruct my own intent later from commit archaeology and vibes.
 
-If you want the long-form reasoning behind this whole thing, that lives over here:
-["Did AI Erase Attribution?"](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l) on dev.to. This file is the practical follow-through.
+> [!TIP]
+> If you want the long-form reasoning behind this whole thing, that lives over here:
+> ["Did AI Erase Attribution?"](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l) on dev.to. This file is the practical follow-through.
 
 ---
 
-## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.0...gitlint-rai-v0.1.1) (2025-12-29)
+## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.0...gitlint-rai-v0.1.1) (2025-12-29) 📡
 
+> _In which the release machinery worked perfectly in GitHub and then aggressively embarrassed itself everywhere else, forcing several rounds of increasingly resigned workflow debugging._
 
-### :beetle: Things That Were Broken
+The plugin itself is fine. It was always fine. The release workflow, however, decided to interpret "automated publishing" as a creative writing exercise with variable outcomes.
 
-* **ci:** consolidate release artifacts and auto-commit locks ([#13](https://github.com/ChecKMarKDevTools/rai-lint/issues/13)) ([184f751](https://github.com/ChecKMarKDevTools/rai-lint/commit/184f7519998153c3df3937a5b599413a978d85aa))
+Release Please created releases. GitHub saw those releases. PyPI did not see those releases, because OIDC token permissions are apparently conditional based on vibes and which YAML indentation the workflow gods favor that day.
 
-
-### :broom: Tending the Edges
-
-* Fix releases again still ([#15](https://github.com/ChecKMarKDevTools/rai-lint/issues/15)) ([115edc0](https://github.com/ChecKMarKDevTools/rai-lint/commit/115edc027e4496b4f8c449fb2c30544da080e72b))
-
-## 0.1.0 (2025-12-28)
-
-_In which a very small gitlint plugin shows up, does exactly one job, and refuses to apologize for it._
+This release fixes the workflow setup that was supposed to already be fixed in the previous release. If it's still broken, that means war.
 
 ---
 
