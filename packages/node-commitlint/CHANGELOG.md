@@ -8,6 +8,23 @@ This is the summary version but Git has the receipts if you want the play-by-pla
 
 ---
 
+## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/commitlint-plugin-rai-v0.1.0...commitlint-plugin-rai-v0.1.1) (2025-12-29)
+
+
+### :beetle: Things That Were Broken
+
+* restrict lockfile-refresh workflow execution ([378d988](https://github.com/ChecKMarKDevTools/rai-lint/commit/378d988366e6902a1d4f3db4438984d5d4b7a1ec))
+
+
+### :hammer_and_wrench: Tooling Changes
+
+* **deps-dev:** bump @types/node ([#16](https://github.com/ChecKMarKDevTools/rai-lint/issues/16)) ([95ef100](https://github.com/ChecKMarKDevTools/rai-lint/commit/95ef100ceac35b429fd279b554c753bee913cde0))
+
+
+### :broom: Tending the Edges
+
+* Fix releases again still ([#15](https://github.com/ChecKMarKDevTools/rai-lint/issues/15)) ([115edc0](https://github.com/ChecKMarKDevTools/rai-lint/commit/115edc027e4496b4f8c449fb2c30544da080e72b))
+
 ## 0.1.0 (2025-12-28)
 
 _In which a commitlint plugin exists purely to ask one mildly uncomfortable but extremely reasonable question before you ship code._

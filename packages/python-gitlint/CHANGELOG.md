@@ -7,6 +7,18 @@ If you want the long-form reasoning behind this whole thing, that lives over her
 
 ---
 
+## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.0...gitlint-rai-v0.1.1) (2025-12-29)
+
+
+### :beetle: Things That Were Broken
+
+* **ci:** consolidate release artifacts and auto-commit locks ([#13](https://github.com/ChecKMarKDevTools/rai-lint/issues/13)) ([184f751](https://github.com/ChecKMarKDevTools/rai-lint/commit/184f7519998153c3df3937a5b599413a978d85aa))
+
+
+### :broom: Tending the Edges
+
+* Fix releases again still ([#15](https://github.com/ChecKMarKDevTools/rai-lint/issues/15)) ([115edc0](https://github.com/ChecKMarKDevTools/rai-lint/commit/115edc027e4496b4f8c449fb2c30544da080e72b))
+
 ## 0.1.0 (2025-12-28)
 
 _In which a very small gitlint plugin shows up, does exactly one job, and refuses to apologize for it._
