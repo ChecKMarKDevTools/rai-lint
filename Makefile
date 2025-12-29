@@ -75,7 +75,7 @@ test-python:
 benchmark: benchmark-node benchmark-python
 
 benchmark-node:
-	cd $(NODE_PKG) && npx vitest run src/tests/node-benchmark.test.ts
+	cd $(NODE_PKG) && npx vitest run tests/node-benchmark.test.ts
 
 benchmark-python:
 	cd $(PYTHON_PKG) && uv run python tests/python_benchmark.py

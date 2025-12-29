@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import raiFooterExists from '../rules/rai-footer-exists';
+import raiFooterExists from '../src/rules/rai-footer-exists.js';
 
 describe('rai-footer-exists', () => {
   it('should pass with Generated-by footer', async () => {

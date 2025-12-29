@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import raiFooterExists from '../rules/rai-footer-exists.js';
+import raiFooterExists from '../src/rules/rai-footer-exists.js';
 
 const iterations = 10000;
 
