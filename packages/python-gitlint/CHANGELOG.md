@@ -8,6 +8,14 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
+## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.1...gitlint-rai-v0.1.2) (2025-12-29) 📡 📡
+
+> _Update to the previous threat:_ not war. Yet. Just cleanup, alignment, and one more attempt to make releases mean the same thing everywhere.
+
+The plugin works as before. This release fixes CI/CD structure, test coverage, and publishing configuration so the release pipeline stops being a creative exercise.
+
+---
+
 ## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.0...gitlint-rai-v0.1.1) (2025-12-29) 📡
 
 > _In which the release machinery worked perfectly in GitHub and then aggressively embarrassed itself everywhere else, forcing several rounds of increasingly resigned workflow debugging._

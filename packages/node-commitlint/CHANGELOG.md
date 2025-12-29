@@ -7,6 +7,14 @@ All notable changes to `@checkmarkdevtools/commitlint-plugin-rai` are documented
 
 ---
 
+## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/commitlint-plugin-rai-v0.1.1...commitlint-plugin-rai-v0.1.2) (2025-12-29) 📡 📡
+
+> _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
+
+No functional changes to the plugin itself. This release tightens workflows, fixes release wiring, and makes the surrounding machinery behave consistently. The goal is boring reliability, and this is me chasing it relentlessly.
+
+---
+
 ## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/commitlint-plugin-rai-v0.1.0...commitlint-plugin-rai-v0.1.1) (2025-12-29) 📡
 
 > _Because the releases technically worked on GitHub, then immediately fell apart when asked to do literally anything else, prompting a debugging session I would describe as "character-building."_
