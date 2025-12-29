@@ -52,21 +52,12 @@ jobs:
       - name: Run tests
         run: npm test --workspace=packages/node-commitlint
 
-      - name: Upload Node test results to Codecov
-        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
-        env:
-          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
-        with:
-          name: node-tests
-          files: packages/node-commitlint/reports/*.xml
-          fail_ci_if_error: true
-
-      - name: Upload Node coverage to Codecov
+      - name: Upload Node coverage and test results to Codecov
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         env:
           CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          files: packages/node-commitlint/coverage/lcov.info
+          files: packages/node-commitlint/reports/lcov.info,packages/node-commitlint/reports/junit-vitest.xml
           flags: node
           fail_ci_if_error: true
 
@@ -74,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: node-coverage-${{ matrix.node-version }}
-          path: packages/node-commitlint/coverage
+          path: packages/node-commitlint/reports
           retention-days: 30
 
   python-tests:
@@ -130,20 +121,12 @@ jobs:
           path: packages/python-gitlint/reports/coverage.xml
           retention-days: 30
 
-      - name: Upload Python test results to Codecov
-        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
-        env:
-          CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
-        with:
-          name: python-tests
-          files: packages/python-gitlint/reports/*.xml
-
-      - name: Upload Python coverage to Codecov
+      - name: Upload Python coverage and test results to Codecov
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         env:
           CODECOV_TOKEN: a8ab1809-0371-488b-b690-1926652b5360
         with:
-          files: packages/python-gitlint/reports/coverage.xml
+          files: packages/python-gitlint/reports/coverage.xml,packages/python-gitlint/reports/junit-py.xml
           flags: python
           fail_ci_if_error: true
 
@@ -194,14 +177,16 @@ jobs:
       - name: Download Node coverage artifacts
         uses: actions/download-artifact@v6
         with:
-          name: node-coverage-24
-          path: packages/node-commitlint/coverage
+          pattern: node-coverage-*
+          path: packages/node-commitlint/reports
+          merge-multiple: true
 
       - name: Download Python coverage artifacts
         uses: actions/download-artifact@v6
         with:
-          name: python-coverage-3.12
+          pattern: python-coverage-*
           path: packages/python-gitlint/reports
+          merge-multiple: true
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8 # v5.0.0
