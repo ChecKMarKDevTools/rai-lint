@@ -23,7 +23,12 @@ def benchmark_validation(message, name, iterations=10000):
 
     start = time.perf_counter()
     for _ in range(iterations):
-        rule.validate(commit)
+        result = rule.validate(commit)
+        assert isinstance(result, list), f"Expected list, got {type(result)}"
+        if "Generated-by: Verdent AI" in message:
+            assert len(result) == 0, f"Expected no violations for valid footer, got {result}"
+        else:
+            assert len(result) > 0, f"Expected violations for invalid footer, got {result}"
     end = time.perf_counter()
 
     total_time = (end - start) * 1000
