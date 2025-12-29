@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitest/config';
 
+const REPORTS_DIR = 'reports';
+
 export default defineConfig({
   test: {
     globals: true,
@@ -7,7 +9,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['lcov', 'text'],
-      reportsDirectory: 'reports',
+      reportsDirectory: REPORTS_DIR,
       include: ['src/**/*.ts'],
       exclude: ['src/**/*.test.ts'],
     },
@@ -16,7 +18,7 @@ export default defineConfig({
       [
         'junit',
         {
-          outputFile: 'reports/junit-vitest.xml',
+          outputFile: `${REPORTS_DIR}/junit-vitest.xml`,
         },
       ],
     ],
