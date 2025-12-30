@@ -8,29 +8,11 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.1...gitlint-rai-v0.1.2) (2025-12-30)
-
-
-### :wrench: Structural Cleanup
-
-* restructure CI/CD workflow and add comprehensive tests ([#22](https://github.com/ChecKMarKDevTools/rai-lint/issues/22)) ([c5b5cec](https://github.com/ChecKMarKDevTools/rai-lint/commit/c5b5cecffa8c47ad87edf517738bb7b44d80e45e))
-
-
-### :robot: Automation
-
-* **workflows:** fix release please workflow to combine versions ([4abe7ac](https://github.com/ChecKMarKDevTools/rai-lint/commit/4abe7acf3ea3c7c8f274d9a468b45c781f56fd93))
-
-
-### :broom: Tending the Edges
-
-* release main ([#23](https://github.com/ChecKMarKDevTools/rai-lint/issues/23)) ([2cf6b6f](https://github.com/ChecKMarKDevTools/rai-lint/commit/2cf6b6f74ab1b25d79c810f316e03d3697b5bbe0))
-* reset release please versions ([be10e8f](https://github.com/ChecKMarKDevTools/rai-lint/commit/be10e8f127891577e2844811c892e10f35a37829))
-
 ## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.1...gitlint-rai-v0.1.2) (2025-12-29) 📡 📡
 
 > _Update to the previous threat:_ not war. Yet. Just cleanup, alignment, and one more attempt to make releases mean the same thing everywhere.
 
-The plugin works as before. This release fixes CI/CD structure, test coverage, and publishing configuration so the release pipeline stops being a creative exercise.
+The plugin’s surface behavior is unchanged, but its internals are not. CI/CD was restructured, test coverage was rebuilt, Release Please was corrected to stop duplicating versions, and the release pipeline was brought back into alignment with reality.
 
 ---
 

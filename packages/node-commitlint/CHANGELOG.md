@@ -7,29 +7,11 @@ All notable changes to `@checkmarkdevtools/commitlint-plugin-rai` are documented
 
 ---
 
-## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/commitlint-plugin-rai-v0.1.1...commitlint-plugin-rai-v0.1.2) (2025-12-30)
-
-
-### :wrench: Structural Cleanup
-
-* restructure CI/CD workflow and add comprehensive tests ([#22](https://github.com/ChecKMarKDevTools/rai-lint/issues/22)) ([c5b5cec](https://github.com/ChecKMarKDevTools/rai-lint/commit/c5b5cecffa8c47ad87edf517738bb7b44d80e45e))
-
-
-### :robot: Automation
-
-* **workflows:** fix release please workflow to combine versions ([4abe7ac](https://github.com/ChecKMarKDevTools/rai-lint/commit/4abe7acf3ea3c7c8f274d9a468b45c781f56fd93))
-
-
-### :broom: Tending the Edges
-
-* release main ([#23](https://github.com/ChecKMarKDevTools/rai-lint/issues/23)) ([2cf6b6f](https://github.com/ChecKMarKDevTools/rai-lint/commit/2cf6b6f74ab1b25d79c810f316e03d3697b5bbe0))
-* reset release please versions ([be10e8f](https://github.com/ChecKMarKDevTools/rai-lint/commit/be10e8f127891577e2844811c892e10f35a37829))
-
 ## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/commitlint-plugin-rai-v0.1.1...commitlint-plugin-rai-v0.1.2) (2025-12-29) 📡 📡
 
 > _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
 
-No functional changes to the plugin itself. This release tightens workflows, fixes release wiring, and makes the surrounding machinery behave consistently. The goal is boring reliability, and this is me chasing it relentlessly.
+No user-facing behavior changes, but under the hood this is a realignment release. Core workflows were restructured, release logic was consolidated, and the surrounding machinery now matches how the plugin actually works instead of how it used to pretend to.
 
 ---
 
