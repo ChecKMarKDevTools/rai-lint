@@ -231,16 +231,17 @@ rai-lint/
 │   │   │   ├── rules/
 │   │   │   │   └── rai-footer-exists.ts
 │   │   │   └── index.ts
-│   │   └── package.json
+│   │   |── package.json
+│   │   ├── tests/
 │   │
 │   └── python-gitlint/            # Python plugin
 │       ├── gitlint_rai/
 │       │   ├── __init__.py
 │       │   └── rules.py
+│       ├── tests/
 │       └── pyproject.toml
 │
 ├── docs/                          # Documentation
-└── fixtures/                      # Test fixtures
 ```
 
 ---

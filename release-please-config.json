@@ -46,7 +46,7 @@
   "plugins": [
     {
       "type": "linked-versions",
-      "components": ["commitlint-plugin-rai", "gitlint-rai"]
+      "packages": ["commitlint-plugin-rai", "gitlint-rai"]
     }
   ]
 }
