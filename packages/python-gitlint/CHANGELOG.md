@@ -8,7 +8,7 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/python-gitlint-v0.1.2...v0.1.2) (2025-12-29) 📡 📡
+## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.1...v0.1.2) (2025-12-29) 📡 📡
 
 > _Update to the previous threat:_ not war. Yet. Just cleanup, alignment, and one more attempt to make releases mean the same thing everywhere.
 
