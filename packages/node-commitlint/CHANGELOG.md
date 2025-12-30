@@ -7,7 +7,7 @@ All notable changes to `@checkmarkdevtools/commitlint-plugin-rai` are documented
 
 ---
 
-## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/commitlint-plugin-rai-v0.1.1...commitlint-plugin-rai-v0.1.2) (2025-12-29) 📡 📡
+## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/commitlint-plugin-rai-v0.1.1...v0.1.2) (2025-12-29) 📡 📡
 
 > _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
 
