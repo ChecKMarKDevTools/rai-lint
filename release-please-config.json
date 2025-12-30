@@ -38,8 +38,6 @@
       ]
     }
   },
-  "label": ":robot: AutoSummon, autorelease: pending",
-  "release-label": ":robot: AutoSummon, autorelease: tagged",
   "pull-request-header": ":package: Release paperwork has been filed",
   "separate-pull-requests": false,
   "group-pull-request-title-pattern": "chore: release ${version}",
