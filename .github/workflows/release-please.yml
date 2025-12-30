@@ -19,7 +19,9 @@ jobs:
       pull-requests: write
       id-token: write
     outputs:
-      release-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] || steps.release.outputs['packages/python-gitlint--tag_name'] }}
+      release-created: ${{ steps.release.outputs.release_created }}
+      release-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
+
     steps:
       - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
         id: release
@@ -242,7 +244,7 @@ jobs:
 
   finalize-release:
     needs: [release-please, release-node, release-python]
-    if: ${{ needs.release-please.outputs.release-tag-name != '' }}
+    if: ${{ needs.release-please.outputs.release-created == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 4
     permissions:
@@ -258,7 +260,8 @@ jobs:
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.release-tag-name }}
-          draft: false
+          name: ${{ needs.release-please.outputs.release-tag-name }}
+          draft: true
           files: |
             commitlint-test-results/commitlint-test-results.zip
             gitlint-test-results/gitlint-test-results.zip

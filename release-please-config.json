@@ -2,8 +2,8 @@
   "packages": {
     "packages/node-commitlint": {
       "release-type": "node",
+      "component": "node-commitlint",
       "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
-      "component": "rai-lint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [
@@ -20,8 +20,8 @@
     },
     "packages/python-gitlint": {
       "release-type": "python",
+      "component": "python-gitlint",
       "package-name": "gitlint-rai",
-      "component": "rai-lint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "extra-files": ["uv.lock"],
@@ -40,13 +40,16 @@
   },
   "pull-request-header": ":package: Release paperwork has been filed",
   "separate-pull-requests": false,
+  "group-pull-request-title-pattern": "chore: release ${version}",
   "fork": false,
   "draft": true,
   "include-v-in-tag": true,
+  "skip-github-release": true,
   "plugins": [
     {
       "type": "linked-versions",
-      "packages": ["commitlint-plugin-rai", "gitlint-rai"]
+      "groupName": "repo-version",
+      "components": ["node-commitlint", "python-gitlint"]
     }
   ]
 }
