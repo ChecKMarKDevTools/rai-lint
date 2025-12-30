@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gitlint-rai"
-version = "0.1.2"
+dynamic = ["version"]
 authors = [
   { name="Ashley Childress", email="human@checkmarkdevtools.dev" },
 ]
@@ -26,6 +26,9 @@ classifiers = [
     "Topic :: Software Development :: Version Control :: Git",
     "Typing :: Typed",
 ]
+
+[tool.setuptools.dynamic]
+version = {attr = "gitlint_rai.version.__version__"}
 
 [project.urls]
 Homepage = "https://github.com/ChecKMarKDevTools/rai-lint"

@@ -151,7 +151,6 @@ trusted-deps = [
 
 [[package]]
 name = "gitlint-rai"
-version = "0.1.2"
 source = { editable = "." }
 dependencies = [
     { name = "gitlint" },
