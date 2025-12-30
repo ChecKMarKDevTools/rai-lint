@@ -2,10 +2,10 @@ name: Security Audit
 
 on:
   schedule:
-    - cron: "03 2 * * 1" # Weekly on Monday at 2 AM
+    - cron: "34 3 12,26 * *" # On the 12th and 26th of every month at 3:34 AM
   push:
     paths:
-      - ".github/workflows/security-audit.yml"
+      - .github/workflows/security-audit.yml
   workflow_dispatch:
 
 concurrency:
@@ -16,6 +16,7 @@ jobs:
   scorecard:
     name: Scorecard
     runs-on: ubuntu-latest
+    if: ${{ github.ref_type != 'tag' }}
     timeout-minutes: 12
     permissions:
       contents: read
@@ -54,6 +55,7 @@ jobs:
   license-scan:
     name: License Compliance
     runs-on: ubuntu-latest
+    if: ${{ github.ref_type != 'tag' }}
     timeout-minutes: 7
     permissions:
       contents: read
@@ -108,6 +110,7 @@ jobs:
   codeql:
     name: CodeQL analysis
     runs-on: ubuntu-latest
+    if: ${{ github.ref_type != 'tag' }}
     timeout-minutes: 10
     permissions:
       contents: read
