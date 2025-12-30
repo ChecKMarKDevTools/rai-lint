@@ -4,6 +4,7 @@
       "release-type": "node",
       "component": "node-commitlint",
       "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
+      "extra-files": ["package.json"],
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [
@@ -24,7 +25,7 @@
       "package-name": "gitlint-rai",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
-      "extra-files": ["uv.lock"],
+      "extra-files": ["version.py"],
       "changelog-sections": [
         { "type": "feat", "section": ":seedling: New Capabilities" },
         { "type": "fix", "section": ":beetle: Things That Were Broken" },
