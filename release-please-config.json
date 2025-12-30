@@ -43,6 +43,7 @@
   "group-pull-request-title-pattern": "chore: release ${version}",
   "fork": false,
   "draft": true,
+  "initial-version": "0.1.2",
   "include-v-in-tag": true,
   "include-components-in-tag": false,
   "skip-github-release": true,
