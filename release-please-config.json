@@ -3,7 +3,7 @@
     "packages/node-commitlint": {
       "release-type": "node",
       "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
-      "component": "commitlint-plugin-rai",
+      "component": "rai-lint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [
@@ -21,7 +21,7 @@
     "packages/python-gitlint": {
       "release-type": "python",
       "package-name": "gitlint-rai",
-      "component": "gitlint-rai",
+      "component": "rai-lint",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "extra-files": ["uv.lock"],
