@@ -69,7 +69,9 @@ omit = [
     "*/__pycache__/*",
     ".venv/*",
     "venv/*",
-    "gitlint_rai/__main__.py",
+    "version.py",
+    "**/__init__.py",
+    "**/__main__.py",
 ]
 
 [tool.coverage.report]

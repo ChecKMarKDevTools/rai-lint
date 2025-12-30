@@ -11,7 +11,7 @@ All notable changes to `@checkmarkdevtools/commitlint-plugin-rai` are documented
 
 > _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
 
-No functional changes to the plugin itself. This release tightens workflows, fixes release wiring, and makes the surrounding machinery behave consistently. The goal is boring reliability, and this is me chasing it relentlessly.
+No user-facing behavior changes, but under the hood this is a realignment release. Core workflows were restructured, release logic was consolidated, and the surrounding machinery now matches how the plugin actually works instead of how it used to pretend to.
 
 ---
 

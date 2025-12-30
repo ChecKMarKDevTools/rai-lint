@@ -12,7 +12,7 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 > _Update to the previous threat:_ not war. Yet. Just cleanup, alignment, and one more attempt to make releases mean the same thing everywhere.
 
-The plugin works as before. This release fixes CI/CD structure, test coverage, and publishing configuration so the release pipeline stops being a creative exercise.
+The plugin’s surface behavior is unchanged, but its internals are not. CI/CD was restructured, test coverage was rebuilt, Release Please was corrected to stop duplicating versions, and the release pipeline was brought back into alignment with reality.
 
 ---
 
