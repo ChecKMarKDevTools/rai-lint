@@ -26,6 +26,5 @@
   "pull-request-header": ":package: Release paperwork has been filed",
   "separate-pull-requests": false,
   "draft": true,
-  "include-v-in-tag": true,
-  "skip-github-release": true
+  "include-v-in-tag": true
 }
