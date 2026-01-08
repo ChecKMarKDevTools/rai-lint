@@ -19,8 +19,9 @@ jobs:
       pull-requests: write
       id-token: write
     outputs:
-      release-created: ${{ steps.release.outputs.release_created }}
-      release-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
+      is-release: ${{ steps.release.outputs['packages/node-commitlint--release_created'] == 'true' || steps.release.outputs['packages/python-gitlint--release_created'] == 'true' }}
+      release-version: ${{ steps.release.outputs['packages/node-commitlint--version'] || steps.release.outputs['packages/python-gitlint--version'] }}
+      release-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] || steps.release.outputs['packages/python-gitlint--tag_name'] }}
 
     steps:
       - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
@@ -175,7 +176,7 @@ jobs:
     needs: [release-please, test]
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    if: ${{ needs.release-please.outputs.release-tag-name != '' }}
+    if: ${{ needs.release-please.outputs.is-release == 'true' }}
     permissions:
       contents: write
       id-token: write
@@ -246,7 +247,7 @@ jobs:
 
   finalize-release:
     needs: [release-please, release-node, release-python]
-    if: ${{ needs.release-please.outputs.release-created == 'true' }}
+    if: ${{ needs.release-please.outputs.is-release == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 4
     permissions:

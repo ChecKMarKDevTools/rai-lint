@@ -1,12 +1,15 @@
 {
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "packages": {
     "packages/node-commitlint": {
       "release-type": "node",
       "component": "node-commitlint",
       "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
+      "skip-github-release": true,
       "extra-files": ["package.json"],
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
+      "include-component-in-tag": false,
       "changelog-sections": [
         { "type": "feat", "section": ":seedling: New Capabilities" },
         { "type": "fix", "section": ":beetle: Things That Were Broken" },
@@ -25,7 +28,9 @@
       "package-name": "gitlint-rai",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
-      "extra-files": ["version.py"],
+      "skip-github-release": true,
+      "extra-files": ["gitlint_rai/version.py"],
+      "include-component-in-tag": false,
       "changelog-sections": [
         { "type": "feat", "section": ":seedling: New Capabilities" },
         { "type": "fix", "section": ":beetle: Things That Were Broken" },
@@ -41,12 +46,8 @@
   },
   "pull-request-header": ":package: Release paperwork has been filed",
   "separate-pull-requests": false,
-  "group-pull-request-title-pattern": "chore: release ${version}",
-  "fork": false,
   "draft": true,
-  "initial-version": "0.1.2",
   "include-v-in-tag": true,
-  "include-components-in-tag": false,
   "skip-github-release": true,
   "plugins": [
     {
