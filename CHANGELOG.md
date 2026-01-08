@@ -8,23 +8,21 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.1...v0.1.2) (2025-12-30) 📡 📡
+## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.1...v0.1.2) (2025-12-30) 📡 📡
 
-> _Update to the previous threat:_ not war. Yet. Just cleanup, alignment, and one more attempt to make releases mean the same thing everywhere.
+> _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
 
-The plugin’s surface behavior is unchanged, but its internals are not. CI/CD was restructured, test coverage was rebuilt, Release Please was corrected to stop duplicating versions, and the release pipeline was brought back into alignment with reality.
+No user-facing behavior changes in either package, but this release is a realignment: workflows were restructured, release logic was consolidated, and the surrounding machinery now matches how these plugins actually work instead of how it used to pretend to.
 
----
+## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.0...v0.1.1) (2025-12-29) 📡
 
-## [0.1.1](https://github.com/ChecKMarKDevTools/rai-lint/compare/gitlint-rai-v0.1.0...gitlint-rai-v0.1.1) (2025-12-29) 📡
+> _Because the releases technically worked on GitHub, then immediately fell apart when asked to do literally anything else, prompting a debugging session I would describe as "character-building."_
 
-> _In which the release machinery worked perfectly in GitHub and then aggressively embarrassed itself everywhere else, forcing several rounds of increasingly resigned workflow debugging._
+The plugins were fine. The release workflow, however, decided that "working" was negotiable.
 
-The plugin itself is fine. It was always fine. The release workflow, however, decided to interpret "automated publishing" as a creative writing exercise with variable outcomes.
+This release corrects the automated publishing setup that was theoretically correct last time but demonstrably wasn't even close.
 
-Release Please created releases. GitHub saw those releases. PyPI did not see those releases, because OIDC token permissions are apparently conditional based on vibes and which YAML indentation the workflow gods favor that day.
-
-This release fixes the workflow setup that was supposed to already be fixed in the previous release. If it's still broken, that means war.
+If this doesn't work, I'm learning pottery.
 
 ---
 

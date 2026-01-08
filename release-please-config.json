@@ -1,31 +1,15 @@
 {
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "packages": {
-    "packages/node-commitlint": {
-      "release-type": "node",
-      "component": "node-commitlint",
-      "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
-      "extra-files": ["package.json"],
+    ".": {
+      "release-type": "simple",
+      "version-file": "version.txt",
+      "changelog-path": "CHANGELOG.md",
+      "skip-github-release": true,
+      "extra-files": ["packages/node-commitlint/package.json", "packages/python-gitlint/gitlint_rai/version.py"],
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
-      "changelog-sections": [
-        { "type": "feat", "section": ":seedling: New Capabilities" },
-        { "type": "fix", "section": ":beetle: Things That Were Broken" },
-        { "type": "perf", "section": ":zap: Faster or Lighter" },
-        { "type": "refactor", "section": ":wrench: Structural Cleanup" },
-        { "type": "docs", "section": ":book: Words and Explanations" },
-        { "type": "test", "section": ":test_tube: Guardrails" },
-        { "type": "build", "section": ":hammer_and_wrench: Tooling Changes" },
-        { "type": "ci", "section": ":robot: Automation" },
-        { "type": "chore", "section": ":broom: Tending the Edges" }
-      ]
-    },
-    "packages/python-gitlint": {
-      "release-type": "python",
-      "component": "python-gitlint",
-      "package-name": "gitlint-rai",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "extra-files": ["version.py"],
+      "include-component-in-tag": false,
       "changelog-sections": [
         { "type": "feat", "section": ":seedling: New Capabilities" },
         { "type": "fix", "section": ":beetle: Things That Were Broken" },
@@ -41,18 +25,6 @@
   },
   "pull-request-header": ":package: Release paperwork has been filed",
   "separate-pull-requests": false,
-  "group-pull-request-title-pattern": "chore: release ${version}",
-  "fork": false,
   "draft": true,
-  "initial-version": "0.1.2",
-  "include-v-in-tag": true,
-  "include-components-in-tag": false,
-  "skip-github-release": true,
-  "plugins": [
-    {
-      "type": "linked-versions",
-      "groupName": "repo-version",
-      "components": ["node-commitlint", "python-gitlint"]
-    }
-  ]
+  "include-v-in-tag": true
 }
