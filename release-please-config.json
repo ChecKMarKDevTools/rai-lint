@@ -24,6 +24,7 @@
     }
   },
   "pull-request-header": ":package: Release paperwork has been filed",
+  "group-pull-request-title-pattern": "chore: release ${branch}",
   "separate-pull-requests": false,
   "draft": true,
   "include-v-in-tag": true
