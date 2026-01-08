@@ -24,7 +24,7 @@ Use Release Please for automated versioning.
 
 - On push to `main`, the action opens a Release PR ("proposed release").
 - Only after that PR is merged, an actual GitHub Release and semantic tag are created.
-- Monorepo outputs are path-prefixed (use bracket syntax: `steps.release.outputs['packages/node-commitlint--release_created']`).
+- Release Please is configured as a single root component (`.`), so workflow outputs are top-level (e.g. `steps.release.outputs.release_created`, `steps.release.outputs.tag_name`).
 
 ### Token Policy
 
@@ -48,7 +48,7 @@ The AI attribution validation is currently defined inline in `commitlint.config.
 
 - `/packages/node-commitlint` - Node.js/ESM commitlint plugin
 - `/packages/python-gitlint` - Python gitlint plugin
-- Monorepo with separate versioning per package
+- Monorepo with a single root version synced to both packages
 
 ## Environment Variables
 

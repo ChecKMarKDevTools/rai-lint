@@ -19,9 +19,8 @@ jobs:
       pull-requests: write
       id-token: write
     outputs:
-      is-release: ${{ steps.release.outputs['packages/node-commitlint--release_created'] == 'true' || steps.release.outputs['packages/python-gitlint--release_created'] == 'true' }}
-      release-version: ${{ steps.release.outputs['packages/node-commitlint--version'] || steps.release.outputs['packages/python-gitlint--version'] }}
-      release-tag-name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] || steps.release.outputs['packages/python-gitlint--tag_name'] }}
+      is-release: ${{ steps.release.outputs.release_created == 'true' }}
+      release-tag-name: ${{ steps.release.outputs.tag_name }}
 
     steps:
       - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
@@ -108,7 +107,7 @@ jobs:
     needs: [release-please, test]
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    if: ${{ needs.release-please.outputs.release-tag-name != '' }}
+    if: ${{ needs.release-please.outputs.is-release == 'true' }}
     permissions:
       contents: write
       id-token: write
@@ -158,7 +157,7 @@ jobs:
             echo "No package .tgz found"
             exit 1
           fi
-          zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json
+          zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json CHANGELOG.md
           ls -l artifacts
 
       - name: Upload node package zip
@@ -227,9 +226,9 @@ jobs:
         working-directory: packages/python-gitlint
         run: |
           set -euo pipefail
-          mkdir -p ../../artifacts
-          zip -j ../../artifacts/gitlint-package.zip dist/* gitlint_rai/sbom/sbom.cdx.json
-          ls -l ../../artifacts
+          mkdir -p "${GITHUB_WORKSPACE}/artifacts"
+          zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json "${GITHUB_WORKSPACE}/CHANGELOG.md"
+          ls -l "${GITHUB_WORKSPACE}/artifacts"
 
       - name: Upload python package zip
         uses: actions/upload-artifact@v6
@@ -263,7 +262,7 @@ jobs:
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.release-tag-name }}
-          name: ${{ needs.release-please.outputs.release-tag-name }}
+          name: ${{ github.event.repository.name }} ${{ needs.release-please.outputs.release-tag-name }}
           draft: true
           files: |
             commitlint-test-results/commitlint-test-results.zip
@@ -287,10 +286,9 @@ jobs:
             esac
           }
 
-          echo "### PyPI Release Summary $(icon "${JOB_STATUS}")" >> $GITHUB_STEP_SUMMARY
+          echo "### Release Summary $(icon \"${JOB_STATUS}\")" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Package:** \`gitlint-rai\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Version:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Tag:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Job status:** \`${JOB_STATUS}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
           echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
