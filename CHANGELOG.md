@@ -8,6 +8,38 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
+## [0.1.3](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.2...v0.1.3) (2026-01-10)
+
+
+### :book: Words and Explanations
+
+* add changelog rewrite style instructions ([8e29b87](https://github.com/ChecKMarKDevTools/rai-lint/commit/8e29b87be4c1e189f006bca7e13f3240709483ba))
+
+
+### :hammer_and_wrench: Tooling Changes
+
+* **deps-dev:** bump the dependencies group across 1 directory with 5 updates ([#32](https://github.com/ChecKMarKDevTools/rai-lint/issues/32)) ([09dae6e](https://github.com/ChecKMarKDevTools/rai-lint/commit/09dae6e1e630414c261fb2c0929a71bf2a0463b3))
+* **deps:** bump astral-sh/setup-uv in the dependencies group ([#33](https://github.com/ChecKMarKDevTools/rai-lint/issues/33)) ([d38753a](https://github.com/ChecKMarKDevTools/rai-lint/commit/d38753a33584d1f8411bca0467546868f0c4cdf4))
+* revert package versions to 0.1.1 ([9fd042c](https://github.com/ChecKMarKDevTools/rai-lint/commit/9fd042ce77744ce6a88fab56cda0d682bc658643))
+
+
+### :robot: Automation
+
+* enhance security audit workflow and release configuration ([0c4ae07](https://github.com/ChecKMarKDevTools/rai-lint/commit/0c4ae07368dd9b45cabebc29de37b90d19196bf8))
+* fix release-please single-tag release wiring ([#34](https://github.com/ChecKMarKDevTools/rai-lint/issues/34)) ([e567c11](https://github.com/ChecKMarKDevTools/rai-lint/commit/e567c11d0ecd444289ca3ae1cb20844684a45b6d))
+* **release-please:** fix release gating to detect merge commits ([f5025d7](https://github.com/ChecKMarKDevTools/rai-lint/commit/f5025d79c76af499cd206d122098a1dfb3c581b6))
+* update release-please configuration ([6e0988a](https://github.com/ChecKMarKDevTools/rai-lint/commit/6e0988a990f1c033409ba7604de3164d777c2025))
+
+
+### :broom: Tending the Edges
+
+* add explicit pr pattern ([edc0d41](https://github.com/ChecKMarKDevTools/rai-lint/commit/edc0d41ab328ea7f8e97f819aa4b46be1f2bda8e))
+* fix missing python version directive ([7880811](https://github.com/ChecKMarKDevTools/rai-lint/commit/788081102f0e39821aabd5c22eb3ef77e9ea2a2e))
+* release ([#29](https://github.com/ChecKMarKDevTools/rai-lint/issues/29)) ([7d61bb1](https://github.com/ChecKMarKDevTools/rai-lint/commit/7d61bb14bdf557a81d00401ab7bd62f5456e5e7d))
+* release ([#30](https://github.com/ChecKMarKDevTools/rai-lint/issues/30)) ([28688fa](https://github.com/ChecKMarKDevTools/rai-lint/commit/28688fa92c49177a73345f8a2e68bfac1f0e3ae9))
+* release main ([#27](https://github.com/ChecKMarKDevTools/rai-lint/issues/27)) ([5465640](https://github.com/ChecKMarKDevTools/rai-lint/commit/5465640a02a8643cd42fbf80852ae992d37209ad))
+* release main ([#35](https://github.com/ChecKMarKDevTools/rai-lint/issues/35)) ([7811c83](https://github.com/ChecKMarKDevTools/rai-lint/commit/7811c83f76325a2b9693cbb8444a3781ddbbd6af))
+
 ## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.1...v0.1.2) (2025-12-30) 📡 📡
 
 > _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
