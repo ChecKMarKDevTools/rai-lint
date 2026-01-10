@@ -8,35 +8,6 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.3](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.2...v0.1.3) (2026-01-08) 📡📡📡
-
-> _A boring release, in the best possible way:_ this one is about making CI/release automation less fragile and keeping dependencies current.
-
-No user-facing rule behavior changes in either package. If you linted commits yesterday, you’re linting commits today — just with fewer ways for the release machinery to hurt itself.
-
-### Highlights
-
-- **Release automation is harder to derail.** Release Please configuration and “single-tag” wiring were fixed so tags/versions line up cleanly across this monorepo instead of drifting into “wait, which package did we publish?” territory.
-- **Security + supply chain posture got a tune-up.** The security audit workflow was improved, and the `astral-sh/setup-uv` action was bumped so the Python toolchain setup stays aligned with the ecosystem.
-- **Paper cuts were removed.** A couple of small-but-annoying config fixes landed (explicit PR pattern, missing Python version directive), and versions were normalized after an earlier mismatch.
-
-<details>
-<summary><strong>Full commit / PR list (raw)</strong></summary>
-
-### :hammer_and_wrench: Tooling Changes
-
-- **deps-dev:** bump the dependencies group across 1 directory with 5 updates ([#32](https://github.com/ChecKMarKDevTools/rai-lint/issues/32)) ([09dae6e](https://github.com/ChecKMarKDevTools/rai-lint/commit/09dae6e1e630414c261fb2c0929a71bf2a0463b3))
-- **deps:** bump astral-sh/setup-uv in the dependencies group ([#33](https://github.com/ChecKMarKDevTools/rai-lint/issues/33)) ([d38753a](https://github.com/ChecKMarKDevTools/rai-lint/commit/d38753a33584d1f8411bca0467546868f0c4cdf4))
-- revert package versions to 0.1.1 ([9fd042c](https://github.com/ChecKMarKDevTools/rai-lint/commit/9fd042ce77744ce6a88fab56cda0d682bc658643)) and then later put back
-
-### :robot: Automation
-
-- enhance security audit workflow and release configuration ([0c4ae07](https://github.com/ChecKMarKDevTools/rai-lint/commit/0c4ae07368dd9b45cabebc29de37b90d19196bf8))
-- fix release-please single-tag release wiring ([#34](https://github.com/ChecKMarKDevTools/rai-lint/issues/34)) ([e567c11](https://github.com/ChecKMarKDevTools/rai-lint/commit/e567c11d0ecd444289ca3ae1cb20844684a45b6d))
-- update release-please configuration ([6e0988a](https://github.com/ChecKMarKDevTools/rai-lint/commit/6e0988a990f1c033409ba7604de3164d777c2025))
-
-</details>
-
 ## [0.1.2](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.1...v0.1.2) (2025-12-30) 📡 📡
 
 > _Ok, I lied._ No pottery. This turned into cleanup, config alignment, and wrestling CI until it stopped freelancing.
