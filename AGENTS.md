@@ -6,6 +6,22 @@
 
 2. **Minimum Viable Product Focus**: Aim for the simplest working solution. Documentation should be concise and practical, not exhaustive. Avoid over-engineering for edge cases.
 
+## Changelog Rewrite Style (AI-Optimized) 😈📝
+
+When asked to **rewrite** `CHANGELOG.md` (or draft release notes), optimize for human readers (narrative, scannable, link-rich).
+
+- **Tone**: cheeky + humorous; emoji are allowed and encouraged.
+- **No commit-by-commit lists**: do **not** enumerate individual commits or SHAs.
+- **Do** summarize **highlights** only (grouped bullets like “Fixes”, “Changes”, “Housekeeping”).
+- **Structure per release**:
+  - Version header with GitHub compare link: `## [X.Y.Z](compare/url) (date) emoji`
+  - Opening quote/summary explaining release theme
+  - "Highlights" section with narrative bullets (explain **why**, not just what)
+- **Link strategy**:
+  - Version header links to GitHub compare view
+  - Do NOT link individual PRs/commits in content bullets
+- Preserve existing project constraints elsewhere in this doc (e.g., don’t call out “breaking changes” until a stable release exists).
+
 ## AI Attribution Footer
 
 When committing changes in this project, I must include one of these five footer formats:
