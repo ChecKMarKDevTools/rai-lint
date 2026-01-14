@@ -188,7 +188,7 @@ pre-push:
 commit-msg:
   commands:
     commitlint:
-      run: npx commitlint --edit {1}
+      run: npx --no-install commitlint --edit {1}
 ```
 
 </details>
@@ -197,7 +197,7 @@ commit-msg:
 <summary><b>Husky</b></summary>
 
 ```bash
-npx husky add .husky/commit-msg 'npx commitlint --edit $1'
+npx husky add .husky/commit-msg 'npx --no-install commitlint --edit $1'
 ```
 
 </details>

@@ -59,7 +59,7 @@ Create `lefthook.yml`:
 commit-msg:
   commands:
     commitlint:
-      run: npx commitlint --edit {1}
+      run: npx --no-install commitlint --edit {1}
 ```
 
 Install hooks:
@@ -73,7 +73,7 @@ npx lefthook install
 ```bash
 npm install --save-dev husky
 npx husky install
-npx husky add .husky/commit-msg 'npx commitlint --edit $1'
+npx husky add .husky/commit-msg 'npx --no-install commitlint --edit $1'
 ```
 
 ---
@@ -214,7 +214,7 @@ gitlint --debug
 commit-msg:
   commands:
     commitlint:
-      run: npx commitlint --edit {1}
+      run: npx --no-install commitlint --edit {1}
     gitlint:
       run: gitlint --msg-filename {1}
 ```
@@ -227,7 +227,7 @@ repos:
     hooks:
       - id: commitlint
         name: commitlint
-        entry: npx commitlint --edit
+        entry: npx --no-install commitlint --edit
         language: system
         stages: [commit-msg]
 

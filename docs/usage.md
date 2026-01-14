@@ -110,25 +110,25 @@ Co-authored-by: GitHub Copilot <copilot@github.com>
 Test a commit message:
 
 ```bash
-echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
+echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx --no-install commitlint
 ```
 
 Validate the last commit:
 
 ```bash
-npx commitlint --from HEAD~1
+npx --no-install commitlint --from HEAD~1
 ```
 
 Validate a specific commit:
 
 ```bash
-npx commitlint --from abc123f
+npx --no-install commitlint --from abc123f
 ```
 
 Validate a commit range:
 
 ```bash
-npx commitlint --from main --to develop
+npx --no-install commitlint --from main --to develop
 ```
 
 ### Python / Gitlint
@@ -190,7 +190,7 @@ jobs:
 
       - run: npm ci
 
-      - run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.sha }}
+      - run: npx --no-install commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.sha }}
 ```
 
 ### GitLab CI
@@ -201,7 +201,7 @@ commitlint:
   image: node:20
   script:
     - npm ci
-    - npx commitlint --from $CI_MERGE_REQUEST_TARGET_BRANCH_SHA --to HEAD
+    - npx --no-install commitlint --from $CI_MERGE_REQUEST_TARGET_BRANCH_SHA --to HEAD
   only:
     - merge_requests
 ```
@@ -212,7 +212,7 @@ commitlint:
 stage('Commit Lint') {
   steps {
     sh 'npm ci'
-    sh 'npx commitlint --from origin/main --to HEAD'
+    sh 'npx --no-install commitlint --from origin/main --to HEAD'
   }
 }
 ```

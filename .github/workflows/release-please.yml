@@ -279,18 +279,48 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v6
+
       - name: Download commitlint test results
         uses: actions/download-artifact@v7
 
       - name: Display files
         run: ls -R .
 
+      - name: Generate GitHub release notes from CHANGELOG
+        id: notes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="$(cat version.txt)"
+
+          awk -v ver="$version" '
+            $0 ~ "^## \\[" ver "\\]" { printing=1 }
+            printing==1 {
+              if (started==1 && $0 ~ "^## \\[[0-9]" && $0 !~ "^## \\[" ver "\\]") exit
+              print
+              started=1
+            }
+          ' CHANGELOG.md > release-notes.md
+
+          if [ ! -s release-notes.md ]; then
+            echo "Failed to extract release notes for version $version from CHANGELOG.md" >&2
+            exit 1
+          fi
+
+          {
+            echo ""
+            echo "---"
+            echo "[Full changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)"
+          } >> release-notes.md
+
       - name: Publish GitHub release
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: ${{ needs.release-please.outputs.release-tag-name }}
           name: ${{ github.event.repository.name }} ${{ needs.release-please.outputs.release-tag-name }}
-          draft: true
+          body_path: release-notes.md
           files: |
             commitlint-test-results/commitlint-test-results.zip
             gitlint-test-results/gitlint-test-results.zip

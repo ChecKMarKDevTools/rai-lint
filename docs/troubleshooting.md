@@ -52,7 +52,7 @@ npx lefthook install
 
 ```bash
 npx husky install
-npx husky add .husky/commit-msg 'npx commitlint --edit $1'
+npx husky add .husky/commit-msg 'npx --no-install commitlint --edit $1'
 ```
 
 **Verify**:
@@ -193,7 +193,7 @@ ls -la .git/hooks/commit-msg
 echo "Generated-by: GitHub Copilot <copilot@github.com>" | xxd
 
 # Test the pattern
-echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
+echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx --no-install commitlint
 ```
 
 ---
@@ -282,16 +282,16 @@ Generated-by: GitHub Copilot <copilot@github.com>
 
 ```bash
 # Test a commit message
-echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx commitlint
+echo "feat: test\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx --no-install commitlint
 
 # Verbose output
-npx commitlint --verbose --edit .git/COMMIT_EDITMSG
+npx --no-install commitlint --verbose --edit .git/COMMIT_EDITMSG
 
 # Debug mode
-DEBUG=* npx commitlint --edit .git/COMMIT_EDITMSG
+DEBUG=* npx --no-install commitlint --edit .git/COMMIT_EDITMSG
 
 # Check config
-npx commitlint --print-config
+npx --no-install commitlint --print-config
 ```
 
 ### Python
