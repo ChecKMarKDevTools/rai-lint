@@ -48,8 +48,8 @@
   },
   "homepage": "https://github.com/ChecKMarKDevTools/rai-lint#readme",
   "peerDependencies": {
-    "@commitlint/lint": ">=19.0.0",
-    "@commitlint/types": ">=19.0.0"
+    "@commitlint/lint": "^19.0.0 || ^20.0.0",
+    "@commitlint/types": "^19.0.0 || ^20.0.0"
   },
   "devDependencies": {
     "@commitlint/types": "^20.0.0",
