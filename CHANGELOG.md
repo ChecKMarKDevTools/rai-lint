@@ -8,6 +8,12 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
+## [0.1.4](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.3...v0.1.4) (2026-01-14) 🧹
+
+> _Because even the tiniest version bump deserves a drumroll, or at least a polite cough._
+
+A quick patch to fix the commitlint package version that was apparently auditioning for a game of hide-and-seek. No user-facing changes, just the machinery getting its act together.
+
 ## [0.1.3](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.2...v0.1.3) (2026-01-08) 📡📡📡
 
 > _A boring release, in the best possible way:_ this one is about making CI/release automation less fragile and keeping dependencies current.
