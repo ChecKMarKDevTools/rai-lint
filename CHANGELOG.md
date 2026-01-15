@@ -8,12 +8,11 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.4](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.3...v0.1.4) (2026-01-14)
+## [0.1.4](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.3...v0.1.4) (2026-01-14) 🧹
 
+> _Because even the tiniest version bump deserves a drumroll, or at least a polite cough._
 
-### :broom: Tending the Edges
-
-* fix commitlint package version ([#37](https://github.com/ChecKMarKDevTools/rai-lint/issues/37)) ([1a6ee58](https://github.com/ChecKMarKDevTools/rai-lint/commit/1a6ee58705690f9c30e1e46929aa1a69508ce932))
+A quick patch to fix the commitlint package version that was apparently auditioning for a game of hide-and-seek. No user-facing changes, just the machinery getting its act together.
 
 ## [0.1.3](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.2...v0.1.3) (2026-01-08) 📡📡📡
 
