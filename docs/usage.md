@@ -12,6 +12,34 @@ CheckMarK RAI Lint enforces AI attribution in Git commit trailers. No attributio
 
 Five footer patterns. All case-insensitive. Pick **one** that represents the **majority AI contribution**.
 
+> [!TIP]
+> While the `Signed-off-by` footer is optional, it's strongly recommended for complete accountability. It serves as YOUR human stamp confirming you reviewed and take responsibility for the AI attribution. Enable the `signed-off-by-exists` rule to enforce it.
+
+### Signed-off-by
+
+**Recommended for complete accountability.** This is YOUR stamp confirming you reviewed and take responsibility for the AI attribution.
+
+**Add it automatically:** `git commit -s` (or `--signoff`)
+
+```bash
+# Your AI attribution prompt generates:
+git commit -m "feat: implement user authentication
+
+Add JWT-based authentication with refresh tokens and secure session management.
+
+Authored-by: Jane Doe <jane@example.com>"
+
+# Then add Signed-off-by with the -s flag:
+git commit --amend -s
+
+# Or combine in one step:
+git commit -s -m "feat: implement user authentication
+
+Add JWT-based authentication with refresh tokens and secure session management.
+
+Authored-by: Jane Doe <jane@example.com>"
+```
+
 ### 1. Authored-by
 
 **When**: Zero AI involvement. You wrote everything.
@@ -107,10 +135,10 @@ Co-authored-by: GitHub Copilot <copilot@github.com>
 
 ### Node.js / Commitlint
 
-Test a commit message:
+Test a commit message (note: you'd normally use `git commit -s`):
 
 ```bash
-echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | npx --no-install commitlint
+echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Your Name <your.email@example.com>" | npx --no-install commitlint
 ```
 
 Validate the last commit:
@@ -133,7 +161,7 @@ npx --no-install commitlint --from main --to develop
 
 ### Python / Gitlint
 
-Lint the last commit:
+Lint the last commit (assumes you used `git commit -s`):
 
 ```bash
 gitlint
@@ -151,10 +179,10 @@ Lint from a file:
 gitlint --msg-filename .git/COMMIT_EDITMSG
 ```
 
-Test a message via stdin:
+Test a message via stdin (note: you'd normally use `git commit -s`):
 
 ```bash
-echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>" | gitlint
+echo "feat: add feature\n\nGenerated-by: GitHub Copilot <copilot@github.com>\nSigned-off-by: Your Name <your.email@example.com>" | gitlint
 ```
 
 ---
@@ -250,10 +278,16 @@ stage('Commit Lint') {
 
 ### Amending Commits
 
-Add a footer to the previous commit:
+Add Signed-off-by to the previous commit:
 
 ```bash
-git commit --amend -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
+git commit --amend -s --no-edit
+```
+
+Or if you need to add an AI attribution footer too:
+
+```bash
+git commit --amend -s -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
 ```
 
 > [!WARNING]
@@ -261,16 +295,17 @@ git commit --amend -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub 
 
 ### Rebasing
 
-When rebasing, ensure all commits include RAI footers:
+When rebasing, ensure all commits include the required RAI footer (and Signed-off-by if you're enforcing it):
 
 ```bash
 git rebase -i HEAD~5
 ```
 
-For each commit without a footer, use `edit`:
+For each commit without footers, use `edit`:
 
 ```bash
-git commit --amend -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
+# Add AI attribution footer and sign off in one step
+git commit --amend -s -m "$(git log -1 --pretty=%B)" -m "" -m "Assisted-by: GitHub Copilot <copilot@github.com>"
 git rebase --continue
 ```
 

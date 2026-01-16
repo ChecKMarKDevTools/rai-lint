@@ -34,15 +34,17 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ---
 
-[Installation](#-installation) • [Quick Start](#-quick-start) • [Attribution Formats](#%EF%B8%8F-ai-attribution-formats) • [Documentation](/docs)
+[Installation](#installation-) • [Quick Start](#quick-start-) • [Required Commit Footers](#required-commit-footers-) • [Documentation](/docs)
 
 </div>
 
 ---
 
-## 🤖 What is this?
+## What is this? 🤖
 
 CheckMarK RAI Lint enforces **Responsible AI (RAI) attribution** in every commit. No more "who wrote this?" moments. No more mystery code. Just honest, trackable AI contributions.
+
+**Read the full story:** [Did AI Erase Attribution? Your Git History Is Missing a Co-Author](https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l)
 
 ```mermaid
 %%{init: {'theme':'dark'}}%%
@@ -60,7 +62,7 @@ Because transparency matters. When AI writes code, everyone should know. This is
 
 ---
 
-## 🎯 Features
+## Features 🎯
 
 <table>
 <tr>
@@ -91,9 +93,18 @@ Works out-of-the-box with sensible defaults. Customize when ready.
 
 ---
 
-## 🏷️ AI Attribution Formats
+## Required Commit Footers 🏷️
 
-Every commit **must** include one of these Git trailer footers:
+Every commit **must** include:
+
+1. **One AI attribution footer** (pick the one that fits)
+2. **Signed-off-by footer** (recommended for complete accountability)
+
+> **💡 Best Practice:** While only the RAI footer is strictly enforced, combining it with `Signed-off-by` creates a complete audit trail—AI attribution plus human accountability. We strongly recommend enforcing both.
+
+### AI Attribution Footers
+
+Pick **one** of these based on AI involvement:
 
 <table>
 <thead>
@@ -132,12 +143,22 @@ Every commit **must** include one of these Git trailer footers:
 </tbody>
 </table>
 
+### Signed-off-by Footer
+
+**Human accountability.** This is YOUR stamp confirming you reviewed and take responsibility for the AI attribution above.
+
+Format: `Signed-off-by: Your Name <your.email@example.com>`
+
+**Automate it:** `git commit -s` (or `--signoff`)
+
 > [!NOTE]
-> All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers). Email format in `<>` is encouraged but not required.
+> All patterns are case-insensitive and follow the [Git trailer format](https://git-scm.com/docs/git-interpret-trailers). Email addresses **must** use angle brackets (`Name <email@example.com>`) — this is stricter than Git's spec but matches Git's own convention and ensures consistency.
+>
+> **By default, only RAI footers are enforced.** The `signed-off-by-exists` rule is available separately and can be enabled in your configuration for complete accountability.
 
 ---
 
-## 📦 Installation
+## Installation 📦
 
 ### Node.js / Commitlint
 
@@ -153,6 +174,7 @@ export default {
   plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
+    'signed-off-by-exists': [2, 'always'],
   },
 };
 ```
@@ -167,12 +189,12 @@ uv add gitlint-rai
 
 ```ini
 [general]
-contrib = gitlint_rai.rules.RaiFooterExists
+contrib = gitlint_rai.rules.RaiFooterExists,gitlint_rai.rules.SignedOffByExists
 ```
 
 ---
 
-## 🚀 Quick Start
+## Quick Start 🚀
 
 ### Hook Integration
 
@@ -221,7 +243,7 @@ repos:
 
 ---
 
-## 🛠️ Monorepo Structure
+## Monorepo Structure 🛠️
 
 ```
 rai-lint/
@@ -246,13 +268,13 @@ rai-lint/
 
 ---
 
-## 🤝 Contributing
+## Contributing 🤝
 
 Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
-## 📄 License
+## License 📄
 
 Look, I'm not gonna hide behind a wall of legalese here.
 
@@ -270,7 +292,7 @@ Sound fair? Cool. Now go lint some commits. 🚀
 
 ---
 
-## 🫶 Show Some Love
+## Show Some Love 🫶
 
 If you find this project useful or want to support its development, consider starring the repo or connecting with me!
 

@@ -39,6 +39,8 @@ export default {
   plugins: ['@checkmarkdevtools/commitlint-plugin-rai'],
   rules: {
     'rai-footer-exists': [2, 'always'],
+    // Optional but recommended for complete accountability:
+    // 'signed-off-by-exists': [2, 'always'],
   },
 };
 ```
@@ -99,6 +101,9 @@ Create or update `.gitlint`:
 ```ini
 [general]
 contrib = gitlint_rai.rules.RaiFooterExists
+
+# Optional but recommended for complete accountability:
+# contrib = gitlint_rai.rules.RaiFooterExists,gitlint_rai.rules.SignedOffByExists
 ```
 
 ### 3. Set Up Git Hooks
