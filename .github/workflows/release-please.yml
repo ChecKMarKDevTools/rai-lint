@@ -45,7 +45,27 @@ jobs:
 
             tag="${{ steps.release.outputs.tag_name }}"
             if [ -z "$tag" ]; then
-              version="$(cat version.txt)"
+              manifest_version=""
+              if [ -f .release-please-manifest.json ]; then
+                manifest_version="$(jq -r '.["."] // empty' .release-please-manifest.json)"
+              fi
+
+              version_file_version=""
+              if [ -f version.txt ]; then
+                version_file_version="$(cat version.txt)"
+              fi
+
+              if [ -n "$manifest_version" ] && [ -n "$version_file_version" ] && [ "$manifest_version" != "$version_file_version" ]; then
+                echo "Version mismatch: .release-please-manifest.json ($manifest_version) != version.txt ($version_file_version)" >&2
+                exit 1
+              fi
+
+              version="${manifest_version:-$version_file_version}"
+              if [ -z "$version" ]; then
+                echo "Could not determine version from manifest or version.txt" >&2
+                exit 1
+              fi
+
               tag="v${version}"
             fi
             echo "tag_name=$tag" >> "$GITHUB_OUTPUT"
@@ -291,7 +311,17 @@ jobs:
         run: |
           set -euo pipefail
 
-          version="$(cat version.txt)"
+          tag="${{ needs.release-please.outputs.release-tag-name }}"
+          if [ -z "$tag" ]; then
+            echo "Release tag is empty; cannot generate release notes" >&2
+            exit 1
+          fi
+
+          version="${tag#v}"
+          if [ -z "$version" ]; then
+            echo "Failed to derive version from tag '$tag'" >&2
+            exit 1
+          fi
 
           awk -v ver="$version" '
             $0 ~ "^## \\[" ver "\\]" { printing=1 }
