@@ -8,12 +8,11 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
-## [0.1.6](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.5...v0.1.6) (2026-01-18)
+## [0.1.6](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.5...v0.1.6) (2026-01-18) 🤖
 
+> _Release Please has been gently informed what “initial” means._
 
-### :robot: Automation
-
-* adjust release-please initial version settings ([78c267c](https://github.com/ChecKMarKDevTools/rai-lint/commit/78c267c8d1f72a2a01e86512302420dd0f7e3a1d))
+Pinned Release Please’s initial version and enforced the single-tag scheme at the top level, so it stops trying to “bootstrap” a repo that already has tags and a manifest.
 
 ## [0.1.5](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.4...v0.1.5) (2026-01-18) 🧯
 
