@@ -37,38 +37,41 @@ jobs:
         run: |
           set -euo pipefail
 
-          releases_created="${{ steps.release.outputs.releases_created }}"
-          release_created="${{ steps.release.outputs.release_created }}"
+          # Release Please is configured with "skip-github-release": true, so the action outputs
+          # for "release created" are not a reliable gate for publish jobs.
+          #
+          # Instead, detect a merged release PR by looking at the HEAD commit message + changed files.
+          changed_files="$(git show --name-only --pretty='' HEAD)"
 
-          if [ "$releases_created" = "true" ] || [ "$release_created" = "true" ]; then
+          is_release=false
+          if echo "$changed_files" | grep -qE '^version\.txt$' && echo "$changed_files" | grep -qE '^CHANGELOG\.md$'; then
+            is_release=true
+          fi
+
+          if [ "$is_release" = "true" ]; then
             echo "is_release=true" >> "$GITHUB_OUTPUT"
 
-            tag="${{ steps.release.outputs.tag_name }}"
-            if [ -z "$tag" ]; then
-              manifest_version=""
-              if [ -f .release-please-manifest.json ]; then
-                manifest_version="$(jq -r '.["."] // empty' .release-please-manifest.json)"
-              fi
+            if [ ! -f version.txt ]; then
+              echo "version.txt missing; cannot derive release tag" >&2
+              exit 1
+            fi
 
-              version_file_version=""
-              if [ -f version.txt ]; then
-                version_file_version="$(cat version.txt)"
-              fi
+            version_file_version="$(cat version.txt)"
+            if [ -z "$version_file_version" ]; then
+              echo "version.txt is empty; cannot derive release tag" >&2
+              exit 1
+            fi
 
-              if [ -n "$manifest_version" ] && [ -n "$version_file_version" ] && [ "$manifest_version" != "$version_file_version" ]; then
+            # Optional sanity-check: manifest should match version.txt when present.
+            if [ -f .release-please-manifest.json ]; then
+              manifest_version="$(jq -r '.["."] // empty' .release-please-manifest.json)"
+              if [ -n "$manifest_version" ] && [ "$manifest_version" != "$version_file_version" ]; then
                 echo "Version mismatch: .release-please-manifest.json ($manifest_version) != version.txt ($version_file_version)" >&2
                 exit 1
               fi
-
-              version="${manifest_version:-$version_file_version}"
-              if [ -z "$version" ]; then
-                echo "Could not determine version from manifest or version.txt" >&2
-                exit 1
-              fi
-
-              tag="v${version}"
             fi
-            echo "tag_name=$tag" >> "$GITHUB_OUTPUT"
+
+            echo "tag_name=v${version_file_version}" >> "$GITHUB_OUTPUT"
           else
             echo "is_release=false" >> "$GITHUB_OUTPUT"
             echo "tag_name=" >> "$GITHUB_OUTPUT"
