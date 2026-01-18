@@ -8,6 +8,18 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
+## [0.1.5](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.4...v0.1.5) (2026-01-18)
+
+
+### :beetle: Things That Were Broken
+
+* **commitlint-plugin:** relax peer deps to restore install ([5587ade](https://github.com/ChecKMarKDevTools/rai-lint/commit/5587ade044f26dc7c0f451f7f0dc6f0d9eec0b84))
+
+
+### :book: Words and Explanations
+
+* enhance documentation with Signed-off-by guidance ([1a8d29c](https://github.com/ChecKMarKDevTools/rai-lint/commit/1a8d29c681a3aa14e2c7f392bf96e85fce67e39d))
+
 ## [0.1.4](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.3...v0.1.4) (2026-01-14) 🧹
 
 > _Because even the tiniest version bump deserves a drumroll, or at least a polite cough._
