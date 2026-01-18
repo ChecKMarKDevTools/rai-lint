@@ -18,8 +18,8 @@ jobs:
       contents: write
       pull-requests: write
     outputs:
-      is-release: ${{ steps.detect.outputs.is_release }}
-      release-tag-name: ${{ steps.detect.outputs.tag_name }}
+      is-release: ${{ steps.release.outputs.release_created }}
+      release-tag-name: ${{ steps.release.outputs.tag_name }}
 
     steps:
       - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
@@ -28,34 +28,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 2
-
-      - name: Detect release commit + tag
-        id: detect
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if ! git rev-parse --verify HEAD^ >/dev/null 2>&1; then
-            echo "is_release=false" >> "$GITHUB_OUTPUT"
-            echo "tag_name=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          changed="$(git diff --name-only HEAD^ HEAD || true)"
-
-          if echo "$changed" | grep -Eq '^(version\.txt|CHANGELOG\.md|\.release-please-manifest\.json)$'; then
-            version="$(cat version.txt)"
-            tag="v${version}"
-            echo "is_release=true" >> "$GITHUB_OUTPUT"
-            echo "tag_name=$tag" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_release=false" >> "$GITHUB_OUTPUT"
-            echo "tag_name=" >> "$GITHUB_OUTPUT"
-          fi
 
   test:
     needs: release-please
@@ -278,6 +250,7 @@ jobs:
     timeout-minutes: 4
     permissions:
       contents: write
+      issues: write
     steps:
       - uses: actions/checkout@v6
 
@@ -326,6 +299,39 @@ jobs:
             gitlint-test-results/gitlint-test-results.zip
             commitlint-package/commitlint-package.zip
             gitlint-package/gitlint-package.zip
+
+      - name: Remove release:pending label from release PRs
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const label = 'release:pending';
+            const tag = '${{ needs.release-please.outputs.release-tag-name }}';
+
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              per_page: 100,
+            });
+
+            for (const pr of prs) {
+              const headRef = pr.head && pr.head.ref ? pr.head.ref : '';
+              const title = pr.title || '';
+              if (headRef.startsWith('release-please') || (tag && title.includes(tag.trim()))) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    name: label,
+                  });
+                  console.log(`Removed label ${label} from PR #${pr.number}`);
+                } catch (e) {
+                  // ignore missing-label errors
+                  console.log(`Could not remove label from PR #${pr.number}: ${e.message}`);
+                }
+              }
+            }
 
       - name: Summary
         if: always()
