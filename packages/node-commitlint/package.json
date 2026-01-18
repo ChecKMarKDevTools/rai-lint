@@ -51,6 +51,14 @@
     "@commitlint/lint": "^19.0.0 || ^20.0.0",
     "@commitlint/types": "^19.0.0 || ^20.0.0"
   },
+  "peerDependenciesMeta": {
+    "@commitlint/lint": {
+      "optional": true
+    },
+    "@commitlint/types": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@commitlint/types": "^20.0.0",
     "@types/node": "^25.0.3",
