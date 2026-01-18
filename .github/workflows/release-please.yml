@@ -18,8 +18,8 @@ jobs:
       contents: write
       pull-requests: write
     outputs:
-      is-release: ${{ steps.release.outputs.release_created }}
-      release-tag-name: ${{ steps.release.outputs.tag_name }}
+      is-release: ${{ steps.meta.outputs.is_release }}
+      release-tag-name: ${{ steps.meta.outputs.tag_name }}
 
     steps:
       - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
@@ -28,6 +28,31 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      - uses: actions/checkout@v6
+
+      - name: Derive release outputs
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          releases_created="${{ steps.release.outputs.releases_created }}"
+          release_created="${{ steps.release.outputs.release_created }}"
+
+          if [ "$releases_created" = "true" ] || [ "$release_created" = "true" ]; then
+            echo "is_release=true" >> "$GITHUB_OUTPUT"
+
+            tag="${{ steps.release.outputs.tag_name }}"
+            if [ -z "$tag" ]; then
+              version="$(cat version.txt)"
+              tag="v${version}"
+            fi
+            echo "tag_name=$tag" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_release=false" >> "$GITHUB_OUTPUT"
+            echo "tag_name=" >> "$GITHUB_OUTPUT"
+          fi
 
   test:
     needs: release-please
