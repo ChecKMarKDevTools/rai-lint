@@ -8,6 +8,13 @@ All notable changes to `gitlint-rai` are documented here so I don’t have to re
 
 ---
 
+## [0.1.6](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.5...v0.1.6) (2026-01-18)
+
+
+### :robot: Automation
+
+* adjust release-please initial version settings ([78c267c](https://github.com/ChecKMarKDevTools/rai-lint/commit/78c267c8d1f72a2a01e86512302420dd0f7e3a1d))
+
 ## [0.1.5](https://github.com/ChecKMarKDevTools/rai-lint/compare/v0.1.4...v0.1.5) (2026-01-18) 🧯
 
 > _A small patch with very little drama, which is exactly the point._
