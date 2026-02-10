@@ -13,69 +13,23 @@ concurrency:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
     permissions:
       contents: write
       pull-requests: write
     outputs:
-      is-release: ${{ steps.meta.outputs.is_release }}
-      release-tag-name: ${{ steps.meta.outputs.tag_name }}
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      node--release_created: ${{ steps.release.outputs['packages/node-commitlint--release_created'] }}
+      node--tag_name: ${{ steps.release.outputs['packages/node-commitlint--tag_name'] }}
+      python--release_created: ${{ steps.release.outputs['packages/python-gitlint--release_created'] }}
+      python--tag_name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
 
     steps:
-      - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-
-      - uses: actions/checkout@v6
-
-      - name: Derive release outputs
-        id: meta
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          # Release Please is configured with "skip-github-release": true, so the action outputs
-          # for "release created" are not a reliable gate for publish jobs.
-          #
-          # Instead, detect a merged release PR by looking at the HEAD commit message + changed files.
-          changed_files="$(git show --name-only --pretty='' HEAD)"
-
-          is_release=false
-          if echo "$changed_files" | grep -qE '^version\.txt$' && echo "$changed_files" | grep -qE '^CHANGELOG\.md$'; then
-            is_release=true
-          fi
-
-          if [ "$is_release" = "true" ]; then
-            echo "is_release=true" >> "$GITHUB_OUTPUT"
-
-            if [ ! -f version.txt ]; then
-              echo "version.txt missing; cannot derive release tag" >&2
-              exit 1
-            fi
-
-            version_file_version="$(cat version.txt)"
-            if [ -z "$version_file_version" ]; then
-              echo "version.txt is empty; cannot derive release tag" >&2
-              exit 1
-            fi
-
-            # Optional sanity-check: manifest should match version.txt when present.
-            if [ -f .release-please-manifest.json ]; then
-              manifest_version="$(jq -r '.["."] // empty' .release-please-manifest.json)"
-              if [ -n "$manifest_version" ] && [ "$manifest_version" != "$version_file_version" ]; then
-                echo "Version mismatch: .release-please-manifest.json ($manifest_version) != version.txt ($version_file_version)" >&2
-                exit 1
-              fi
-            fi
-
-            echo "tag_name=v${version_file_version}" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_release=false" >> "$GITHUB_OUTPUT"
-            echo "tag_name=" >> "$GITHUB_OUTPUT"
-          fi
 
   test:
     needs: release-please
@@ -105,7 +59,6 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts
           zip -j artifacts/commitlint-test-results.zip packages/node-commitlint/reports/lcov.info packages/node-commitlint/reports/junit-vitest.xml
-          ls -l artifacts
 
       - name: Upload Node test results zip
         uses: actions/upload-artifact@v6
@@ -141,7 +94,6 @@ jobs:
           set -euo pipefail
           mkdir -p ../../artifacts
           zip -j ../../artifacts/gitlint-test-results.zip reports/coverage.xml reports/junit-py.xml
-          ls -l ../../artifacts
 
       - name: Upload Python test results zip
         uses: actions/upload-artifact@v6
@@ -153,8 +105,8 @@ jobs:
   release-node:
     needs: [release-please, test]
     runs-on: ubuntu-latest
-    timeout-minutes: 8
-    if: ${{ needs.release-please.outputs.is-release == 'true' }}
+    timeout-minutes: 10
+    if: ${{ needs.release-please.outputs.node--release_created == 'true' }}
     permissions:
       contents: write
       id-token: write
@@ -204,25 +156,33 @@ jobs:
             echo "No package .tgz found"
             exit 1
           fi
-          zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json CHANGELOG.md
-          ls -l artifacts
-
-      - name: Upload node package zip
-        uses: actions/upload-artifact@v6
-        with:
-          name: commitlint-package
-          path: artifacts/commitlint-package.zip
-          retention-days: 60
+          zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json CHANGELOG.md || zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json packages/node-commitlint/CHANGELOG.md
 
       - name: Publish to npm
         id: publish
         run: npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Download test results
+        uses: actions/download-artifact@v7
+        with:
+          name: commitlint-test-results
+          path: artifacts
+
+      - name: Upload assets to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ needs.release-please.outputs.node--tag_name }} \
+            artifacts/commitlint-package.zip \
+            artifacts/commitlint-test-results.zip
 
   release-python:
     needs: [release-please, test]
     runs-on: ubuntu-latest
-    timeout-minutes: 8
-    if: ${{ needs.release-please.outputs.is-release == 'true' }}
+    timeout-minutes: 10
+    if: ${{ needs.release-please.outputs.python--release_created == 'true' }}
     permissions:
       contents: write
       id-token: write
@@ -274,15 +234,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "${GITHUB_WORKSPACE}/artifacts"
-          zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json "${GITHUB_WORKSPACE}/CHANGELOG.md"
-          ls -l "${GITHUB_WORKSPACE}/artifacts"
-
-      - name: Upload python package zip
-        uses: actions/upload-artifact@v6
-        with:
-          name: gitlint-package
-          path: artifacts/gitlint-package.zip
-          retention-days: 60
+          # Same changelog logic as above
+          zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json "${GITHUB_WORKSPACE}/CHANGELOG.md" || zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json CHANGELOG.md
 
       - name: Publish to PyPI with Trusted Publishing
         id: publish
@@ -291,131 +244,16 @@ jobs:
           packages-dir: packages/python-gitlint/dist/
           attestations: true
 
-  finalize-release:
-    needs: [release-please, release-node, release-python]
-    if: ${{ needs.release-please.outputs.is-release == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 4
-    permissions:
-      contents: write
-      issues: write
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Download commitlint test results
+      - name: Download test results
         uses: actions/download-artifact@v7
-
-      - name: Display files
-        run: ls -R .
-
-      - name: Generate GitHub release notes from CHANGELOG
-        id: notes
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          tag="${{ needs.release-please.outputs.release-tag-name }}"
-          if [ -z "$tag" ]; then
-            echo "Release tag is empty; cannot generate release notes" >&2
-            exit 1
-          fi
-
-          version="${tag#v}"
-          if [ -z "$version" ]; then
-            echo "Failed to derive version from tag '$tag'" >&2
-            exit 1
-          fi
-
-          awk -v ver="$version" '
-            $0 ~ "^## \\[" ver "\\]" { printing=1 }
-            printing==1 {
-              if (started==1 && $0 ~ "^## \\[[0-9]" && $0 !~ "^## \\[" ver "\\]") exit
-              print
-              started=1
-            }
-          ' CHANGELOG.md > release-notes.md
-
-          if [ ! -s release-notes.md ]; then
-            echo "Failed to extract release notes for version $version from CHANGELOG.md" >&2
-            exit 1
-          fi
-
-          {
-            echo ""
-            echo "---"
-            echo "[Full changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)"
-          } >> release-notes.md
-
-      - name: Publish GitHub release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
-          tag_name: ${{ needs.release-please.outputs.release-tag-name }}
-          name: ${{ github.event.repository.name }} ${{ needs.release-please.outputs.release-tag-name }}
-          body_path: release-notes.md
-          files: |
-            commitlint-test-results/commitlint-test-results.zip
-            gitlint-test-results/gitlint-test-results.zip
-            commitlint-package/commitlint-package.zip
-            gitlint-package/gitlint-package.zip
+          name: gitlint-test-results
+          path: artifacts
 
-      - name: Remove release:pending label from release PRs
-        uses: actions/github-script@v8
-        with:
-          script: |
-            const label = 'release:pending';
-            const tag = '${{ needs.release-please.outputs.release-tag-name }}';
-
-            const { data: prs } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'all',
-              per_page: 100,
-            });
-
-            for (const pr of prs) {
-              const headRef = pr.head && pr.head.ref ? pr.head.ref : '';
-              const title = pr.title || '';
-              if (headRef.startsWith('release-please') || (tag && title.includes(tag.trim()))) {
-                try {
-                  await github.rest.issues.removeLabel({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: pr.number,
-                    name: label,
-                  });
-                  console.log(`Removed label ${label} from PR #${pr.number}`);
-                } catch (e) {
-                  // ignore missing-label errors
-                  console.log(`Could not remove label from PR #${pr.number}: ${e.message}`);
-                }
-              }
-            }
-
-      - name: Summary
-        if: always()
+      - name: Upload assets to Release
         env:
-          JOB_STATUS: ${{ job.status }}
-          TAG_NAME: ${{ needs.release-please.outputs.release-tag-name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          icon() {
-            case "$1" in
-              success) echo "✅" ;;
-              failure) echo "❌" ;;
-              cancelled) echo "🛑" ;;
-              skipped) echo "⏭️" ;;
-              *) echo "❓" ;;
-            esac
-          }
-
-          echo "### Release Summary $(icon \"${JOB_STATUS}\")" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Tag:** \`${TAG_NAME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Job status:** \`${JOB_STATUS}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Release:** https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}" >> $GITHUB_STEP_SUMMARY
-          echo "**Coverage:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-
-          if [ "${JOB_STATUS}" != "success" ]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Job did not succeed; failing summary step so it isn't a misleading green check." >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
+          gh release upload ${{ needs.release-please.outputs.python--tag_name }} \
+            "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" \
+            artifacts/gitlint-test-results.zip
