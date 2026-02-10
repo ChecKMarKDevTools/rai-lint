@@ -13,6 +13,7 @@ concurrency:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    timeout-minutes: 7
     permissions:
       contents: write
       pull-requests: write
@@ -24,7 +25,7 @@ jobs:
       python--tag_name: ${{ steps.release.outputs['packages/python-gitlint--tag_name'] }}
 
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -156,13 +157,11 @@ jobs:
             echo "No package .tgz found"
             exit 1
           fi
-          zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json CHANGELOG.md || zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json packages/node-commitlint/CHANGELOG.md
-
+          zip -j artifacts/commitlint-package.zip "$TGZ" packages/node-commitlint/sbom.json CHANGELOG.md
+          
       - name: Publish to npm
         id: publish
         run: npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Download test results
         uses: actions/download-artifact@v7
@@ -181,7 +180,7 @@ jobs:
   release-python:
     needs: [release-please, test]
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 7
     if: ${{ needs.release-please.outputs.python--release_created == 'true' }}
     permissions:
       contents: write
@@ -235,7 +234,7 @@ jobs:
           set -euo pipefail
           mkdir -p "${GITHUB_WORKSPACE}/artifacts"
           # Same changelog logic as above
-          zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json "${GITHUB_WORKSPACE}/CHANGELOG.md" || zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json CHANGELOG.md
+          zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json "${GITHUB_WORKSPACE}/CHANGELOG.md"
 
       - name: Publish to PyPI with Trusted Publishing
         id: publish
