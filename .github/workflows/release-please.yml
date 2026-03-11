@@ -62,7 +62,7 @@ jobs:
           zip -j artifacts/commitlint-test-results.zip packages/node-commitlint/reports/lcov.info packages/node-commitlint/reports/junit-vitest.xml
 
       - name: Upload Node test results zip
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: commitlint-test-results
           path: artifacts/commitlint-test-results.zip
@@ -73,7 +73,7 @@ jobs:
           python-version: "3.12"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v7.2.1
+        uses: astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1
         with:
           enable-cache: true
 
@@ -97,7 +97,7 @@ jobs:
           zip -j ../../artifacts/gitlint-test-results.zip reports/coverage.xml reports/junit-py.xml
 
       - name: Upload Python test results zip
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: gitlint-test-results
           path: artifacts/gitlint-test-results.zip
@@ -142,7 +142,7 @@ jobs:
 
       - name: Generate build attestation
         id: attest
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             packages/node-commitlint/dist/**/*
@@ -164,7 +164,7 @@ jobs:
         run: npm --workspace=packages/node-commitlint publish --provenance --access public --ignore-scripts
 
       - name: Download test results
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: commitlint-test-results
           path: artifacts
@@ -196,7 +196,7 @@ jobs:
           python-version: "3.12"
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v7.2.1
+        uses: astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1
         with:
           enable-cache: true
 
@@ -225,7 +225,7 @@ jobs:
 
       - name: Generate build attestation
         id: attest
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: packages/python-gitlint/dist/*
 
@@ -234,7 +234,6 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "${GITHUB_WORKSPACE}/artifacts"
-          # Same changelog logic as above
           zip -j "${GITHUB_WORKSPACE}/artifacts/gitlint-package.zip" dist/* gitlint_rai/sbom/sbom.cdx.json "${GITHUB_WORKSPACE}/packages/python-gitlint/CHANGELOG.md"
 
       - name: Publish to PyPI with Trusted Publishing
@@ -245,7 +244,7 @@ jobs:
           attestations: true
 
       - name: Download test results
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: gitlint-test-results
           path: artifacts
