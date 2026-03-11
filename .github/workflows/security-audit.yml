@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@v6.0.2
         with:
           persist-credentials: false
 
@@ -41,7 +41,7 @@ jobs:
           ignore-unfixed: true
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: SARIF file
           path: results.sarif
@@ -60,14 +60,14 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@v6.0.2
 
       - name: Get Node version from package.json
         id: node-version
         run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        uses: actions/setup-node@v6.3.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
 
@@ -128,7 +128,7 @@ jobs:
             build-mode: none
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
