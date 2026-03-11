@@ -62,7 +62,7 @@ jobs:
           fail_ci_if_error: true
 
       - name: Upload Node coverage artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: node-coverage-${{ matrix.node-version }}
           path: packages/node-commitlint/reports
@@ -88,7 +88,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v7.2.1
+        uses: astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1
         with:
           enable-cache: true
 
@@ -115,10 +115,10 @@ jobs:
             --cov-report=term-missing
 
       - name: Upload Python coverage artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: python-coverage-${{ matrix.python-version }}
-          path: packages/python-gitlint/reports/coverage.xml
+          path: packages/python-gitlint/reports
           retention-days: 30
 
       - name: Upload Python coverage and test results to Codecov
@@ -175,14 +175,14 @@ jobs:
           fetch-depth: 0
 
       - name: Download Node coverage artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: node-coverage-*
           path: packages/node-commitlint/reports
           merge-multiple: true
 
       - name: Download Python coverage artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: python-coverage-*
           path: packages/python-gitlint/reports
