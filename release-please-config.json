@@ -1,33 +1,24 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
-  "initial-version": "0.1.5",
-  "include-component-in-tag": false,
   "packages": {
-    ".": {
-      "release-type": "simple",
-      "version-file": "version.txt",
+    "packages/node-commitlint": {
+      "release-type": "node",
+      "package-name": "@checkmarkdevtools/commitlint-plugin-rai",
       "changelog-path": "CHANGELOG.md",
-      "skip-github-release": true,
-      "extra-files": ["packages/node-commitlint/package.json", "packages/python-gitlint/gitlint_rai/version.py"],
       "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true,
-      "include-component-in-tag": false,
-      "changelog-sections": [
-        { "type": "feat", "section": ":seedling: New Capabilities" },
-        { "type": "fix", "section": ":beetle: Things That Were Broken" },
-        { "type": "perf", "section": ":zap: Faster or Lighter" },
-        { "type": "refactor", "section": ":wrench: Structural Cleanup" },
-        { "type": "docs", "section": ":book: Words and Explanations" },
-        { "type": "test", "section": ":test_tube: Guardrails" },
-        { "type": "build", "section": ":hammer_and_wrench: Tooling Changes" },
-        { "type": "ci", "section": ":robot: Automation" },
-        { "type": "chore", "section": ":broom: Tending the Edges" }
-      ]
+      "bump-patch-for-minor-pre-major": true
+    },
+    "packages/python-gitlint": {
+      "release-type": "python",
+      "package-name": "gitlint-rai",
+      "changelog-path": "CHANGELOG.md",
+      "version-file": "gitlint_rai/version.py",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
     }
   },
-  "pull-request-header": ":package: Release paperwork has been filed",
-  "group-pull-request-title-pattern": "chore: release ${branch}",
-  "separate-pull-requests": false,
-  "draft": true,
-  "include-v-in-tag": true
+  "include-component-in-tag": true,
+  "include-v-in-tag": true,
+  "separate-pull-requests": true,
+  "plugins": ["sentence-case"]
 }

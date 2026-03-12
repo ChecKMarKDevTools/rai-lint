@@ -25,12 +25,12 @@ jobs:
 
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           persist-credentials: false
 
       - name: "Run Trivy analysis"
-        uses: aquasecurity/trivy-action@97e0b3872f55f89b95b2f65b3dbab56962816478 # v0.34.2
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # 0.35.0
         with:
           scan-type: "repo"
           scan-ref: "."
@@ -41,14 +41,14 @@ jobs:
           ignore-unfixed: true
 
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: SARIF file
           path: results.sarif
           retention-days: 30
 
       - name: "Upload to code-scanning"
-        uses: github/codeql-action/upload-sarif@c793b717bc78562f491db7b0e93a3a178b099162 # v4.32.5
+        uses: github/codeql-action/upload-sarif@6bc82e05fd0ea64601dd4b465378bbcf57de0314 # v4.32.1
         with:
           sarif_file: results.sarif
 
@@ -60,14 +60,14 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
 
       - name: Get Node version from package.json
         id: node-version
         run: echo "version=$(jq -r '.engines.node' packages/node-commitlint/package.json)" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v6.3.0
         with:
           node-version: ${{ steps.node-version.outputs.version }}
 
@@ -75,7 +75,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1
+        uses: astral-sh/setup-uv@6ee6290f1cbc4156c0bdd66691b2c144ef8df19a # v7.4.0
         with:
           python-version: "3.12"
           enable-cache: true
@@ -128,12 +128,12 @@ jobs:
             build-mode: none
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
       - name: "Initialize CodeQL"
-        uses: github/codeql-action/init@c793b717bc78562f491db7b0e93a3a178b099162 # v4.32.5
+        uses: github/codeql-action/init@6bc82e05fd0ea64601dd4b465378bbcf57de0314 # v4.32.1
         with:
           languages: ${{ matrix.language }}
           packs: codeql/actions-queries
@@ -145,4 +145,4 @@ jobs:
           npm run build --if-present
 
       - name: "Perform CodeQL Analysis"
-        uses: github/codeql-action/analyze@c793b717bc78562f491db7b0e93a3a178b099162 # v4.32.5
+        uses: github/codeql-action/analyze@6bc82e05fd0ea64601dd4b465378bbcf57de0314 # v4.32.1
