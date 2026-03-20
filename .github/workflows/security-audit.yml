@@ -48,7 +48,7 @@ jobs:
           retention-days: 30
 
       - name: "Upload to code-scanning"
-        uses: github/codeql-action/upload-sarif@6bc82e05fd0ea64601dd4b465378bbcf57de0314 # v4.32.1
+        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
         with:
           sarif_file: results.sarif
 
@@ -75,7 +75,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@6ee6290f1cbc4156c0bdd66691b2c144ef8df19a # v7.4.0
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         with:
           python-version: "3.12"
           enable-cache: true
@@ -133,7 +133,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Initialize CodeQL"
-        uses: github/codeql-action/init@6bc82e05fd0ea64601dd4b465378bbcf57de0314 # v4.32.1
+        uses: github/codeql-action/init@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
         with:
           languages: ${{ matrix.language }}
           packs: codeql/actions-queries
@@ -145,4 +145,4 @@ jobs:
           npm run build --if-present
 
       - name: "Perform CodeQL Analysis"
-        uses: github/codeql-action/analyze@6bc82e05fd0ea64601dd4b465378bbcf57de0314 # v4.32.1
+        uses: github/codeql-action/analyze@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
