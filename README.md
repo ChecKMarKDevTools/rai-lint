@@ -255,6 +255,21 @@ repos:
 
 ---
 
+## See Your Numbers 📊
+
+Once footers are landing, [**rai-commit-badge**](https://github.com/anchildress1/rai-commit-badge) reads them back out of your history and publishes a shields.io badge. Mark the spot, and the action fills it in:
+
+```markdown
+<!--START_SECTION:rai-badge-->
+<!--END_SECTION:rai-badge-->
+```
+
+It weights each commit by lines changed and scores the five footers on an ordinal scale, so a typo fix doesn't outvote a generated module.
+
+The split is deliberate: **rai-lint gates, rai-commit-badge measures.** Neither does the other's job.
+
+---
+
 ## Monorepo Structure 🛠️
 
 ```
