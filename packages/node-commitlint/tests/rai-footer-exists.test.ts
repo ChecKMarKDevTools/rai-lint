@@ -41,33 +41,16 @@ describe('rai-footer-exists', () => {
     expect(message).toContain('AI attribution');
   });
 
-  it('should fail without email', () => {
-    const [isValid] = validate('feat: add feature\n\nGenerated-by: GitHub Copilot');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail with an empty value', () => {
-    const [isValid] = validate('feat: add feature\n\nGenerated-by: ');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail when the attribution name is missing', () => {
-    const [isValid] = validate('feat: add feature\n\nGenerated-by: <ai@example.com>');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail without whitespace after the colon', () => {
-    const [isValid] = validate('feat: add feature\n\nGenerated-by:AI <ai@example.com>');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail without whitespace before the email', () => {
-    const [isValid] = validate('feat: add feature\n\nGenerated-by: AI<ai@example.com>');
-    expect(isValid).toBe(false);
-  });
-
-  it('should not match an attribution spanning multiple lines', () => {
-    const [isValid] = validate('feat: add feature\n\nGenerated-by: GitHub Copilot\n<copilot@github.com>');
+  it.each([
+    ['no email', 'feat: add feature\n\nGenerated-by: GitHub Copilot'],
+    ['an empty value', 'feat: add feature\n\nGenerated-by: '],
+    ['a missing attribution name', 'feat: add feature\n\nGenerated-by: <ai@example.com>'],
+    ['no whitespace after the colon', 'feat: add feature\n\nGenerated-by:AI <ai@example.com>'],
+    ['no whitespace before the email', 'feat: add feature\n\nGenerated-by: AI<ai@example.com>'],
+    ['an attribution spanning multiple lines', 'feat: add feature\n\nGenerated-by: GitHub Copilot\n<copilot@github.com>'],
+    ['no body', 'feat: add feature'],
+  ])('should reject %s', (_label, message) => {
+    const [isValid] = validate(message);
     expect(isValid).toBe(false);
   });
 
@@ -88,11 +71,6 @@ describe('rai-footer-exists', () => {
 
   it('should stay linear on pathological input', () => {
     const [isValid] = validate(`feat: add feature\n\n${'A'.repeat(5000)}:${'B'.repeat(5000)}`);
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail without a body', () => {
-    const [isValid] = validate('feat: add feature');
     expect(isValid).toBe(false);
   });
 
