@@ -1,9 +1,5 @@
 name: RAI Attribution
 
-# Dogfoods the action against its own history. `uses: ./` runs the committed
-# dist/ bundle exactly as a consumer would, so a broken build fails here before
-# it reaches the Marketplace.
-
 on:
   push:
     branches: [main]
