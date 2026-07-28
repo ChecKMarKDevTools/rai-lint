@@ -20,7 +20,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📦 Packages
 
-[![NPM Version](https://img.shields.io/npm/v/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/gitlint-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/gitlint-rai/)
+[![NPM Version](https://img.shields.io/npm/v/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/gitlint-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/gitlint-rai/) [![Marketplace](https://img.shields.io/badge/marketplace-RAI%20Commit%20Attribution%20Badge-7C3AED?style=for-the-badge&logo=githubactions&logoColor=fff)](https://github.com/marketplace/actions/rai-commit-attribution-badge)
 
 <!-- prettier-ignore-start -->
 <!--START_SECTION:rai-badge-->

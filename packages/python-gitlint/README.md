@@ -97,6 +97,10 @@ This plugin is the practical follow-through.
 - Python >= 3.11, < 3.15
 - gitlint >= 0.19.1
 
+## Related 🔗
+
+Enforcement is only half the story. [`rai-commit-badge`](https://github.com/marketplace/actions/rai-commit-attribution-badge) reads these footers back out of your history and publishes the score as a badge.
+
 ## License 📄
 
 [PolyForm Shield License 1.0.0](./LICENSE) — free to use anywhere, including inside commercial products. What's off the table: providing anything that competes with this tool — selling it, rebranding it, hosting it, or shipping a practical substitute, paid or free. This is a plain-language summary; the [LICENSE](./LICENSE) is what actually controls. Commercial licensing questions: [anchildress1@gmail.com](mailto:anchildress1@gmail.com).
