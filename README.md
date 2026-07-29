@@ -28,6 +28,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 <!-- prettier-ignore-start -->
 <!--START_SECTION:rai-badge-->
+![AI attribution](https://img.shields.io/badge/AI%20attribution-66%25%20since%202025--10-7C3AED?style=for-the-badge)
 <!--END_SECTION:rai-badge-->
 <!-- prettier-ignore-end -->
 
