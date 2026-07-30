@@ -22,6 +22,12 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 [![NPM Version](https://img.shields.io/npm/v/commitlint-plugin-rai?style=for-the-badge&logo=npm&logoColor=fff&color=CB3837)](https://www.npmjs.com/package/commitlint-plugin-rai) [![PyPI Version](https://img.shields.io/pypi/v/gitlint-rai?style=for-the-badge&logo=pypi&logoColor=fff&color=3775A9)](https://pypi.org/project/gitlint-rai/)
 
+<!-- prettier-ignore-start -->
+<!--START_SECTION:rai-badge-->
+![AI attribution](https://img.shields.io/badge/AI%20attribution-66%25%20since%202025--10-7C3AED?style=for-the-badge)
+<!--END_SECTION:rai-badge-->
+<!-- prettier-ignore-end -->
+  
 ### 🗣️ Languages
 
 [![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![TypeScript Badge](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=for-the-badge)](https://www.typescriptlang.org/) [![Python Badge](https://img.shields.io/badge/Python-3670A0?logo=python&logoColor=ffdd54&style=for-the-badge)](https://www.python.org/)

@@ -30,38 +30,17 @@ describe('rai-signed-off-by', () => {
     expect(message).toContain('Signed-off-by');
   });
 
-  it('should fail without email', () => {
-    const [isValid] = validate('feat: add feature\n\nSigned-off-by: Jane Doe');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail with an empty value', () => {
-    const [isValid] = validate('feat: add feature\n\nSigned-off-by: ');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail when the name is missing', () => {
-    const [isValid] = validate('feat: add feature\n\nSigned-off-by: <jane@example.com>');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail without whitespace after the colon', () => {
-    const [isValid] = validate('feat: add feature\n\nSigned-off-by:Jane Doe <jane@example.com>');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail without whitespace before the email', () => {
-    const [isValid] = validate('feat: add feature\n\nSigned-off-by: Jane Doe<jane@example.com>');
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail with trailing whitespace after the email', () => {
-    const [isValid] = validate('feat: add feature\n\nSigned-off-by: Jane Doe <jane@example.com> ');
-    expect(isValid).toBe(false);
-  });
-
-  it('should not match a sign-off spanning multiple lines', () => {
-    const [isValid] = validate('feat: add feature\n\nSigned-off-by: Jane Doe\n<jane@example.com>');
+  it.each([
+    ['no email', 'feat: add feature\n\nSigned-off-by: Jane Doe'],
+    ['an empty value', 'feat: add feature\n\nSigned-off-by: '],
+    ['a missing name', 'feat: add feature\n\nSigned-off-by: <jane@example.com>'],
+    ['no whitespace after the colon', 'feat: add feature\n\nSigned-off-by:Jane Doe <jane@example.com>'],
+    ['no whitespace before the email', 'feat: add feature\n\nSigned-off-by: Jane Doe<jane@example.com>'],
+    ['trailing whitespace after the email', 'feat: add feature\n\nSigned-off-by: Jane Doe <jane@example.com> '],
+    ['a sign-off spanning multiple lines', 'feat: add feature\n\nSigned-off-by: Jane Doe\n<jane@example.com>'],
+    ['no body', 'feat: add feature'],
+  ])('should reject %s', (_label, message) => {
+    const [isValid] = validate(message);
     expect(isValid).toBe(false);
   });
 
@@ -82,11 +61,6 @@ describe('rai-signed-off-by', () => {
 
   it('should stay linear on pathological input', () => {
     const [isValid] = validate(`feat: add feature\n\nSigned-off-by:${'A'.repeat(5000)}:${'B'.repeat(5000)}`);
-    expect(isValid).toBe(false);
-  });
-
-  it('should fail without a body', () => {
-    const [isValid] = validate('feat: add feature');
     expect(isValid).toBe(false);
   });
 
