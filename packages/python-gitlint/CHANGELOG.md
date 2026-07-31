@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v1.0.1...gitlint-rai-v1.0.2) (2026-07-31)
+
+
+### Documentation
+
+* **readme:** Link rai-commit-badge marketplace listing and tidy README ([#122](https://github.com/anchildress1/rai-lint/issues/122)) ([d964d1e](https://github.com/anchildress1/rai-lint/commit/d964d1ec97bf6bbe9b800c4ec411c744857f8135))
+
 ## [1.0.1](https://github.com/anchildress1/rai-lint/compare/gitlint-rai-v1.0.0...gitlint-rai-v1.0.1) (2026-07-06)
 
 
