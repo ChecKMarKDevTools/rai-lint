@@ -14,9 +14,9 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ### 📊 Project Stats
 
-[![GitHub Issues](https://img.shields.io/github/issues/anchildress1/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/issues) [![Release](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Frai-lint%2Fmain%2F.release-please-manifest.json&query=%24%5B%27packages%2Fnode-commitlint%27%5D&prefix=v&label=release&style=for-the-badge&color=0875AE)](https://github.com/anchildress1/rai-lint/releases) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/anchildress1/rai-lint?style=for-the-badge&color=34A853&cacheSeconds=3600)](https://github.com/anchildress1/rai-lint/issues) [![License: Polyform Shield License 1.0.0](https://img.shields.io/badge/license-Polyform%20Shield%20License%201.0.0-orange?style=for-the-badge)](LICENSE) [![Release](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Frai-lint%2Fmain%2F.release-please-manifest.json&query=%24%5B%27packages%2Fnode-commitlint%27%5D&prefix=v&label=release&style=for-the-badge&color=0875AE)](https://github.com/anchildress1/rai-lint/releases)
 
-[![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint)
+[![Sonar Tech Debt](https://img.shields.io/sonar/alert_status/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Coverage](https://img.shields.io/sonar/coverage/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Bugs](https://img.shields.io/sonar/bugs/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint) [![Code Smells](https://img.shields.io/sonar/code_smells/anchildress1_rai-lint?server=https%3A%2F%2Fsonarcloud.io&label=code_smells&style=for-the-badge&logo=sonarqubecloud)](https://sonarcloud.io/summary/new_code?id=anchildress1_rai-lint)
 
 ### 📦 Packages
 
@@ -27,7 +27,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 ![AI attribution](https://img.shields.io/badge/AI%20attribution-66%25%20since%202025--10-7C3AED?style=for-the-badge)
 <!--END_SECTION:rai-badge-->
 <!-- prettier-ignore-end -->
-  
+
 ### 🗣️ Languages
 
 [![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![TypeScript Badge](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=for-the-badge)](https://www.typescriptlang.org/) [![Python Badge](https://img.shields.io/badge/Python-3670A0?logo=python&logoColor=ffdd54&style=for-the-badge)](https://www.python.org/)
@@ -44,7 +44,7 @@ _A dual-language validation framework that makes AI attribution non-negotiable._
 
 ---
 
-[Installation](#installation-) • [Quick Start](#quick-start-) • [Required Commit Footers](#required-commit-footers-) • [Documentation](/docs)
+[Installation](#installation-) • [Quick Start](#quick-start-) • [Required Commit Footers](#required-commit-footers-) • [See Your Nubers](#see-your-numbers-) • [Documentation](/docs)
 
 </div>
 
