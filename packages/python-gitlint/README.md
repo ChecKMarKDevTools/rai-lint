@@ -99,7 +99,7 @@ This plugin is the practical follow-through.
 
 ## Related 🔗
 
-Enforcement is only half the story. [`rai-commit-badge`](https://github.com/marketplace/actions/rai-commit-attribution-badge) reads these footers back out of your history and publishes the score as a badge.
+Enforcement is only half the story. [RAI Commit Attribution Badge](https://github.com/marketplace/actions/rai-commit-attribution-badge) reads these footers back out of your history and publishes the score as a badge.
 
 ## License 📄
 
